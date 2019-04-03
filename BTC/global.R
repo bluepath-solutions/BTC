@@ -45,12 +45,8 @@ library(tidyverse)
 source("microsim_utilities.R")
 source("microsim.R")
 
-# cl <- makeCluster(detectCores() - 1)
-# registerDoParallel(cl)
-
-tab_id <- c("Overview", "Inputs", "Fracture", "Scenarios", "Results", "Assumptions", "Break", "Disclosures", "Terms", "References")
-
-NUM_PAGES <- 11
+cl <- makeCluster(detectCores() - 1)
+registerDoParallel(cl)
 
 age_probabilities <- (read_excel("age_distribution.xlsx"))
 

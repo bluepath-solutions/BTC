@@ -1,9 +1,11 @@
 ###########################VARIABLES##############################
+tab_id <- c("Home", "Overview", "Inputs", "Fracture", "Results", "Assumptions", "Disclosures", "Terms", "References")
+
+# Previous_Button=tags$div(actionButton("Prev_Tab",HTML('<div class="col-sm-4"><i class="fa fa-angle-double-left fa-2x"></i></div>')))
+# Next_Button=div(actionButton("Next_Tab",HTML('<div class="col-sm-4"><i class="fa fa-angle-double-right fa-2x"></i></div>')))
+
 abbreviations <- data.frame(abbrev = c("BMD", "CPI", "DXA", "FRAX", "NHANES"),
                             full = c("bone mineral density", "Consumer Price Index", "dual-energy X-ray absorptiometry", "Fracture Risk Assessment Tool", "National Health and Nutrition Examination Survey"))
-
-tab_id <- c("Home", "Overview", "Inputs", "Fracture", "Scenarios", "Results", "Assumptions", "Disclosures", "Terms", "References")
-
 
 
 #################################################################
@@ -12,44 +14,6 @@ function(input, output, session) {
   
 
 ###############DEFAULT ACTIONS###################################
-  observe({
-    lapply(c("Next", "Previous"),
-           toggle,
-           condition = input[["tabs"]] != "Home")
-  })
-  
-  Current <- reactiveValues(
-    Tab = "Home"
-  )
-  
-  observeEvent(
-    input[["tabs"]],
-    {
-      Current$Tab <- input[["tabs"]]
-    }
-  )
-  
-  observeEvent(
-    input[["Previous"]],
-    {
-      tab_id_position <- match(Current$Tab, tab_id) - 1
-      if (tab_id_position == 0) tab_id_position <- length(tab_id)
-      Current$Tab <- tab_id[tab_id_position]
-      updateTabItems(session, "tabs", tab_id[tab_id_position]) 
-    }
-  )
-  
-  observeEvent(
-    input[["Next"]],
-    {
-      tab_id_position <- match(Current$Tab, tab_id) + 1
-      if (tab_id_position > length(tab_id)) tab_id_position <- 1
-      Current$Tab <- tab_id[tab_id_position]
-      updateTabItems(session, "tabs", tab_id[tab_id_position]) 
-    }
-  )
-  
-  
   observeEvent(input$restoreall, {
     reset("pop_input")
     reset("BMD_mean")
@@ -345,25 +309,7 @@ scenario_one <- reactive({
                  })
 })
 
-###############RENDERING BOXES & PLOTS######################
-uiOutput("nlp_sentences_tree")
-
-output$totalfxr_content <- renderText({
-  base_case <- sim_data()
-  S1 <- scenario_one()
-  inp_year <- as.Date(input$endYear, "%Y")
-  inp_year <- format(inp_year, "%Y")
-  total_frax <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
-  for(i in 1:duration) {
-    total_frax <- total_frax + (S1[[i]]$total_fractures - base_case[[i]]$total_fractures)}
-  formatted_fxrs <- formatC(round(total_frax), format = 'd', big.mark=',')
-  paste("The total number of fractures is estimated to ", 
-                                            ifelse(total_frax > 0, "increase by ", "decrease by "), 
-                                             formatted_fxrs, 
-                                             " during the years 2018-", inp_year, sep = "", collapse = NULL)
-                                            })
-
+###############RENDERING PLOTS######################
 output$FraxBox_R <- renderInfoBox({
   base_case <- sim_data()
   S1 <- scenario_one()
@@ -372,12 +318,9 @@ output$FraxBox_R <- renderInfoBox({
   for(i in 1:duration) {
     total_frax <- total_frax + (S1[[i]]$total_fractures - base_case[[i]]$total_fractures)
   }
-  subtitle_text <- ifelse(total_frax > 0, "Change to New Scenario Results in Fracture Incidence Increasing", "Change to New Scenario Results in Fracture Incidence Decreasing")
-  inp_year <- as.Date(input$endYear, "%Y")
-  inp_year <- format(inp_year, "%Y")
-  title_text <- paste("Change in Fracture Occurrence, 2018-", inp_year, sep = "", collapse = NULL)
+  subtitle_text <- ifelse(total_frax > 0, "Fracture Incidence increases", "Fracture Incidence Decreases")
   infoBox(
-    title = title_text,
+    title = "Change in Fracture Occurence", 
     subtitle = subtitle_text, 
     value = formatC(round(total_frax), format = 'd', big.mark=','),
     icon = icon("list"),
@@ -394,12 +337,9 @@ output$CostBox_R <- renderInfoBox({
     total_frax_cost <- (total_frax_cost) + ((S1[[i]]$grand_total/1000000) - (base_case[[i]]$grand_total/1000000))
   }
   print(total_frax_cost)
-  subtitle_text <- ifelse(total_frax_cost > 0, "Change to New Scenario Results in Cost Increases ($MM)", "Change to New Scenario Results in Cost Decreases ($MM)")
-  inp_year <- as.Date(input$endYear, "%Y")
-  inp_year <- format(inp_year, "%Y")
-  title_text <- paste("Change in Total Costs, 2018-", inp_year, sep = "", collapse = NULL)
+  subtitle_text <- ifelse(total_frax_cost > 0, "Cost Increases ($MM)", "Cost Decreases ($MM)")
   infoBox(
-    title = title_text,
+    title = "Change in Cost",
     subtitle = subtitle_text, 
     value = dollar_format(negative_parens = TRUE)((total_frax_cost)),
     icon = icon("list"),
@@ -415,12 +355,9 @@ output$FraxBox <- renderInfoBox({
   for(i in 1:duration) {
     total_frax <- total_frax + (S1[[i]]$total_fractures - base_case[[i]]$total_fractures)
   }
-  subtitle_text <- ifelse(total_frax > 0, "Change to New Scenario Results in Fracture Incidence Increasing", "Change to New Scenario Results in Fracture Incidence Decreasing")
-  inp_year <- as.Date(input$endYear, "%Y")
-  inp_year <- format(inp_year, "%Y")
-  title_text <- paste("Change in Fracture Occurrence, 2018-", inp_year, sep = "", collapse = NULL)
+  subtitle_text <- ifelse(total_frax > 0, "Fracture Incidence increases", "Fracture Incidence Decreases")
   infoBox(
-    title = title_text,
+    title = "Change in Fracture Occurence", 
     subtitle = subtitle_text, 
     value = formatC(round(total_frax), format = 'd', big.mark=','),
     icon = icon("list"),
@@ -437,12 +374,9 @@ output$CostBox <- renderInfoBox({
     total_frax_cost <- (total_frax_cost) + ((S1[[i]]$grand_total/1000000) - (base_case[[i]]$grand_total/1000000))
   }
   print(total_frax_cost)
-  subtitle_text <- ifelse(total_frax_cost > 0, "Change to New Scenario Results in Cost Increases ($MM)", "Change to New Scenario Results in Cost Decreases ($MM)")
-  inp_year <- as.Date(input$endYear, "%Y")
-  inp_year <- format(inp_year, "%Y")
-  title_text <- paste("Change in Total Costs, 2018-", inp_year, sep = "", collapse = NULL)
+  subtitle_text <- ifelse(total_frax_cost > 0, "Cost Increases ($MM)", "Cost Decreases ($MM)")
   infoBox(
-    title = title_text,
+    title = "Change in Cost",
     subtitle = subtitle_text, 
     value = dollar_format(negative_parens = TRUE)((total_frax_cost)),
     icon = icon("list"),
@@ -537,7 +471,6 @@ output$CostBox <- renderInfoBox({
     p <- plot_ly(dummybc, x = ~xbc) %>% 
       add_trace(y = ~ybc, name = "Base Case", mode = 'lines', line = list(color = color_pal[1]) ) %>% 
       add_trace(y = ~ys1, name = "New Scenario", mode = 'lines', line = list(color = color_pal[2])) %>%
-      config(displayModeBar = F) %>%
       layout(
         title = "Cumulative Fractures vs. Time",
         xaxis = list(showgrid = FALSE,
