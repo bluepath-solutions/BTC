@@ -11,7 +11,7 @@ dashboardPagePlus(
   skin = "blue",
   header = dashboardHeaderPlus(
     titleWidth=270,
-    #tags$li(class = "dropdown", actionBttn(inputId="Next", label=icon("arrow-right"),color="primary",style="minimal", size="xs")),
+    tags$li(class = "dropdown", actionBttn(inputId="Next_Tab", label=icon("arrow-right"),color="primary",style="minimal", size="xs")),
     enable_rightsidebar = TRUE,
     rightSidebarIcon = "info-circle",
     title = tagList(span(class = "logo-lg", "Bending the Curve"),
@@ -65,12 +65,6 @@ dashboardPagePlus(
     ),
     
   body <- dashboardBody(
-    
-    hidden(actionBttn(inputId="Previous", label=icon("arrow-left"),color="primary",style="float", size="xs")),  
-    hidden(actionBttn(inputId="Next", label=icon("arrow-right"),color="primary",style="float", size="xs")),  
-    
-    #hidden(actionBttn(inputId ="Previous", label = icon("arrow-left"))),
-    
     setShadow("box"),
     
     tabItems(
@@ -111,12 +105,12 @@ dashboardPagePlus(
                 height = 4,
                 solidHeader = FALSE, 
                 collapsible = FALSE
-              ))
-              # fluidRow(
-              #   column(11),
-              #   column(1,
-              #   hidden(actionBttn(inputId="Next", label=icon("arrow-right"),color="primary",style="float", size="xs")))
-              # )
+              )),
+              fluidRow(
+                column(11),
+                column(1,
+                actionBttn(inputId="Next_Tab", label=icon("arrow-right"),color="primary",style="float", size="xs"))
+              )
       ),
       
       tabItem(tabName = "Overview",
@@ -128,43 +122,49 @@ dashboardPagePlus(
                         column(
                           width = 12,
                           descriptionBlock(    
-                      tags$img(src="Model_Flow.PNG", width = "800px", height = "150px", style="display: block; margin-left: auto; margin-right: auto;")),
+                      tags$img(src="Model_Flow.PNG", width = "850px", height = "200px", style="display: block; margin-left: auto; margin-right: auto;")),
                       text = "Model Flow")
                       ))),
                 fluidRow(
                   box(
-                    title = "Objective", width = 6,  status = "primary",
+                    title = "Objective", width = 6, height = "125px", status = "primary",
                     "To estimate the future clinical and economic burden of osteoporotic fractures in the US with and without policy changes."),
                   box(
-                    title = "Structure", width = 6,  status = "primary",
+                    title = "Structure", width = 6, height = "125px", status = "primary",
                     "An R-based invidual-level microsimulation model, informed by NHANES estimates of risk factors and utilizing the FRAX risk prediction tool (based on publicly available risk tables)")),
                 fluidRow(
                   box(
-                    title = "Time Horizon", width = 6,  status = "primary",
+                    title = "Time Horizon", width = 6, height = "125px", status = "primary",
                     HTML("•	Cross-sectional calendar year <br/>
                     •	The model evaluates the impact by calendar year from 2019 through 2040")),
                   box(
-                    title = "Population", width = 6, status = "primary",
+                    title = "Population", width = 6, height = "125px",status = "primary",
                     HTML("US women aged 65 years and older, including those with and without a history of fractures<br/>
                           &nbsp"))),
                 fluidRow(
                   box(
-                    title = "Clinical Inputs", width = 6, status = "primary",
+                    title = "Clinical Inputs", width = 6, height = "125px", status = "primary",
                     HTML("•	Population demographics and charactersitics <br/>
                          • Fracture risk for untreated and treated population by therapy")),
                   box(
-                    title = "Economic Inputs", width = 6,  status = "primary",
+                    title = "Economic Inputs", width = 6, height = "125px", status = "primary",
                     HTML("•	Identification and treatment cost by therapy <br/>
                          • Fracture costs (direct and indirect)"))),
                 fluidRow(
                   box(
-                    title = "Model Outputs", width = 12, status = "primary",
+                    title = "Model Outputs", width = 12, height = "125px",  status = "primary",
                     column(width = 6, HTML("•	Annual costs (total and by category) <br/>
                           &nbsp;&nbsp;&nbsp;&nbsp  o	Cumulative costs")),
                     column(width = 6, HTML("•	Annual fractures rates (total and by site)  <br/>
                           &nbsp;&nbsp;&nbsp;&nbsp o	Cumulative fractures"))
 ))),
-          tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
+              fluidRow(
+                column(10),
+                column(2, offset=11,
+                actionBttn(inputId="Previous_Tab", label=icon("arrow-left"),color="primary",style="float", size="xs"),
+                actionBttn(inputId="Next_Tab", label=icon("arrow-right"),color="primary",style="float", size="xs"))
+              ),
+              tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
               
       ),
       
@@ -189,8 +189,8 @@ dashboardPagePlus(
                                                                 reflect an annual risk. This risk is used to estimate the probability of fracture. Total fractures are<br/>
                                                                 aggreated by type and monetized using direct and indirect costs."))),
                 fluidRow(
-                  column(width = 4, numericInput(inputId = "pop_input", label = "Eligible Population", value = 1000000, min = 0, max = 30000000))),
-                    # bsTooltip("pop_input", "Enter eligible population. Default value of 1 million is based on ....","right", options = list(container = "body"))),
+                  column(width = 4, numericInput(inputId = "pop_input", label = "Eligible Population", value = 1000000, min = 0, max = 30000000)),
+                    bsTooltip("pop_input", "Enter eligible population. Default value of 1 million is based on ....","right", options = list(container = "body"))),
                 box(id="riskdesc", tags$p("Risk Factors", tags$sup(style="font-size: 50px")), align = "left", color = "blue", width = 16, height = 4),
                   bsTooltip("riskdesc", "Risk factor prevalence was estimated from analyzing NHANES. Fracture risks for individual women in the model is estimated using FRAX simplified tables based on the baseline population demographics and charactersitics.",
                           "left", options = list(container = "body")),
@@ -253,20 +253,34 @@ dashboardPagePlus(
                           column(width = 2, h5(strong("Monthly Cost ($)")), align = "center"),
                           column(width = 2, h5(strong("Hip")), align = "center"),
                           column(width = 2, h5(strong("Other")), align = "center")),
-                        
                         fluidRow(
-                          column(width = 4, h5("Anti-Resportive Agents")),
-                          column(width = 2, box(id="AR_MS", tags$p("91.5%", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
-                          bsTooltip("AR_MS", "Market share inputs are based on utilization trends as of 2018, DOF.",
+                          column(width = 4, h5("bisphosphonates")),
+                          #column(width = 2, tags$style("#alendronate {border: 2px dotted #008080;}"), numericInput("alendronate", label = NULL, value = 90)),
+                          column(width = 2, box(id="bisph_MS", tags$p("62.3%", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                          bsTooltip("bisph_MS", "Market share inputs are based on utilization trends as of 2018, DOF.",
                                     "right", options = list(container = "body")),
-                          column(width = 2, box(id="AR_cost", tags$p("$195.62", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
-                          bsTooltip("AR_cost", "Monthly costs are based on a weighted averge of costs - weighted by market share - from Medicare Part D files as of 2018.",
+                          column(width = 2, box(id="bisph_cost", tags$p("$10.00", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                          bsTooltip("bisph_cost", "Monthly costs are taken from Medicare Part D files as of 2018.",
                                     "right", options = list(container = "body")),
-                          column(width = 2, box(id="AR_eff", tags$p("0.61", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
-                          bsTooltip("AR_eff", "Efficacy of anti-resportives is based on a weighted average efficacy - weighted by market share - taken from NMA, 2018...",
+                          column(width = 2, box(id="bisph_eff", tags$p("0.65", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                          bsTooltip("bisph_eff", "Efficacy of bisphophonates are taken from NMA, 2018...",
                                     "left", options = list(container = "body")),
-                          column(width = 2, box(id="AR_effoth", tags$p("0.58", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4))),
-                        bsTooltip("AR_effoth", "Efficacy of denosumab is taken from NMA, 2018...",
+                          column(width = 2, box(id="bisph_effoth", tags$p("0.66", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4))),
+                        bsTooltip("bisph_effoth", "Efficacy of bisphophonates are taken from NMA, 2018...",
+                                  "left", options = list(container = "body")),
+                        fluidRow(
+                          column(width = 4, h5("anti-RANKL")),
+                          column(width = 2, box(id="deno_MS", tags$p("29.2%", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                          bsTooltip("deno_MS", "Market share inputs are based on utilization trends as of 2018, DOF.",
+                                    "right", options = list(container = "body")),
+                          column(width = 2, box(id="deno_cost", tags$p("$195.62", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                          bsTooltip("deno_cost", "Monthly costs are based on denosumab SubQ 60 MG/ML taken from Medicare Part D files as of 2018.",
+                                    "right", options = list(container = "body")),
+                          column(width = 2, box(id="deno_eff", tags$p("0.61", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                          bsTooltip("deno_eff", "Efficacy of denosumab is taken from NMA, 2018...",
+                                    "left", options = list(container = "body")),
+                          column(width = 2, box(id="deno_effoth", tags$p("0.58", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4))),
+                        bsTooltip("deno_effoth", "Efficacy of denosumab is taken from NMA, 2018...",
                                   "left", options = list(container = "body")),
                         fluidRow(
                           column(width = 4, h5("Selective Estrogen Receptor Modulators (SERMs)")),
@@ -274,7 +288,7 @@ dashboardPagePlus(
                           bsTooltip("SERM_MS", "Market share inputs are based on utilization trends as of 2018, DOF.",
                                     "right", options = list(container = "body")),
                           column(width = 2, box(id="SERM_cost", tags$p("$158.84", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
-                          bsTooltip("SERM_cost", "Monthly costs are based on a weighted averge of costs - weighted by market share - from Medicare Part D files as of 2018.",
+                          bsTooltip("SERM_cost", "Monthly costs are based on Conjugated Estrogens/Bazedoxifene 0.45-20 MG taken from Medicare Part D files as of 2018.",
                                     "right", options = list(container = "body")),
                           column(width = 2, box(id="SERM_eff", tags$p("0.59", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
                           bsTooltip("SERM_eff", "Efficacy of SERMs is taken from NMA, 2018...",
@@ -288,15 +302,20 @@ dashboardPagePlus(
                           bsTooltip("PTH_MS", "Market share inputs are based on utilization trends as of 2018, DOF.",
                                     "right", options = list(container = "body")),
                           column(width = 2, box(id="PTH_cost", tags$p("$2,997.90", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
-                          bsTooltip("PTH_cost", "Monthly costs are based on a weighted averge of costs - weighted by market share - from Medicare Part D files as of 2018",
+                          bsTooltip("PTH_cost", "Monthly costs are based on Forteo (Teriparatide) SubQ 600 MCG/2.4ML taken from Medicare Part D files as of 2018.",
                                     "right", options = list(container = "body")),
                           column(width = 2, box(id="PTH_eff", tags$p("0.25", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
-                          bsTooltip("PTH_eff", "Efficacy of bone builders / PTHs is taken from NMA, 2018...",
+                          bsTooltip("PTH_eff", "Efficacy of PTHs is taken from NMA, 2018...",
                                     "left", options = list(container = "body")),
                           column(width = 2, box(id="PTH_effoth", tags$p("0.34", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
                         bsTooltip("PTH_effoth", "Efficacy of PTHs is taken from NMA, 2018...",
                                   "left", options = list(container = "body")))),
-                
+                fluidRow(
+                  column(10),
+                  column(2, offset=11,
+                         actionBttn(inputId="Previous_Tab", label=icon("arrow-left"),color="primary",style="float", size="xs"),
+                         actionBttn(inputId="Next_Tab", label=icon("arrow-right"),color="primary",style="float", size="xs"))
+                ),
                 tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
                 )
       ),
@@ -357,13 +376,18 @@ dashboardPagePlus(
                         column(width = 4, h5("Informal Caregiver", align = "left")),
                         column(width = 4, numericInput(inputId = "costcare1", label = NULL, value = "1770.60")),
                         column(width = 4, numericInput(inputId = "costcare2", label = NULL, value = "2487.71")))),
-                bsTooltip("FxrCostInp", "Default direct costs following a fracture were based on a claims analysis, differed by category (i.e., inpatient, outpatient, emergency department, long-term care, pharmacy costs following a fracture, and other), and differed for individuals experiencing a single fracture within a year vs. those with a subsequent fracture. Outpatient services included claims for radiology, primary care, outpatient hospital visits, orthopedic specialist visits, and rehabilitation services. Long-term care services were defined as at least 1 longterm care stay in a rehabilitation or skilled nursing facility. Other costs include XYZ. All costs are updated to USD 2019 using the Medical Care index from the Bureau of Labor Statistics. ",
+                bsTooltip("FxrCostInp", "Default direct costs following a fracture were based on a claims analysis, differed by category (i.e., inpatient, outpatient, emergency department, long-term care, pharmacy costs following a fracture, and other), and differed for individuals experiencing a single fracture within a year vs. those with a subsequent fracture. Outpatient services included claims for radiology, primary care, outpatient hospital visits, orthopedic specialist visits, and rehabilitation services. Long-term care services were defined as at least 1 longterm care stay in a rehabilitation or skilled nursing facility. Other costs include XYZ.",
                           "left", options = list(container = "body"))),
                 fluidRow(boxPlus(width=12,
                   plotlyOutput("costp"),
                   #tableOutput("coststbl"),
                   fill=FALSE)),
-              
+              fluidRow(
+                column(10),
+                column(2, offset=11,
+                       actionBttn(inputId="Previous_Tab", label=icon("arrow-left"),color="primary",style="float", size="xs"),
+                       actionBttn(inputId="Next_Tab", label=icon("arrow-right"),color="primary",style="float", size="xs"))
+              ),
               tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
       ),
       tabItem(tabName = "Scenarios",
@@ -371,7 +395,7 @@ dashboardPagePlus(
                 width = NULL, background = "black"),
               h3("Bending the Curve: The Estimated Long-Term Value of Improving Patient Identification and Treatment in Post-Menopausal Osteoporosis", align = "center"),
               fluidRow(
-                boxPlus(title = "Treatment, Identification Rates & Time Horizon", width = 12, closable = FALSE, collapsible = TRUE,
+                boxPlus(title = "Treatment and Identification Rates", width = 12, closable = FALSE, collapsible = TRUE,
                         enable_dropdown = TRUE, dropdown_icon = "question-circle",
                         dropdown_menu = dropdownItemList(
                           dropdownItem(name = HTML("Define the base case and scenarios to evaluate over the time horizon. You may adjust the <br/>
@@ -384,26 +408,38 @@ dashboardPagePlus(
                           column(width = 4, h5(strong("Identification (%)")), align = "center"),
                           column(width = 4, h5(strong("Treatment (%)")), align = "center")),
                         fluidRow(
-                          column(width = 4, align="center", h5("Base Case")),
+                          column(width = 4, h5("Base Case")),
                           column(width = 4, numericInput(inputId = "basecaseID", label = NULL, value = "11.3")),
                           column(width = 4, numericInput(inputId = "basecaseTx", label = NULL, value = "10.4"))),
-                        
+                        br(),
                         fluidRow(
-                          column(width = 4, align="center", h5("New Scenario")),
+                          column(width = 4, h5("New Scenario")),
                           column(width = 4, numericInput(inputId = "scenario1ID", label = NULL, value = "31.3")),
-                          column(width = 4, numericInput(inputId = "scenario1Tx", label = NULL, value = "17.8"))),
+                          column(width = 4, numericInput(inputId = "scenario1Tx", label = NULL, value = "17.8"))))),
+              boxPlus(title = "Time Horizon", width = 12, closable = FALSE, collapsible = TRUE,
+                      enable_dropdown = TRUE, dropdown_icon = "question-circle",
+                      dropdown_menu = dropdownItemList(
+                        dropdownItem(name = HTML("Define the time horizon years. The time horizon affects aggregate totals, <br/>
+                                                            such as the total number of fractures across the number of years selected.")),
+                        dropdownDivider()),
+                        
                       fluidRow(
-                        column(width = 4, align="center", h5("Time Horizon")),
-                        column(width = 7,
+                        column(width = 6, h5(strong("Starting Year")), align = "center"),
+                        column(width = 6, h5(strong("End Year")), align = "center")),
+                      fluidRow(
+                        column(width = 6, h5(strong("2018")), align = "center"),
+                        column(width = 6,
                         sliderInput(inputId = "endYear", 
                                     label = NULL,
-                                    min = as.Date("2022", '%Y'),
-                                    max = as.Date("2040", '%Y'),
-                                    value = as.Date("2040", '%Y'),
+                                    min = as.Date("2022-06-01", '%Y-%m-%d'),
+                                    max = as.Date("2040-06-01", '%Y-%m-%d'),
+                                    value = as.Date("2040-06-01", '%Y-%m-%d'),
                                     step = 365,
-                                    timeFormat = "%Y"), align = "center"),
-                        column(width = 1)
-                        ))),
+                                    timeFormat = "%Y-%m-%d"), align = "center")
+                        #column(width = 6, dateInput(inputId = "startYear", label = NULL, format = "yyyy", width = "50%", value = "2018-06-01"), align = "center"),
+                        #column(width = 6, dateInput(inputId = "endYear", label = NULL, format = "yyyy", width = "50%", value = "2040-06-01"), align = "center") 
+                        
+                        ) ),
               boxPlus(width = 12, closable = FALSE, collapsible = TRUE,
                       fluidRow(
                         column(width = 6, infoBoxOutput("FraxBox_R"), tags$style("#FraxBox_R {width:100%}")),
@@ -412,17 +448,22 @@ dashboardPagePlus(
                 boxPlus(withSpinner(plotlyOutput("fxrplot")), width = 6),
                 boxPlus(withSpinner(plotlyOutput("costplot")), width = 6)),
               
-              
+              # fluidRow(
+              #   boxPlus(withSpinner(plotlyOutput("costplotv2")), width = 12)),
+              #   #boxPlus(plotlyOutput("violin"), width = 6))
+              fluidRow(
+                column(10),
+                column(2, offset=11,
+                       actionBttn(inputId="Previous_Tab", label=icon("arrow-left"),color="primary",style="float", size="xs"),
+                       actionBttn(inputId="Next_Tab", label=icon("arrow-right"),color="primary",style="float", size="xs"))
+              ),
               tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
     ),
     tabItem(tabName = "Results",
             fluidRow(
-              width = NULL, background = "black"),
-            h3("Bending the Curve: The Estimated Long-Term Value of Improving Patient Identification and Treatment in Post-Menopausal Osteoporosis", align = "center"),
-            fluidRow(
               boxPlus(title = "Total Estimated Fractures", 
                       closable = FALSE, status = "warning", solidHeader = FALSE, collapsible = TRUE, width = 8,
-                      p(textOutput('totalfxr_content'))
+                      p("Total fractures ")
               ),
                 infoBoxOutput("FraxBox")), 
             fluidRow(
@@ -443,10 +484,8 @@ dashboardPagePlus(
           boxPlus(title = "Thank you for visiting.", 
                   closable = FALSE, status = "info", solidHeader = FALSE, collapsible = TRUE, width = 12,
                   p("Thank you for visiting the Bend the Curve Microsimulation Site. The results of the model based on the current inputs suggest.... Using the validated FRAX tables and insights from NHANES to estimate the future burden among Medicare-eligible women, we found that total fractures and fracture-related costs will increase substantially under the status quo of under-diagnosis and under-treatment of osteoporosis")
-          )),
-        
-        tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
-        ),
+          )))
+      ,
     
     tabItem(tabName = "Assumptions",
             fluidRow(
@@ -472,10 +511,8 @@ dashboardPagePlus(
                 p("In any model-based analysis, especially when making projections as far out as 2040, uncertainty exists and simplifying assumptions must be made. However, we erred on the conservative side, underestimating the results to provide a lower bound on the potential benefits of increased case finding and treatment. We did not attempt to quantify the clinical benefits in terms of quality-adjusted life years, and this could be an area of future research. Additionally, we only considered currently available treatments. To the extent that new treatment alternatives are introduced that are more efficacious, the fracture reduction and cost savings in scenarios with increased utilization would be an underestimate of the true benefit.")
               )
             ),
-           
             tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
             ),
-
     tabItem(tabName = "Disclosures",
             fluidRow(
               width = NULL, background = "black"),
@@ -559,9 +596,7 @@ o	This study was funded by Amgen Inc.<br/>
                       "))
               )
             ),
-            
             tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
-            
       ),
     tabItem(tabName = "Terms",
             fluidRow(
@@ -587,8 +622,8 @@ o	This study was funded by Amgen Inc.<br/>
               )))
               )
               ),
-            
-            tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")            ),
+            tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
+            ),
     tabItem(tabName = "References",
             fluidRow(
               width = NULL, background = "black"),
@@ -606,12 +641,6 @@ o	This study was funded by Amgen Inc.<br/>
                 )
               )
             ),
-            # fluidRow(
-            #   column(10),
-            #   column(2, offset=11,
-            #          actionBttn(inputId="Previous", label=icon("arrow-left"),color="primary",style="float", size="xs"),
-            #          actionBttn(inputId="Next", label=icon("arrow-right"),color="primary",style="float", size="xs"))
-            # ),
             tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
     )
     

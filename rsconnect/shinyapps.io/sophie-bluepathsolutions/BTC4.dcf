@@ -1,0 +1,13 @@
+name: BTC4
+title: BTC4
+username:
+account: sophie-bluepathsolutions
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 830119
+bundleId: 1984224
+url: https://sophie-bluepathsolutions.shinyapps.io/BTC4/
+when: 1554301842.43837
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: README.md

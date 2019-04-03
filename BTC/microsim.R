@@ -36,7 +36,7 @@ EXTRAPOLATION_FACTOR <- 1.0
 # 
 
 # Population Size
-population_size <- 100000 #10000000 #10000000/13
+population_size <- 200000 #10000000 #10000000/13
 EXTRAPOLATION_FACTOR <- POP/population_size
 
 
