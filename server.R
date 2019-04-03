@@ -128,7 +128,7 @@ sim_data <- reactive({
   costpharm1 <- input$costpharm1
   costpharm2 <- input$costpharm2
   
-  start_year <- as.integer(substring(input$startYear, 1, 4))
+  start_year <- 2018
   end_year   <- as.integer(substring(input$endYear, 1, 4))
   
   print(start_year)
@@ -239,7 +239,7 @@ scenario_one <- reactive({
   costpharm1 <- input$costpharm1
   costpharm2 <- input$costpharm2
   
-  start_year <- as.integer(substring(input$startYear, 1, 4))
+  start_year <- 2018
   end_year   <- as.integer(substring(input$endYear, 1, 4))
   
   return(foreach(i=start_year:end_year,
@@ -310,12 +310,49 @@ scenario_one <- reactive({
 })
 
 ###############RENDERING PLOTS######################
+output$FraxBox_R <- renderInfoBox({
+  base_case <- sim_data()
+  S1 <- scenario_one()
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  for(i in 1:duration) {
+    total_frax <- total_frax + (S1[[i]]$total_fractures - base_case[[i]]$total_fractures)
+  }
+  subtitle_text <- ifelse(total_frax > 0, "Fracture Incidence increases", "Fracture Incidence Decreases")
+  infoBox(
+    title = "Change in Fracture Occurence", 
+    subtitle = subtitle_text, 
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "blue", fill = T, width = NULL#3
+  )
+})
+
+output$CostBox_R <- renderInfoBox({
+  base_case <- sim_data()
+  S1 <- scenario_one()
+  total_frax_cost <- (0)
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  for(i in 1:duration) {
+    total_frax_cost <- (total_frax_cost) + ((S1[[i]]$grand_total/1000000) - (base_case[[i]]$grand_total/1000000))
+  }
+  print(total_frax_cost)
+  subtitle_text <- ifelse(total_frax_cost > 0, "Cost Increases ($MM)", "Cost Decreases ($MM)")
+  infoBox(
+    title = "Change in Cost",
+    subtitle = subtitle_text, 
+    value = dollar_format(negative_parens = TRUE)((total_frax_cost)),
+    icon = icon("list"),
+    color = "orange", fill = T, width = NULL#3
+  )
+})
 
 output$FraxBox <- renderInfoBox({
   base_case <- sim_data()
   S1 <- scenario_one()
   total_frax <- 0
-  for(i in 1:23) {
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  for(i in 1:duration) {
     total_frax <- total_frax + (S1[[i]]$total_fractures - base_case[[i]]$total_fractures)
   }
   subtitle_text <- ifelse(total_frax > 0, "Fracture Incidence increases", "Fracture Incidence Decreases")
@@ -332,7 +369,8 @@ output$CostBox <- renderInfoBox({
   base_case <- sim_data()
   S1 <- scenario_one()
   total_frax_cost <- (0)
-  for(i in 1:23) {
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  for(i in 1:duration) {
     total_frax_cost <- (total_frax_cost) + ((S1[[i]]$grand_total/1000000) - (base_case[[i]]$grand_total/1000000))
   }
   print(total_frax_cost)
@@ -404,7 +442,7 @@ output$CostBox <- renderInfoBox({
     scenario_1 <- scenario_one()
     progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/4, detail = "Preparing Plot")
    
-    start_year <- as.integer(substring(input$startYear, 1, 4))
+    start_year <- 2018
     end_year   <- as.integer(substring(input$endYear, 1, 4))
     
     xbc <- c(start_year:end_year)
@@ -459,7 +497,7 @@ output$CostBox <- renderInfoBox({
     sim <- sim_data()
     scenario_1 <- scenario_one()
     
-    start_year <- as.integer(substring(input$startYear, 1, 4))
+    start_year <- 2018
     end_year   <- as.integer(substring(input$endYear, 1, 4))
     
     xbc <- c(start_year:end_year)

@@ -427,11 +427,23 @@ dashboardPagePlus(
                         column(width = 6, h5(strong("Starting Year")), align = "center"),
                         column(width = 6, h5(strong("End Year")), align = "center")),
                       fluidRow(
-                        column(width = 6, dateInput(inputId = "startYear", label = NULL, format = "yyyy", width = "50%", value = "2018-06-01"), align = "center"),
-                        column(width = 6, dateInput(inputId = "endYear", label = NULL, format = "yyyy", width = "50%", value = "2040-06-01"), align = "center"))),
-              # fluidRow(
-              #          column(width = 6, infoBoxOutput("FraxBox")),
-              #          column(width = 6, infoBoxOutput("CostBox"))),
+                        column(width = 6, h5(strong("2018")), align = "center"),
+                        column(width = 6,
+                        sliderInput(inputId = "endYear", 
+                                    label = NULL,
+                                    min = as.Date("2022-06-01", '%Y-%m-%d'),
+                                    max = as.Date("2040-06-01", '%Y-%m-%d'),
+                                    value = as.Date("2040-06-01", '%Y-%m-%d'),
+                                    step = 365,
+                                    timeFormat = "%Y-%m-%d"), align = "center")
+                        #column(width = 6, dateInput(inputId = "startYear", label = NULL, format = "yyyy", width = "50%", value = "2018-06-01"), align = "center"),
+                        #column(width = 6, dateInput(inputId = "endYear", label = NULL, format = "yyyy", width = "50%", value = "2040-06-01"), align = "center") 
+                        
+                        ) ),
+              boxPlus(width = 12, closable = FALSE, collapsible = TRUE,
+                      fluidRow(
+                        column(width = 6, infoBoxOutput("FraxBox_R"), tags$style("#FraxBox_R {width:100%}")),
+                        column(width = 6, infoBoxOutput("CostBox_R"), tags$style("#CostBox_R {width:100%}") ))),
               fluidRow(
                 boxPlus(withSpinner(plotlyOutput("fxrplot")), width = 6),
                 boxPlus(withSpinner(plotlyOutput("costplot")), width = 6)),
