@@ -427,8 +427,8 @@ dashboardPagePlus(
                         column(width = 6, h5(strong("Starting Year")), align = "center"),
                         column(width = 6, h5(strong("End Year")), align = "center")),
                       fluidRow(
-                        column(width = 6, dateInput(inputId = "startYear", label = NULL, format = "yyyy", width = "50%", value = "06-01-2018"), align = "center"),
-                        column(width = 6, dateInput(inputId = "endYear", label = NULL, format = "yyyy", width = "50%", value = "06-01-2040"), align = "center"))),
+                        column(width = 6, dateInput(inputId = "startYear", label = NULL, format = "yyyy", width = "50%", value = "2018-06-01"), align = "center"),
+                        column(width = 6, dateInput(inputId = "endYear", label = NULL, format = "yyyy", width = "50%", value = "2040-06-01"), align = "center"))),
               # fluidRow(
               #          column(width = 6, infoBoxOutput("FraxBox")),
               #          column(width = 6, infoBoxOutput("CostBox"))),
