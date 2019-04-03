@@ -1,0 +1,767 @@
+###########################VARIABLES##############################
+tab_id <- c("Home", "Overview", "Inputs", "Fracture", "Results", "Assumptions", "Disclosures", "Terms", "References")
+
+# Previous_Button=tags$div(actionButton("Prev_Tab",HTML('<div class="col-sm-4"><i class="fa fa-angle-double-left fa-2x"></i></div>')))
+# Next_Button=div(actionButton("Next_Tab",HTML('<div class="col-sm-4"><i class="fa fa-angle-double-right fa-2x"></i></div>')))
+
+abbreviations <- data.frame(abbrev = c("BMD", "CPI", "DXA", "FRAX", "NHANES"),
+                            full = c("bone mineral density", "Consumer Price Index", "dual-energy X-ray absorptiometry", "Fracture Risk Assessment Tool", "National Health and Nutrition Examination Survey"))
+
+
+#################################################################
+function(input, output, session) {
+  output$value <- renderText({ input$inpt })
+  
+
+###############DEFAULT ACTIONS###################################
+  observeEvent(input$restoreall, {
+    reset("pop_input")
+    reset("BMD_mean")
+    reset("BMD_SD")
+    reset("RA_inp")
+    reset("fxr_inp")
+    reset("parfxr_inp")
+    reset("smoker")
+    reset("alco")
+    reset("gluco_tx")
+    reset("RE_cauc")
+    reset("RE_hisp")
+    reset("RE_asian")
+    reset("RE_black")
+   
+    reset("costinpt1")
+    reset("costinpt2")
+    reset("costoutpt1")
+    reset("costoutpt2")
+    reset("costLTC1")
+    reset("costLTC2")
+    reset("costED1")
+    reset("costED2")
+    reset("costother1")
+    reset("costother2")
+    reset("costpharm1")
+    reset("costpharm2")
+    reset("costprod1")
+    reset("costprod2")
+    reset("costcare1")
+    reset("costcare2")
+  })  
+  
+  observeEvent(input$restorepop, {
+    reset("pop_input")
+    reset("BMD_mean")
+    reset("BMD_SD")
+    reset("RA_inp")
+    reset("fxr_inp")
+    reset("parfxr_inp")
+    reset("smoker")
+    reset("alco")
+    reset("gluco_tx")
+    reset("RE_cauc")
+    reset("RE_hisp")
+    reset("RE_asian")
+    reset("RE_black")
+  })  
+  
+  observeEvent(input$restorefxrcosts, {
+    reset("costinpt1")
+    reset("costinpt2")
+    reset("costoutpt1")
+    reset("costoutpt2")
+    reset("costLTC1")
+    reset("costLTC2")
+    reset("costED1")
+    reset("costED2")
+    reset("costother1")
+    reset("costother2")
+    reset("costpharm1")
+    reset("costpharm2")
+    reset("costprod1")
+    reset("costprod2")
+    reset("costcare1")
+    reset("costcare2")
+  })  
+
+###############REACTIVE ACTIONS#####################
+# TODO
+# Make Copies of microsim function for 3 additional scenarios
+# Put scenarios in graph
+# Cumulative plot at bottom
+# labels in charts, pretty them up
+   
+  
+sim_data <- reactive({
+  population <- input$pop_input
+  caucasian_rate <- input$RE_cauc/100.0
+  hispanic_rate <-  input$RE_hisp/100.0
+  asian_rate <-     input$RE_asian/100.0 
+  black_rate <-     input$RE_black/100.0
+  
+  bmd_mean <-       input$BMD_mean
+  bmd_sd <-         input$BMD_SD
+  
+  ra_rate <-        input$RA_inp/100.0
+  fxr_rate <-       input$fxr_inp/100.0
+  parfxr_rate <-    input$parfxr_inp/100.0
+  smoker_rate <-    input$smoker/100.0
+  alcohol_rate <-   input$alco/100.0
+  gluco_rate <-     input$gluco_tx/100.0
+  
+  dxa_prob <-       input$basecaseID/100.0
+  med_base_prob <-  input$basecaseTx/100.0
+  
+  costinpt1 <- input$costinpt1
+  costinpt2 <- input$costinpt2
+  
+  costoutpt1 <- input$costoutpt1
+  costoutpt2 <- input$costoutpt2
+  
+  costLTC1 <- input$costLTC1
+  costLTC2 <- input$costLTC2
+  
+  costED1 <- input$costED1
+  costED2 <- input$costED2
+  
+  costother1 <- input$costother1
+  costother2 <- input$costother2
+  
+  costpharm1 <- input$costpharm1
+  costpharm2 <- input$costpharm2
+  # TODO make years dynamic, single slider for years?
+  return(foreach(i=2018:2040,
+                              .packages = c('readxl',
+                                            'hashmap'),
+                              .export=c('microsim',
+                                        'age_probabilities',
+                                        'minimum_age',
+                                        'maximum_age',
+                                        'age_cutoffs',
+                                        'age_index_scores',
+                                        'race_categories',
+                                        'race_index_scores',
+                                        'fracture_breakdown',
+                                        'centering_mean',
+                                        'bmd_index_scores',
+                                        'bmd_cutoffs',
+                                        'ID_lookup',
+                                        #'id_to_frax_hash', TODO investigate if hashmaps can be passed directly
+                                        #'MAX_HIP_FRACTURE_RATE',
+                                        #'id_to_frax_major_hash',
+                                        #'MAX_MAJOR_FRACTURE_RATE',
+                                        'MEDICATION_ADHERENCE',
+                                        'HIP_FRACTURE_RATIO',
+                                        'MULTI_FRACTURE_FACTOR',
+                                        'input',
+                                        'isolate',
+                                        'getAgeIndex',
+                                        'getRaceIndex',
+                                        'getBMDIndex',
+                                        'getRiskFactorIndex',
+                                        'getMedicationUtilization'
+                                        ), .verbose = T) %dopar% {
+                               isolate({microsim(population,
+                                                 caucasian_rate,
+                                                 hispanic_rate,
+                                                 asian_rate,
+                                                 black_rate,
+                                                 bmd_mean,
+                                                 bmd_sd,
+                                                 ra_rate,
+                                                 fxr_rate,
+                                                 parfxr_rate,
+                                                 smoker_rate,
+                                                 alcohol_rate,
+                                                 gluco_rate,
+                                                 dxa_prob,
+                                                 med_base_prob,
+                                                 costinpt1,
+                                                 costinpt2,
+                                                 
+                                                 costoutpt1,
+                                                 costoutpt2,
+                                                 
+                                                 costLTC1,
+                                                 costLTC2,
+                                                 
+                                                 costED1,
+                                                 costED2,
+                                                 
+                                                 costother1,
+                                                 costother2,
+                                                 
+                                                 costpharm1,
+                                                 costpharm2,
+                                                 i, 0)})
+                              })
+  # return(microsim(input, 2018))
+  #return(sim_results)
+})
+
+scenario_one <- reactive({
+  population <- input$pop_input
+  caucasian_rate <- input$RE_cauc/100.0
+  hispanic_rate <-  input$RE_hisp/100.0
+  asian_rate <-     input$RE_asian/100.0 
+  black_rate <-     input$RE_black/100.0
+  
+  bmd_mean <-       input$BMD_mean
+  bmd_sd <-         input$BMD_SD
+  
+  ra_rate <-        input$RA_inp/100.0
+  fxr_rate <-       input$fxr_inp/100.0
+  parfxr_rate <-    input$parfxr_inp/100.0
+  smoker_rate <-    input$smoker/100.0
+  alcohol_rate <-   input$alco/100.0
+  gluco_rate <-     input$gluco_tx/100.0
+  
+  dxa_prob <-       input$scenario1ID/100.0
+  med_base_prob <-  input$scenario1Tx/100.0
+  
+  costinpt1 <- input$costinpt1
+  costinpt2 <- input$costinpt2
+  
+  costoutpt1 <- input$costoutpt1
+  costoutpt2 <- input$costoutpt2
+  
+  costLTC1 <- input$costLTC1
+  costLTC2 <- input$costLTC2
+  
+  costED1 <- input$costED1
+  costED2 <- input$costED2
+  
+  costother1 <- input$costother1
+  costother2 <- input$costother2
+  
+  costpharm1 <- input$costpharm1
+  costpharm2 <- input$costpharm2
+  
+  return(foreach(i=2018:2040,
+                 .packages = c('readxl',
+                               'hashmap'),
+                 .export=c('microsim',
+                           'age_probabilities',
+                           'minimum_age',
+                           'maximum_age',
+                           'age_cutoffs',
+                           'age_index_scores',
+                           'race_categories',
+                           'race_index_scores',
+                           'fracture_breakdown',
+                           'centering_mean',
+                           'bmd_index_scores',
+                           'bmd_cutoffs',
+                           'ID_lookup',
+                           #'id_to_frax_hash',
+                           #'MAX_HIP_FRACTURE_RATE',
+                           #'id_to_frax_major_hash',
+                           #'MAX_MAJOR_FRACTURE_RATE',
+                           'MEDICATION_ADHERENCE',
+                           'HIP_FRACTURE_RATIO',
+                           'MULTI_FRACTURE_FACTOR',
+                           'input',
+                           'isolate',
+                           'getAgeIndex',
+                           'getRaceIndex',
+                           'getBMDIndex',
+                           'getRiskFactorIndex',
+                           'getMedicationUtilization'
+                 ), .verbose = T) %dopar% {
+                   isolate({microsim(population,
+                                     caucasian_rate,
+                                     hispanic_rate,
+                                     asian_rate,
+                                     black_rate,
+                                     bmd_mean,
+                                     bmd_sd,
+                                     ra_rate,
+                                     fxr_rate,
+                                     parfxr_rate,
+                                     smoker_rate,
+                                     alcohol_rate,
+                                     gluco_rate,
+                                     dxa_prob,
+                                     med_base_prob,
+                                     costinpt1,
+                                     costinpt2,
+                                     
+                                     costoutpt1,
+                                     costoutpt2,
+                                     
+                                     costLTC1,
+                                     costLTC2,
+                                     
+                                     costED1,
+                                     costED2,
+                                     
+                                     costother1,
+                                     costother2,
+                                     
+                                     costpharm1,
+                                     costpharm2,
+                                     i, 0)})
+                 })
+})
+
+#' scenario_two <- reactive({
+#'   population <- input$pop_input
+#'   caucasian_rate <- input$RE_cauc/100.0
+#'   hispanic_rate <-  input$RE_hisp/100.0
+#'   asian_rate <-     input$RE_asian/100.0 
+#'   black_rate <-     input$RE_black/100.0
+#'   
+#'   bmd_mean <-       input$BMD_mean
+#'   bmd_sd <-         input$BMD_SD
+#'   
+#'   ra_rate <-        input$RA_inp/100.0
+#'   fxr_rate <-       input$fxr_inp/100.0
+#'   parfxr_rate <-    input$parfxr_inp/100.0
+#'   smoker_rate <-    input$smoker/100.0
+#'   alcohol_rate <-   input$alco/100.0
+#'   gluco_rate <-     input$gluco_tx/100.0
+#'   
+#'   dxa_prob <-       input$scenario2ID/100.0
+#'   med_base_prob <-  input$scenario2Tx/100.0
+#'   
+#'   costinpt1 <- input$costinpt1
+#'   costinpt2 <- input$costinpt2
+#'   
+#'   costoutpt1 <- input$costoutpt1
+#'   costoutpt2 <- input$costoutpt2
+#'   
+#'   costLTC1 <- input$costLTC1
+#'   costLTC2 <- input$costLTC2
+#'   
+#'   costED1 <- input$costED1
+#'   costED2 <- input$costED2
+#'   
+#'   costother1 <- input$costother1
+#'   costother2 <- input$costother2
+#'   
+#'   costpharm1 <- input$costpharm1
+#'   costpharm2 <- input$costpharm2
+#'   
+#'   return(foreach(i=2018:2040,
+#'                  .packages = c('readxl',
+#'                                'hashmap'),
+#'                  .export=c('microsim',
+#'                            'age_probabilities',
+#'                            'minimum_age',
+#'                            'maximum_age',
+#'                            'age_cutoffs',
+#'                            'age_index_scores',
+#'                            'race_categories',
+#'                            'race_index_scores',
+#'                            'fracture_breakdown',
+#'                            'centering_mean',
+#'                            'bmd_index_scores',
+#'                            'bmd_cutoffs',
+#'                            'ID_lookup',
+#'                            #'id_to_frax_hash',
+#'                            #'MAX_HIP_FRACTURE_RATE',
+#'                            #'id_to_frax_major_hash',
+#'                            #'MAX_MAJOR_FRACTURE_RATE',
+#'                            'MEDICATION_ADHERENCE',
+#'                            'HIP_FRACTURE_RATIO',
+#'                            'MULTI_FRACTURE_FACTOR',
+#'                            'input',
+#'                            'isolate',
+#'                            'getAgeIndex',
+#'                            'getRaceIndex',
+#'                            'getBMDIndex',
+#'                            'getRiskFactorIndex',
+#'                            'getMedicationUtilization'
+#'                  ), .verbose = T) %dopar% {
+#'                    isolate({microsim(population,
+#'                                      caucasian_rate,
+#'                                      hispanic_rate,
+#'                                      asian_rate,
+#'                                      black_rate,
+#'                                      bmd_mean,
+#'                                      bmd_sd,
+#'                                      ra_rate,
+#'                                      fxr_rate,
+#'                                      parfxr_rate,
+#'                                      smoker_rate,
+#'                                      alcohol_rate,
+#'                                      gluco_rate,
+#'                                      dxa_prob,
+#'                                      med_base_prob,
+#'                                      costinpt1,
+#'                                      costinpt2,
+#'                                      
+#'                                      costoutpt1,
+#'                                      costoutpt2,
+#'                                      
+#'                                      costLTC1,
+#'                                      costLTC2,
+#'                                      
+#'                                      costED1,
+#'                                      costED2,
+#'                                      
+#'                                      costother1,
+#'                                      costother2,
+#'                                      
+#'                                      costpharm1,
+#'                                      costpharm2,
+#'                                      i, 0)})
+#'                  })
+#' })
+#' 
+#' scenario_three <- reactive({
+#'   population <- input$pop_input
+#'   caucasian_rate <- input$RE_cauc/100.0
+#'   hispanic_rate <-  input$RE_hisp/100.0
+#'   asian_rate <-     input$RE_asian/100.0 
+#'   black_rate <-     input$RE_black/100.0
+#'   
+#'   bmd_mean <-       input$BMD_mean
+#'   bmd_sd <-         input$BMD_SD
+#'   
+#'   ra_rate <-        input$RA_inp/100.0
+#'   fxr_rate <-       input$fxr_inp/100.0
+#'   parfxr_rate <-    input$parfxr_inp/100.0
+#'   smoker_rate <-    input$smoker/100.0
+#'   alcohol_rate <-   input$alco/100.0
+#'   gluco_rate <-     input$gluco_tx/100.0
+#'   
+#'   dxa_prob <-       input$scenario3ID/100.0
+#'   med_base_prob <-  input$scenario3Tx/100.0
+#'   
+#'   costinpt1 <- input$costinpt1
+#'   costinpt2 <- input$costinpt2
+#'   
+#'   costoutpt1 <- input$costoutpt1
+#'   costoutpt2 <- input$costoutpt2
+#'   
+#'   costLTC1 <- input$costLTC1
+#'   costLTC2 <- input$costLTC2
+#'   
+#'   costED1 <- input$costED1
+#'   costED2 <- input$costED2
+#'   
+#'   costother1 <- input$costother1
+#'   costother2 <- input$costother2
+#'   
+#'   costpharm1 <- input$costpharm1
+#'   costpharm2 <- input$costpharm2
+#'   
+#'   return(foreach(i=2018:2040,
+#'                  .packages = c('readxl',
+#'                                'hashmap'),
+#'                  .export=c('microsim',
+#'                            'age_probabilities',
+#'                            'minimum_age',
+#'                            'maximum_age',
+#'                            'age_cutoffs',
+#'                            'age_index_scores',
+#'                            'race_categories',
+#'                            'race_index_scores',
+#'                            'fracture_breakdown',
+#'                            'centering_mean',
+#'                            'bmd_index_scores',
+#'                            'bmd_cutoffs',
+#'                            'ID_lookup',
+#'                            #'id_to_frax_hash',
+#'                            #'MAX_HIP_FRACTURE_RATE',
+#'                            #'id_to_frax_major_hash',
+#'                            #'MAX_MAJOR_FRACTURE_RATE',
+#'                            'MEDICATION_ADHERENCE',
+#'                            'HIP_FRACTURE_RATIO',
+#'                            'MULTI_FRACTURE_FACTOR',
+#'                            'input',
+#'                            'isolate',
+#'                            'getAgeIndex',
+#'                            'getRaceIndex',
+#'                            'getBMDIndex',
+#'                            'getRiskFactorIndex',
+#'                            'getMedicationUtilization'
+#'                  ), .verbose = T) %dopar% {
+#'                    isolate({microsim(population,
+#'                                      caucasian_rate,
+#'                                      hispanic_rate,
+#'                                      asian_rate,
+#'                                      black_rate,
+#'                                      bmd_mean,
+#'                                      bmd_sd,
+#'                                      ra_rate,
+#'                                      fxr_rate,
+#'                                      parfxr_rate,
+#'                                      smoker_rate,
+#'                                      alcohol_rate,
+#'                                      gluco_rate,
+#'                                      dxa_prob,
+#'                                      med_base_prob,
+#'                                      costinpt1,
+#'                                      costinpt2,
+#'                                      
+#'                                      costoutpt1,
+#'                                      costoutpt2,
+#'                                      
+#'                                      costLTC1,
+#'                                      costLTC2,
+#'                                      
+#'                                      costED1,
+#'                                      costED2,
+#'                                      
+#'                                      costother1,
+#'                                      costother2,
+#'                                      
+#'                                      costpharm1,
+#'                                      costpharm2,
+#'                                      i, 0)})
+#'                  })
+#' })
+###############RENDERING PLOTS######################
+
+output$FraxBox <- renderInfoBox({
+  base_case <- sim_data()
+  S1 <- scenario_one()
+  total_frax <- 0
+  for(i in 1:23) {
+    total_frax <- total_frax + (S1[[i]]$total_fractures - base_case[[i]]$total_fractures)
+  }
+  subtitle_text <- ifelse(total_frax > 0, "Fracture Incidence increases", "Fracture Incidence Decreases")
+  infoBox(
+    title = "Change in Fracture Occurence", 
+    subtitle = subtitle_text, 
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "blue", fill = T, width = NULL#3
+  )
+})
+
+output$CostBox <- renderInfoBox({
+  base_case <- sim_data()
+  S1 <- scenario_one()
+  total_frax_cost <- (0)
+  for(i in 1:23) {
+    total_frax_cost <- (total_frax_cost) + ((S1[[i]]$grand_total/1000000) - (base_case[[i]]$grand_total/1000000))
+  }
+  print(total_frax_cost)
+  subtitle_text <- ifelse(total_frax_cost > 0, "Cost Increases ($MM)", "Cost Decreases ($MM)")
+  infoBox(
+    title = "Change in Cost",
+    subtitle = subtitle_text, 
+    value = dollar_format(negative_parens = TRUE)((total_frax_cost)),
+    icon = icon("list"),
+    color = "orange", fill = T, width = NULL#3
+  )
+})
+
+
+# output$S2Box <- renderInfoBox({
+#   S2 <- scenario_two()
+#   total_frax <- 0
+#   for(i in 1:23) {
+#     total_frax <- total_frax + S2[[i]]$total_fractures
+#   }
+#   infoBox(
+#     title = "Scenario Two", subtitle = "Total Fractures (2018-2040)",
+#     value = formatC(round(total_frax), format = 'd', big.mark=','),
+#     icon = icon("list"),
+#     color = "purple", fill = T, width = NULL#3
+#   )
+# })
+# 
+# 
+# output$S3Box <- renderInfoBox({
+#   S3 <- scenario_three()
+#   total_frax <- 0
+#   for(i in 1:23) {
+#     total_frax <- total_frax + S3[[i]]$total_fractures
+#   }
+#   infoBox(
+#     title = "Scenario Three", subtitle = "Total Fractures (2018-2040)",
+#     value = formatC(round(total_frax), format = 'd', big.mark=','),
+#     icon = icon("list"),
+#     color = "yellow", fill = T, width = NULL#3
+#   )
+# })
+#   
+  output$costp <-  renderPlotly({
+    costid <- rbind("One per Year", "> One per Year", stringAsFactors = TRUE)
+    inpt <- rbind(as.numeric(input$costinpt1), as.numeric(input$costinpt2))
+    outpt <- rbind(as.numeric(input$costoutpt1), as.numeric(input$costoutpt2))
+    LTC <- rbind(as.numeric(input$costLTC1), as.numeric(input$costLTC2))
+    ED <- rbind(as.numeric(input$costED1), as.numeric(input$costED2))
+    other <- rbind(as.numeric(input$costother1), as.numeric(input$costother2))
+    pharm <- rbind(as.numeric(input$costpharm1), as.numeric(input$costpharm2))
+    allcost.df <- data.frame(inpt, outpt, LTC, ED, other, pharm, stringsAsFactors=FALSE)
+    
+    costs <- rbind(as.numeric(input$costinpt1), as.numeric(input$costoutpt1), as.numeric(input$costLTC1), as.numeric(input$costED1), as.numeric(input$costother1), as.numeric(input$costpharm1), as.numeric(input$costinpt2), as.numeric(input$costoutpt2), as.numeric(input$costLTC2), as.numeric(input$costED2), as.numeric(input$costother2), as.numeric(input$costpharm2))
+    costsd <- prettyNum(costs, big.mark =",",scientific=FALSE)
+    costsx <- c("One per Year", "> One per Year")
+    costsx <- factor(costsx, levels = costsx)
+    allcostdf <- allcost.df[, c(input$inpt, input$outpt, input$LTC, input$ED, input$other, input$pharm),]
+    #allcostdf$costsx <- ordered(allcostdf$costsx, c("One per Year", "> One per Year"))
+    
+    #custom_palette = brewer.pal(6,"Paired")#c('#46005D','#7A4791','#CFA8D5','#D58DC8','#B964AA')
+    plot_ly(allcost.df, x = ~costsx, y = ~inpt, type = 'bar', name = 'Inpatient', colors = "GnBu", color = as.factor('first_trace'), 
+            hoverinfo = 'text', 
+            text = ~paste('Cost:', inpt),
+            hoverformat ="$,f") %>%
+       config(displayModeBar = F)%>%
+      add_trace(y = ~outpt, name = 'Outpatient', color = as.factor('second_trace')) %>%
+      add_trace(y = ~LTC, name = 'Long-term Care', color = as.factor('third_trace')) %>%
+      add_trace(y = ~ED, name = 'Emergency Department', color = as.factor('fourth_trace')) %>%
+      add_trace(y = ~other, name = 'Other', color = as.factor('fifth_trace')) %>%
+      add_trace(y = ~pharm, name = 'Pharmacy', color = as.factor('sixth_trace')) %>%
+      layout(
+        yaxis = list(title = 'Costs ($)'),
+        xaxis = list(title = 'Fracture Frequency', zeroline = FALSE, showgrid = FALSE), 
+        barmode = 'stack')
+  })
+  
+  #observeEvent(input$add,{
+  #  
+  #  
+  #  #output$coststbl <- renderTable({
+  #  #  allcost.df[, c(input$inpt, input$outpt, input$LTC, input$ED, input$other, input$pharm), drop = FALSE]
+  #  #}, rownames = TRUE)
+  #  
+  #  
+  #})
+  
+  output$fxrplot <- renderPlotly({
+    
+    progress <- shiny::Progress$new()
+    progress$set(message = "Simulating Population", value = 0)
+    
+    # Close the progress when this reactive exits (even if there's an error)
+    on.exit(progress$close())
+    
+    
+    sim <- sim_data()
+    progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/6, detail = "Preparing Plot")
+    scenario_1 <- scenario_one()
+    progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/6, detail = "Preparing Plot")
+   
+    
+    xbc <- c(2018:2040)
+    ybc <- c()
+    ys1 <- c()
+
+    
+    print(sim)
+    for(i in 1:length(xbc)) {
+      if(i > 1) {
+        ybc <- cbind(ybc, sim[[i]]$total_fractures + ybc[i-1])
+        ys1 <- cbind(ys1, scenario_1[[i]]$total_fractures + ys1[i-1])  
+      } else {
+        ybc <- cbind(ybc, sim[[i]]$total_fractures)
+        ys1 <- cbind(ys1, scenario_1[[i]]$total_fractures)
+      }
+    }
+
+    
+    
+    dummybc <- data.frame(xbc, ybc, ys1)#, frames)
+
+    
+    progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/6, detail = "Preparing Plot")
+    color_pal <- brewer.pal(3, "Paired")
+    p <- plot_ly(dummybc, x = ~xbc) %>% 
+      add_trace(y = ~ybc, name = "Base Case", mode = 'lines', line = list(color = color_pal[1]) ) %>% 
+      add_trace(y = ~ys1, name = "New Scenario", mode = 'lines', line = list(color = color_pal[2])) %>%
+      layout(
+        title = "Cumulative Fractures vs. Time",
+        xaxis = list(showgrid = FALSE,
+                     title = "Year",
+                     zeroline = TRUE
+        ),
+        yaxis = list(
+          title = "Total Number of Fractures",
+          zeroline = TRUE
+        ),
+        xaxis = list(
+          title = "Year",
+          zeroline = TRUE
+        )
+      )
+    
+    progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/6, detail = "Preparing Plot")
+    return(p)
+  })
+  
+  
+  output$costplot <- renderPlotly({
+    
+    sim <- sim_data()
+    scenario_1 <- scenario_one()
+
+    xbc <- c(2018:2040)
+    costybc <- c()
+    costys1 <- c()
+
+    for(i in 1:length(xbc)) {
+      if(i > 1) {
+        costybc <- cbind(costybc, sim[[i]]$total_med_cost + costybc[i-1])
+        costys1 <- cbind(costys1, scenario_1[[i]]$total_med_cost + costys1[i-1])
+      } else {
+        costybc <- cbind(costybc, sim[[i]]$total_med_cost)
+        costys1 <- cbind(costys1, scenario_1[[i]]$total_med_cost) 
+      }
+    }
+    
+    dummybc <- data.frame(xbc, costybc, costys1)#, frames)
+    color_pal <- brewer.pal(3, "Paired")
+    p <- plot_ly(dummybc, 
+                 x = ~xbc) %>%
+         add_trace(y = ~costybc, name = "Base Case", type = 'scatter', 
+                   mode = "markers", marker = list(color = color_pal[1]) ) %>%
+         add_trace(y = ~costys1, name = "New Scenario", type = 'scatter',
+                   mode = "markers", marker = list(color = color_pal[2]) ) %>%
+              config(displayModeBar = F) %>%
+              layout(
+                title = "Cumulative Therapy Cost vs. Time",
+                xaxis = list(showgrid = FALSE,
+                  title = "Year",
+                  zeroline = TRUE
+                ),
+                yaxis = list(
+                  title = "Total Therapy Cost ($)",
+                  zeroline = TRUE
+                )
+              ) 
+    
+    
+  })
+  
+  output$costplotv2 <- renderPlotly({
+    #size <- c(10, 20, 30, 40)
+    
+    sim <- sim_data()
+    scenario_1 <- scenario_one()
+    # scenario_2 <- scenario_two()
+    # scenario_3 <- scenario_three()
+    xbc <- c(2018:2040)
+    bc <- 0
+    s1 <- 0
+    # s2 <- 0
+    # s3 <- 0
+    for(i in 1:length(xbc)) {
+      bc <- bc + sim[[i]]$grand_total
+      s1 <- s1 + scenario_1[[i]]$grand_total
+      # s2 <- s2 + scenario_2[[i]]$grand_total
+      # s3 <- s3 + scenario_3[[i]]$grand_total
+    }
+    
+    #xv2 <- c(1,2, 3, 4)
+    xv2 <- c("Base Case", "New Scenario")
+    costyv2 <- c(bc, s1)
+    money_labels <- dollar_format()(costyv2)
+    bubbledf <- data.frame(xv2, costyv2, money_labels)
+    
+    plot_ly(bubbledf, x = ~xv2, y = ~costyv2, type = 'bar', 
+            name = "Cumulative Costs", orientation = "v", 
+            color =~xv2, colors = brewer.pal(4, "Paired"),
+            text = money_labels, textposition = 'auto') %>% 
+      config(displayModeBar = F)%>%
+      layout(title = 'Cumulative Cost by Scenario',
+             xaxis = list(title = "Scenarios", showgrid = FALSE),
+             yaxis = list(title = "Cost ($)"),
+             showlegend = FALSE,
+             annotations = ~money_labels) %>% hide_colorbar()
+  })
+  
+}
