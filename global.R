@@ -18,7 +18,6 @@ library(dplyr)
 library(lubridate)
 library(ggplot2)
 library(ggvis)
-library(gganimate)
 library(hashmap)
 library(htmlwidgets)
 library(magrittr)
@@ -45,8 +44,8 @@ library(tidyverse)
 source("microsim_utilities.R")
 source("microsim.R")
 
-# cl <- makeCluster(detectCores() - 1)
-# registerDoParallel(cl)
+cl <- makeCluster(detectCores() - 1)
+registerDoParallel(cl)
 
 tab_id <- c("Overview", "Inputs", "Fracture", "Scenarios", "Results", "Assumptions", "Break", "Disclosures", "Terms", "References")
 

@@ -14,7 +14,7 @@
 ############################################################################
 microsim <- function(POP, CAUC, HISP, ASIAN, BLACK, BMD_MEAN, BMD_SD, RA_INP,
                      FXR_INP, PARFXR_INP, SMOKER, ALCO, GLUCO_TX, BASECASEID,
-                     BASECASETX, COSTINPT1, COSTINPT2, COSTOUTPT1, COSTOUTPT2,
+                     BASECASETX, S1ID, S1TX, COSTINPT1, COSTINPT2, COSTOUTPT1, COSTOUTPT2,
                      COSTLTC1, COSTLTC2, COSTED1, COSTED2, COSTOTHER1, COSTOTHER2,
                      COSTPHARM1, COSTPHARM2, YEAR, CASE) {
 
@@ -77,9 +77,10 @@ gluco_prob <- GLUCO_TX
 
 # 0.113 in Copy version
 dxa_prob <- BASECASEID # 11.3% in paper ... 33.1% for one scenario
-
 med_base_prob <-  BASECASETX #0.104 # THIS SHOULD DECAY LOGARITHMICALLY
-print(med_base_prob)
+
+dxa_prob_s1 <- S1ID
+med_base_prob_s1 <- S1TX
 # Treatment Mix
 treatment_mix <-c(0.439, # Alendronate  PRIMARY (BISPHOSPHONATES?)
                   0.061,  # Ibandronate 150 MG
@@ -209,17 +210,24 @@ frax[is.na(frax)] <- MAX_HIP_FRACTURE_RATE
 frax_major <- id_to_frax_major_hash[[ index ]] # frax major
 frax_major[is.na(frax_major)] <- MAX_MAJOR_FRACTURE_RATE
 
+dxa_scans <- getDXAScans(population_size,
+                         frax_major,
+                         dxa_prob) 
 
-if(dxa_prob == 0) {
-  dxa_scans <- replicate(population_size,0)
-} else {
-  dxa_scans    <- frax_major >= quantile(frax_major, 1 - dxa_prob)  
-}
-if(med_base_prob == 0 || getMedicationUtilization(med_base_prob, year) <= 0) {
-  med_patients <- replicate(population_size, 0)
-} else {
-  med_patients <- frax_major >= quantile(frax_major, 1 - getMedicationUtilization(med_base_prob, year) )
-}
+dxa_scans_s1 <- getDXAScans(population_size,
+                            frax_major,
+                            dxa_prob_s1) 
+
+
+med_patients <- getMedPatients(population_size,
+                               frax_major,
+                               med_base_prob,
+                               year)
+
+med_patients_s1 <- getMedPatients(population_size,
+                               frax_major,
+                               med_base_prob_s1,
+                               year)
 
 
 samples <- runif(population_size)

@@ -144,3 +144,24 @@ getMedicationUtilization <- function(BASE_MEDICATION_ADHERENCE,
                                    YEAR) {
   return(BASE_MEDICATION_ADHERENCE - 0.026 * log(YEAR - 2013))
 }
+
+getDXAScans <- function(POPULATION_SIZE,
+                        FRAX_MAJOR,
+                        DXA_PROB) {
+  if(DXA_PROB == 0) {
+    return(replicate(POPULATION_SIZE,0))
+  } else {
+    return(FRAX_MAJOR >= quantile(FRAX_MAJOR, 1 - DXA_PROB))  
+  }
+}
+
+getMedPatients <- function(POPULATION_SIZE,
+                           FRAX_MAJOR,
+                           MED_PROB,
+                           YEAR) {
+  if(MED_PROB == 0 || getMedicationUtilization(MED_PROB, YEAR) <= 0) {
+    return(replicate(POPULATION_SIZE, 0))
+  } else {
+    return(FRAX_MAJOR >= quantile(FRAX_MAJOR, 1 - getMedicationUtilization(MED_PROB, YEAR) ))
+  }  
+}
