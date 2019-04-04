@@ -14,9 +14,10 @@
 ############################################################################
 microsim <- function(POP, CAUC, HISP, ASIAN, BLACK, BMD_MEAN, BMD_SD, RA_INP,
                      FXR_INP, PARFXR_INP, SMOKER, ALCO, GLUCO_TX, BASECASEID,
-                     BASECASETX, COSTINPT1, COSTINPT2, COSTOUTPT1, COSTOUTPT2,
+                     BASECASETX, S1ID, S1TX, COSTINPT1, COSTINPT2, COSTOUTPT1, COSTOUTPT2,
                      COSTLTC1, COSTLTC2, COSTED1, COSTED2, COSTOTHER1, COSTOTHER2,
-                     COSTPHARM1, COSTPHARM2, YEAR, CASE) {
+                     COSTPHARM1, COSTPHARM2, COSTPROD1, COSTPROD2, COSTCARE1,
+                     COSTCARE2, YEAR, CASE) {
 
 # Setup Hashmap for lookups    
 id_to_frax_hash <- hashmap(ID_lookup$ID, ID_lookup$`FRAX- HIP`)
@@ -77,9 +78,10 @@ gluco_prob <- GLUCO_TX
 
 # 0.113 in Copy version
 dxa_prob <- BASECASEID # 11.3% in paper ... 33.1% for one scenario
-
 med_base_prob <-  BASECASETX #0.104 # THIS SHOULD DECAY LOGARITHMICALLY
-print(med_base_prob)
+
+dxa_prob_s1 <- S1ID
+med_base_prob_s1 <- S1TX
 # Treatment Mix
 treatment_mix <-c(0.439, # Alendronate  PRIMARY (BISPHOSPHONATES?)
                   0.061,  # Ibandronate 150 MG
@@ -170,8 +172,12 @@ other_w_subsequent_fracture <-  COSTOTHER2#4295
 pharmacy_wo_subsequent_fracture <- COSTPHARM1#2174
 pharmacy_w_subsequent_fracture <-  COSTPHARM2#2488
 
-productivity_unit_cost <- 2445
-caregiver_costs <- 1770.60
+productivity_wo_subsequent_fracture <- COSTPROD1#2445
+productivity_w_subsequent_fracture <- COSTPROD2#2445
+
+caregiver_wo_subsequent_fracture <- COSTCARE1#2445
+caregiver_w_subsequent_fracture <- COSTCARE2#2445
+
 
 # 2. Create Population based on input parameters
 # Simulate population
@@ -209,40 +215,64 @@ frax[is.na(frax)] <- MAX_HIP_FRACTURE_RATE
 frax_major <- id_to_frax_major_hash[[ index ]] # frax major
 frax_major[is.na(frax_major)] <- MAX_MAJOR_FRACTURE_RATE
 
+dxa_scans <- getDXAScans(population_size,
+                         frax_major,
+                         dxa_prob) 
 
-if(dxa_prob == 0) {
-  dxa_scans <- replicate(population_size,0)
-} else {
-  dxa_scans    <- frax_major >= quantile(frax_major, 1 - dxa_prob)  
-}
-if(med_base_prob == 0 || getMedicationUtilization(med_base_prob, year) <= 0) {
-  med_patients <- replicate(population_size, 0)
-} else {
-  med_patients <- frax_major >= quantile(frax_major, 1 - getMedicationUtilization(med_base_prob, year) )
-}
+dxa_scans_s1 <- getDXAScans(population_size,
+                            frax_major,
+                            dxa_prob_s1) 
+
+
+med_patients <- getMedPatients(population_size,
+                               frax_major,
+                               med_base_prob,
+                               year)
+
+med_patients_s1 <- getMedPatients(population_size,
+                               frax_major,
+                               med_base_prob_s1,
+                               year)
 
 
 samples <- runif(population_size)
-any_fracture <- ifelse(med_patients,
-                       samples < (ANY_FRACTURE_AVERAGE*(1-exp(-(-log(1-frax_major)/10)))),
-                       samples < (1-exp(-(-log(1-frax_major)/10)))  )
+
+any_fracture <- getFracture(med_patients,
+                            ANY_FRACTURE_AVERAGE,
+                            frax_major,
+                            samples)
+
+any_fracture_s1 <- getFracture(med_patients_s1,
+                            ANY_FRACTURE_AVERAGE,
+                            frax_major,
+                            samples)
 
 samples <- runif(population_size)
-hip_fracture <- ifelse(med_patients, 
-                       samples < (HIP_FRACTURE_AVERAGE*(1-exp(-(-log(1-frax)/10)))),
-                       samples < (1-exp(-(-log(1-frax)/10)))
-)
 
+hip_fracture <- getFracture(med_patients,
+                            HIP_FRACTURE_AVERAGE,
+                            frax,
+                            samples)
+
+hip_fracture_s1 <- getFracture(med_patients_s1,
+                            HIP_FRACTURE_AVERAGE,
+                            frax,
+                            samples)
 
 other_fracture <- ifelse(!any_fracture,
                          F,
                          !hip_fracture)
+
+other_fracture_s1 <- ifelse(!any_fracture_s1,
+                            F,
+                            !hip_fracture_s1)
 
 # Should be more parameterized
 
 
 
 total_other_fracture <- sum(other_fracture)
+total_other_fracture_s1 <- sum(other_fracture_s1)
 
 
 total_hip <- sum(hip_fracture) * MULTI_FRACTURE_FACTOR * weird_coefficient[year-2013]
@@ -250,41 +280,114 @@ total_shoulder <- fracture_breakdown[1] * total_other_fracture* MULTI_FRACTURE_F
 total_vertebral <- fracture_breakdown[2] * total_other_fracture * MULTI_FRACTURE_FACTOR * weird_coefficient[year-2013]
 total_forearm <- fracture_breakdown[3] * total_other_fracture* MULTI_FRACTURE_FACTOR* weird_coefficient[year-2013]
 
+total_hip_s1 <- sum(hip_fracture_s1) * MULTI_FRACTURE_FACTOR * weird_coefficient[year-2013]
+total_shoulder_s1 <- fracture_breakdown[1] * total_other_fracture_s1* MULTI_FRACTURE_FACTOR* weird_coefficient[year-2013]
+total_vertebral_s1 <- fracture_breakdown[2] * total_other_fracture_s1 * MULTI_FRACTURE_FACTOR * weird_coefficient[year-2013]
+total_forearm_s1 <- fracture_breakdown[3] * total_other_fracture_s1* MULTI_FRACTURE_FACTOR* weird_coefficient[year-2013]
+
+
 total_other <- HIP_FRACTURE_RATIO * total_hip - total_shoulder - total_vertebral - total_forearm
-# May explore total_fractures further
 total_fractures <- total_hip + total_shoulder + total_vertebral + total_forearm + total_other
 
+total_other_s1 <- HIP_FRACTURE_RATIO * total_hip_s1 - total_shoulder_s1 - total_vertebral_s1 - total_forearm_s1
+total_fractures_s1 <- total_hip_s1 + total_shoulder_s1 + total_vertebral_s1 + total_forearm_s1 + total_other_s1
 
 
 total_dxa_cost <- sum(dxa_scans) * dxa_cost* weird_coefficient[year-2013]
 total_med_cost <- sum(med_patients) * MEDICATION_COST * MEDICATION_ADHERENCE* weird_coefficient[year-2013]
 
-total_inpatient_cost <- total_fractures * (1/MULTI_FRACTURE_FACTOR)*inpatient_wo_subsequent_fracture + 
-                        total_fractures * ((MULTI_FRACTURE_FACTOR-1)/MULTI_FRACTURE_FACTOR)*inpatient_w_subsequent_fracture
-total_outpatient_cost <- total_fractures * (1/MULTI_FRACTURE_FACTOR)*outpatient_wo_subsequent_fracture + 
-                         total_fractures * ((MULTI_FRACTURE_FACTOR-1)/MULTI_FRACTURE_FACTOR) * outpatient_w_subsequent_fracture
+total_dxa_cost_s1 <- sum(dxa_scans_s1) * dxa_cost* weird_coefficient[year-2013]
+total_med_cost_s1 <- sum(med_patients_s1) * MEDICATION_COST * MEDICATION_ADHERENCE* weird_coefficient[year-2013]
+
+total_inpatient_cost <- getMultiFraxCost(total_fractures,
+                                         MULTI_FRACTURE_FACTOR,
+                                         inpatient_wo_subsequent_fracture,
+                                         inpatient_w_subsequent_fracture)
+total_inpatient_cost_s1 <- getMultiFraxCost(total_fractures_s1,
+                                         MULTI_FRACTURE_FACTOR,
+                                         inpatient_wo_subsequent_fracture,
+                                         inpatient_w_subsequent_fracture)
+
+total_outpatient_cost <- getMultiFraxCost(total_fractures,
+                                         MULTI_FRACTURE_FACTOR,
+                                         outpatient_wo_subsequent_fracture,
+                                         outpatient_w_subsequent_fracture)
+total_outpatient_cost_s1 <- getMultiFraxCost(total_fractures_s1,
+                                          MULTI_FRACTURE_FACTOR,
+                                          outpatient_wo_subsequent_fracture,
+                                          outpatient_w_subsequent_fracture)
+
+total_ltc_cost <- getMultiFraxCost(total_fractures,
+                                   MULTI_FRACTURE_FACTOR,
+                                   ltc_wo_subsequent_fracture,
+                                   ltc_w_subsequent_fracture)
+total_ltc_cost_s1 <- getMultiFraxCost(total_fractures_s1,
+                                      MULTI_FRACTURE_FACTOR,
+                                      ltc_wo_subsequent_fracture,
+                                      ltc_w_subsequent_fracture)
+
+total_ed_cost <- getMultiFraxCost(total_fractures,
+                                  MULTI_FRACTURE_FACTOR,
+                                  ed_wo_subsequent_fracture,
+                                  ed_w_subsequent_fracture)
+total_ed_cost_s1 <- getMultiFraxCost(total_fractures_s1,
+                                     MULTI_FRACTURE_FACTOR,
+                                     ed_wo_subsequent_fracture,
+                                     ed_w_subsequent_fracture)
+
+total_other_cost <- getMultiFraxCost(total_fractures,
+                                 MULTI_FRACTURE_FACTOR,
+                                 other_wo_subsequent_fracture,
+                                 other_w_subsequent_fracture)
+total_other_cost_s1 <- getMultiFraxCost(total_fractures_s1,
+                                     MULTI_FRACTURE_FACTOR,
+                                     other_wo_subsequent_fracture,
+                                     other_w_subsequent_fracture)
+
+total_pharmacy_cost <- getMultiFraxCost(total_fractures,
+                                     MULTI_FRACTURE_FACTOR,
+                                     pharmacy_wo_subsequent_fracture,
+                                     pharmacy_w_subsequent_fracture)
+total_pharmacy_cost_s1 <- getMultiFraxCost(total_fractures_s1,
+                                        MULTI_FRACTURE_FACTOR,
+                                        pharmacy_wo_subsequent_fracture,
+                                        pharmacy_w_subsequent_fracture)
 
 
-total_ltc_cost <- total_fractures * (1/MULTI_FRACTURE_FACTOR)*ltc_wo_subsequent_fracture + 
-                  total_fractures*((MULTI_FRACTURE_FACTOR-1)/MULTI_FRACTURE_FACTOR)*ltc_w_subsequent_fracture
-total_ed_cost <- total_fractures * (1/MULTI_FRACTURE_FACTOR)*ed_wo_subsequent_fracture + total_fractures * ((MULTI_FRACTURE_FACTOR-1)/MULTI_FRACTURE_FACTOR)*ed_w_subsequent_fracture
+total_productivity_losses <- getMultiFraxCost(total_fractures,
+                                              MULTI_FRACTURE_FACTOR,
+                                              productivity_wo_subsequent_fracture,
+                                              productivity_w_subsequent_fracture)
 
-total_other_cost <- total_fractures * (1/MULTI_FRACTURE_FACTOR)*other_wo_subsequent_fracture + 
-                    total_fractures * ((MULTI_FRACTURE_FACTOR-1)/MULTI_FRACTURE_FACTOR)*other_w_subsequent_fracture
-total_pharmacy_cost <- total_fractures * (1/MULTI_FRACTURE_FACTOR)*pharmacy_wo_subsequent_fracture + 
-                       total_fractures * ((MULTI_FRACTURE_FACTOR-1)/MULTI_FRACTURE_FACTOR)*pharmacy_w_subsequent_fracture
+total_productivity_losses_s1 <- getMultiFraxCost(total_fractures_s1,
+                                              MULTI_FRACTURE_FACTOR,
+                                              productivity_wo_subsequent_fracture,
+                                              productivity_w_subsequent_fracture)
 
-total_productivity_losses <- total_fractures * productivity_unit_cost
-total_caregiver_losses <- total_fractures *caregiver_costs
+total_caregiver_losses <- getMultiFraxCost(total_fractures,
+                                           MULTI_FRACTURE_FACTOR,
+                                           caregiver_wo_subsequent_fracture,
+                                           caregiver_w_subsequent_fracture)
+
+total_caregiver_losses_s1 <- getMultiFraxCost(total_fractures_s1,
+                                              MULTI_FRACTURE_FACTOR,
+                                              caregiver_wo_subsequent_fracture,
+                                              caregiver_w_subsequent_fracture)
+
 
 total_direct_cost <- total_dxa_cost + total_med_cost + total_inpatient_cost +
-  total_outpatient_cost + total_ltc_cost + total_ed_cost +
-  total_other_cost + total_pharmacy_cost
+                     total_outpatient_cost + total_ltc_cost + total_ed_cost +
+                     total_other_cost + total_pharmacy_cost
 
-total_indirect_cost <- total_productivity_losses + total_caregiver_losses
+total_direct_cost_s1 <- total_dxa_cost_s1 + total_med_cost_s1 + total_inpatient_cost_s1 +
+                     total_outpatient_cost_s1 + total_ltc_cost_s1 + total_ed_cost_s1 +
+                     total_other_cost_s1 + total_pharmacy_cost_s1
 
+total_indirect_cost <-    total_productivity_losses + total_caregiver_losses
+total_indirect_cost_s1 <- total_productivity_losses_s1 + total_caregiver_losses_s1
 
 grand_total <- total_direct_cost + total_indirect_cost
+grand_total_s1 <- total_direct_cost_s1 + total_indirect_cost_s1
 
 
 clinical_data <- data.frame(total_hip, total_shoulder, total_vertebral, 
@@ -296,6 +399,15 @@ financial_data <- data.frame(total_dxa_cost, total_med_cost, total_inpatient_cos
                              total_caregiver_losses, total_direct_cost, total_indirect_cost, 
                              grand_total)
 
-packaged_data <- data.frame(clinical_data, financial_data)
-return(packaged_data)#*EXTRAPOLATION_FACTOR)
+clinical_data_s1 <- data.frame(total_hip_s1, total_shoulder_s1, total_vertebral_s1, 
+                            total_forearm_s1, total_other_s1, total_fractures_s1)
+
+financial_data_s1 <- data.frame(total_dxa_cost_s1, total_med_cost_s1, total_inpatient_cost_s1,
+                             total_outpatient_cost_s1, total_ltc_cost_s1, total_ed_cost_s1,
+                             total_other_cost_s1, total_pharmacy_cost_s1, total_productivity_losses_s1,
+                             total_caregiver_losses_s1, total_direct_cost_s1, total_indirect_cost_s1, 
+                             grand_total_s1)
+
+packaged_data <- data.frame(clinical_data, financial_data, clinical_data_s1, financial_data_s1)
+return(packaged_data)
 }

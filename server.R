@@ -117,7 +117,233 @@ function(input, output, session) {
     reset("costcare1")
     reset("costcare2")
   })  
-
+  ###############INPUT VALIDATION#####################
+  pop_input <- reactive({
+    validate(
+      need(input$pop_input > 0, "Population must be greater than 0.")
+    )
+    return(input$pop_input)
+  })
+  
+  cauc_rate <- reactive({
+    validate(
+      need(input$RE_cauc >= 0 && input$RE_cauc <= 100, 
+           "Caucasion demographic must be within range of [0,100]")
+      %then% need(input$RE_cauc + input$RE_hisp +
+                    input$RE_asian + input$RE_black == 100,
+                  "Demographic percentages must sum to 100"))
+    return(input$RE_cauc/100.0)
+  })
+  
+  hisp_rate <- reactive({
+    validate(
+      need(input$RE_hisp >= 0 && input$RE_hisp <= 100, 
+           "Hispanic demographic must be within range of [0,100]")
+      %then% need(input$RE_cauc + input$RE_hisp +
+                    input$RE_asian + input$RE_black == 100,
+                  "Demographic percentages must sum to 100"))
+    return(input$RE_hisp/100.0)
+  })
+  
+  asian_rate <- reactive({
+    validate(
+      need(input$RE_asian >= 0 && input$RE_asian <= 100, 
+           "Asian demographic must be within range of [0,100]")
+      %then% need(input$RE_cauc + input$RE_hisp +
+                    input$RE_asian + input$RE_black == 100,
+                  "Demographic percentages must sum to 100"))
+    return(input$RE_asian/100.0)
+  })
+  
+  black_rate <- reactive({
+    validate(
+      need(input$RE_black >= 0 && input$RE_black <= 100, 
+           "Black demographic must be within range of [0,100]")
+      %then% need(input$RE_cauc + input$RE_hisp +
+                    input$RE_asian + input$RE_black == 100,
+                  "Demographic percentages must sum to 100"))
+    return(input$RE_black/100.0)
+  })
+  BMD_mean <- reactive({
+    validate(
+      need(input$BMD_mean > 0 && input$BMD_mean <= 1.0, 
+           "Mean bone mineral density must be within the range (0, 1.0]"))
+    return(input$BMD_mean)
+  })
+  
+  BMD_SD <- reactive({
+    validate(
+      need(input$BMD_SD > 0 && input$BMD_SD <= 1.0, 
+           "Bone mineral density standard deviation must be within the range (0, 1.0]"))
+    return(input$BMD_SD)
+  })  
+  
+  RA_rate <- reactive({
+    validate(
+      need(input$RA_inp > 0 && input$RA_inp <= 100.0, 
+           "Rheumatoid arthritis percentage must be within the range (0, 100.0]"))
+    return(input$RA_inp/100.0)
+  })
+  
+  FXR_rate <- reactive({
+    validate(
+      need(input$fxr_inp > 0 && input$fxr_inp <= 100.0, 
+           "Previous fracture percentage must be within the range (0, 100.0]"))
+    return(input$fxr_inp/100.0)
+  })
+  
+  PARFXR_rate <- reactive({
+    validate(
+      need(input$parfxr_inp > 0 && input$parfxr_inp <= 100.0, 
+           "Parent history of hip fracture percentage must be within the range (0, 100.0]"))
+    return(input$parfxr_inp/100.0)
+  })
+  
+  SMOKER_rate <- reactive({
+    validate(
+      need(input$smoker > 0 && input$smoker <= 100.0, 
+           "Smoker percentage must be within the range (0, 100.0]"))
+    return(input$smoker/100.0)
+  })
+  
+  ALCO_rate <- reactive({
+    validate(
+      need(input$alco > 0 && input$alco <= 100.0, 
+           "Excessive alcohol use percentage must be within the range (0, 100.0]"))
+    return(input$alco/100.0)
+  })
+  
+  GLUCO_rate <- reactive({
+    validate(
+      need(input$gluco_tx > 0 && input$gluco_tx <= 100.0, 
+           "Long-term glucocorticoid therpay percentage must be within the range (0, 100.0]"))
+    return(input$gluco_tx/100.0)
+  })
+  
+  Base_Case_ID <- reactive({
+    validate(
+      need(input$basecaseID >= 0 && input$basecaseID <= 100.0, 
+           "Base case identification rate must be within the range [0, 100.0]"))
+    return(input$basecaseID/100.0)
+  })
+  
+  Base_Case_Treatment <- reactive({
+    validate(
+      need(input$basecaseTx >= 0 && input$basecaseTx <= 100.0, 
+           "Base case treatment percentage must be within the range [0, 100.0]"))
+    return(input$basecaseTx/100.0)
+  })
+  
+  S1_ID <- reactive({
+    validate(
+      need(input$scenario1ID >= 0 && input$scenario1ID <= 100.0, 
+           "New scenario identification rate must be within the range [0, 100.0]"))
+    return(input$scenario1ID/100.0)
+  })
+  
+  S1_Treatment <- reactive({
+    validate(
+      need(input$scenario1Tx >= 0 && input$scenario1Tx <= 100.0, 
+           "New scenario treatment percentage must be within the range [0, 100.0]"))
+    return(input$scenario1Tx/100.0)
+  })
+  costinpt1 <- reactive({
+    validate(
+      need(input$costinpt1 >= 0, 
+           "Inpatient costs must be greater than or equal to 0."))
+    return(input$costinpt1)
+  })
+  costinpt2 <- reactive({
+    validate(
+      need(input$costinpt2 >= 0, 
+           "Inpatient costs must be greater than or equal to 0."))
+    return(input$costinpt2)
+  })
+  costoutpt1 <- reactive({
+    validate(
+      need(input$costoutpt1 >= 0, 
+           "outpatient costs must be greater than or equal to 0."))
+    return(input$costoutpt1)
+  })
+  costoutpt2 <- reactive({
+    validate(
+      need(input$costoutpt2 >= 0, 
+           "Outpatient costs must be greater than or equal to 0."))
+    return(input$costoutpt2)
+  })
+  costLTC1 <- reactive({
+    validate(
+      need(input$costLTC1 >= 0, 
+           "Long-term care costs must be greater than or equal to 0."))
+    return(input$costLTC1)
+  })
+  costLTC2 <- reactive({
+    validate(
+      need(input$costLTC2 >= 0, 
+           "Long-term care costs must be greater than or equal to 0."))
+    return(input$costLTC2)
+  })
+  
+  costED1 <- reactive({
+    validate(
+      need(input$costED1 >= 0, 
+           "Emergency department costs must be greater than or equal to 0."))
+    return(input$costED1)
+  })
+  costED2 <- reactive({
+    validate(
+      need(input$costED2 >= 0, 
+           "Emergency department costs must be greater than or equal to 0."))
+    return(input$costED2)
+  })
+  costOTHER1 <- reactive({
+    validate(
+      need(input$costother1 >= 0, 
+           "Other costs must be greater than or equal to 0."))
+    return(input$costother1)
+  })
+  costOTHER2 <- reactive({
+    validate(
+      need(input$costother2 >= 0, 
+           "Other costs must be greater than or equal to 0."))
+    return(input$costother2)
+  })
+  costpharm1 <- reactive({
+    validate(
+      need(input$costpharm1 >= 0, 
+           "Pharmacy costs must be greater than or equal to 0."))
+    return(input$costpharm1)
+  })
+  costpharm2 <- reactive({
+    validate(
+      need(input$costpharm2 >= 0, 
+           "Pharmacy costs must be greater than or equal to 0."))
+    return(input$costpharm2)
+  })
+  costprod1 <- reactive({
+    validate(
+      need(input$costprod1 >= 0, 
+           "Productivity loss costs must be greater than or equal to 0."))
+    return(input$costprod1)
+  })
+  costprod2 <- reactive({
+    validate(
+      need(input$costprod2 >= 0, 
+           "Productivity loss costs must be greater than or equal to 0."))
+    return(input$costprod2)
+  })
+  costcare1 <- reactive({
+    validate(
+      need(input$costcare1 >= 0, 
+           "Caregiver costs must be greater than or equal to 0."))
+    return(input$costcare1)
+  })
+  costcare2 <- reactive({
+    validate(
+      need(input$costcare2 >= 0, 
+           "Caregiver costs must be greater than or equal to 0."))
+    return(input$costcare2)
+  })
 ###############REACTIVE ACTIONS#####################
 # TODO
 # Make Copies of microsim function for 3 additional scenarios
@@ -127,49 +353,57 @@ function(input, output, session) {
    
   
 sim_data <- reactive({
-  population <- input$pop_input
-  caucasian_rate <- input$RE_cauc/100.0
-  hispanic_rate <-  input$RE_hisp/100.0
-  asian_rate <-     input$RE_asian/100.0 
-  black_rate <-     input$RE_black/100.0
+  population <-     pop_input()
+  caucasian_rate <- cauc_rate()
+  hispanic_rate <-  hisp_rate()
+  asian_rate <-     asian_rate() 
+  black_rate <-     black_rate()
   
-  bmd_mean <-       input$BMD_mean
-  bmd_sd <-         input$BMD_SD
+  bmd_mean <-       BMD_mean()
+  bmd_sd <-         BMD_SD()
   
-  ra_rate <-        input$RA_inp/100.0
-  fxr_rate <-       input$fxr_inp/100.0
-  parfxr_rate <-    input$parfxr_inp/100.0
-  smoker_rate <-    input$smoker/100.0
-  alcohol_rate <-   input$alco/100.0
-  gluco_rate <-     input$gluco_tx/100.0
+  ra_rate <-        RA_rate()
+  fxr_rate <-       FXR_rate()
+  parfxr_rate <-    PARFXR_rate()
+  smoker_rate <-    SMOKER_rate()
+  alcohol_rate <-   ALCO_rate()
+  gluco_rate <-     GLUCO_rate()
   
-  dxa_prob <-       input$basecaseID/100.0
-  med_base_prob <-  input$basecaseTx/100.0
+  dxa_prob <-       Base_Case_ID()
+  med_base_prob <-  Base_Case_Treatment()
   
-  costinpt1 <- input$costinpt1
-  costinpt2 <- input$costinpt2
+  dxa_prob_s1 <-       S1_ID()
+  med_base_prob_s1 <-  S1_Treatment()
   
-  costoutpt1 <- input$costoutpt1
-  costoutpt2 <- input$costoutpt2
+  costinpt1 <- costinpt1()
+  costinpt2 <- costinpt2()
   
-  costLTC1 <- input$costLTC1
-  costLTC2 <- input$costLTC2
+  costoutpt1 <- costoutpt1()
+  costoutpt2 <- costoutpt2()
   
-  costED1 <- input$costED1
-  costED2 <- input$costED2
+  costLTC1 <- costLTC1()
+  costLTC2 <- costLTC2()
   
-  costother1 <- input$costother1
-  costother2 <- input$costother2
+  costED1 <- costED1()
+  costED2 <- costED2()
   
-  costpharm1 <- input$costpharm1
-  costpharm2 <- input$costpharm2
+  costother1 <- costOTHER1()
+  costother2 <- costOTHER2()
+  
+  costpharm1 <- costpharm1()
+  costpharm2 <- costpharm2()
+  
+  costprod1 <- costprod1()
+  costprod2 <- costprod2()
+  
+  costcare1 <- costcare1()
+  costcare2 <- costcare2()
   
   start_year <- 2018
   end_year   <- as.integer(substring(input$endYear, 1, 4))
   
   print(start_year)
   print(end_year)
-  # TODO make years dynamic, single slider for years?
   return(foreach(i=start_year:end_year,
                               .packages = c('readxl',
                                             'hashmap'),
@@ -199,7 +433,11 @@ sim_data <- reactive({
                                         'getRaceIndex',
                                         'getBMDIndex',
                                         'getRiskFactorIndex',
-                                        'getMedicationUtilization'
+                                        'getMedicationUtilization',
+                                        'getDXAScans',
+                                        'getMedPatients',
+                                        'getFracture',
+                                        'getMultiFraxCost'
                                         ), .verbose = T) %dopar% {
                                isolate({microsim(population,
                                                  caucasian_rate,
@@ -216,6 +454,9 @@ sim_data <- reactive({
                                                  gluco_rate,
                                                  dxa_prob,
                                                  med_base_prob,
+                                                 dxa_prob_s1,
+                                                 med_base_prob_s1,
+                                                 
                                                  costinpt1,
                                                  costinpt2,
                                                  
@@ -233,116 +474,14 @@ sim_data <- reactive({
                                                  
                                                  costpharm1,
                                                  costpharm2,
+                                                 
+                                                 costprod1,
+                                                 costprod2,
+                                                 
+                                                 costcare1,
+                                                 costcare2,
                                                  i, 0)})
                               })
-})
-
-scenario_one <- reactive({
-  population <- input$pop_input
-  caucasian_rate <- input$RE_cauc/100.0
-  hispanic_rate <-  input$RE_hisp/100.0
-  asian_rate <-     input$RE_asian/100.0 
-  black_rate <-     input$RE_black/100.0
-  
-  bmd_mean <-       input$BMD_mean
-  bmd_sd <-         input$BMD_SD
-  
-  ra_rate <-        input$RA_inp/100.0
-  fxr_rate <-       input$fxr_inp/100.0
-  parfxr_rate <-    input$parfxr_inp/100.0
-  smoker_rate <-    input$smoker/100.0
-  alcohol_rate <-   input$alco/100.0
-  gluco_rate <-     input$gluco_tx/100.0
-  
-  dxa_prob <-       input$scenario1ID/100.0
-  med_base_prob <-  input$scenario1Tx/100.0
-  
-  costinpt1 <- input$costinpt1
-  costinpt2 <- input$costinpt2
-  
-  costoutpt1 <- input$costoutpt1
-  costoutpt2 <- input$costoutpt2
-  
-  costLTC1 <- input$costLTC1
-  costLTC2 <- input$costLTC2
-  
-  costED1 <- input$costED1
-  costED2 <- input$costED2
-  
-  costother1 <- input$costother1
-  costother2 <- input$costother2
-  
-  costpharm1 <- input$costpharm1
-  costpharm2 <- input$costpharm2
-  
-  start_year <- 2018
-  end_year   <- as.integer(substring(input$endYear, 1, 4))
-  
-  return(foreach(i=start_year:end_year,
-                 .packages = c('readxl',
-                               'hashmap'),
-                 .export=c('microsim',
-                           'age_probabilities',
-                           'minimum_age',
-                           'maximum_age',
-                           'age_cutoffs',
-                           'age_index_scores',
-                           'race_categories',
-                           'race_index_scores',
-                           'fracture_breakdown',
-                           'centering_mean',
-                           'bmd_index_scores',
-                           'bmd_cutoffs',
-                           'ID_lookup',
-                           #'id_to_frax_hash',
-                           #'MAX_HIP_FRACTURE_RATE',
-                           #'id_to_frax_major_hash',
-                           #'MAX_MAJOR_FRACTURE_RATE',
-                           'MEDICATION_ADHERENCE',
-                           'HIP_FRACTURE_RATIO',
-                           'MULTI_FRACTURE_FACTOR',
-                           'input',
-                           'isolate',
-                           'getAgeIndex',
-                           'getRaceIndex',
-                           'getBMDIndex',
-                           'getRiskFactorIndex',
-                           'getMedicationUtilization'
-                 ), .verbose = T) %dopar% {
-                   isolate({microsim(population,
-                                     caucasian_rate,
-                                     hispanic_rate,
-                                     asian_rate,
-                                     black_rate,
-                                     bmd_mean,
-                                     bmd_sd,
-                                     ra_rate,
-                                     fxr_rate,
-                                     parfxr_rate,
-                                     smoker_rate,
-                                     alcohol_rate,
-                                     gluco_rate,
-                                     dxa_prob,
-                                     med_base_prob,
-                                     costinpt1,
-                                     costinpt2,
-                                     
-                                     costoutpt1,
-                                     costoutpt2,
-                                     
-                                     costLTC1,
-                                     costLTC2,
-                                     
-                                     costED1,
-                                     costED2,
-                                     
-                                     costother1,
-                                     costother2,
-                                     
-                                     costpharm1,
-                                     costpharm2,
-                                     i, 0)})
-                 })
 })
 
 ###############RENDERING BOXES & PLOTS######################
@@ -350,13 +489,12 @@ uiOutput("nlp_sentences_tree")
 
 output$totalfxr_content <- renderText({
   base_case <- sim_data()
-  S1 <- scenario_one()
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
   total_frax <- 0
   duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
   for(i in 1:duration) {
-    total_frax <- total_frax + (S1[[i]]$total_fractures - base_case[[i]]$total_fractures)}
+    total_frax <- total_frax + (base_case[[i]]$total_fractures_s1 - base_case[[i]]$total_fractures)}
   formatted_fxrs <- formatC(round(total_frax), format = 'd', big.mark=',')
   paste("The total number of fractures is estimated to ", 
                                             ifelse(total_frax > 0, "increase by ", "decrease by "), 
@@ -366,11 +504,10 @@ output$totalfxr_content <- renderText({
 
 output$FraxBox_R <- renderInfoBox({
   base_case <- sim_data()
-  S1 <- scenario_one()
   total_frax <- 0
   duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
   for(i in 1:duration) {
-    total_frax <- total_frax + (S1[[i]]$total_fractures - base_case[[i]]$total_fractures)
+    total_frax <- total_frax + (base_case[[i]]$total_fractures_s1 - base_case[[i]]$total_fractures)
   }
   subtitle_text <- ifelse(total_frax > 0, "Change to New Scenario Results in Fracture Incidence Increasing", "Change to New Scenario Results in Fracture Incidence Decreasing")
   inp_year <- as.Date(input$endYear, "%Y")
@@ -387,11 +524,10 @@ output$FraxBox_R <- renderInfoBox({
 
 output$CostBox_R <- renderInfoBox({
   base_case <- sim_data()
-  S1 <- scenario_one()
   total_frax_cost <- (0)
   duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
   for(i in 1:duration) {
-    total_frax_cost <- (total_frax_cost) + ((S1[[i]]$grand_total/1000000) - (base_case[[i]]$grand_total/1000000))
+    total_frax_cost <- (total_frax_cost) + ((base_case[[i]]$grand_total_s1/1000000) - (base_case[[i]]$grand_total/1000000))
   }
   print(total_frax_cost)
   subtitle_text <- ifelse(total_frax_cost > 0, "Change to New Scenario Results in Cost Increases ($MM)", "Change to New Scenario Results in Cost Decreases ($MM)")
@@ -409,11 +545,10 @@ output$CostBox_R <- renderInfoBox({
 
 output$FraxBox <- renderInfoBox({
   base_case <- sim_data()
-  S1 <- scenario_one()
   total_frax <- 0
   duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
   for(i in 1:duration) {
-    total_frax <- total_frax + (S1[[i]]$total_fractures - base_case[[i]]$total_fractures)
+    total_frax <- total_frax + (base_case[[i]]$total_fractures_s1 - base_case[[i]]$total_fractures)
   }
   subtitle_text <- ifelse(total_frax > 0, "Change to New Scenario Results in Fracture Incidence Increasing", "Change to New Scenario Results in Fracture Incidence Decreasing")
   inp_year <- as.Date(input$endYear, "%Y")
@@ -430,11 +565,10 @@ output$FraxBox <- renderInfoBox({
 
 output$CostBox <- renderInfoBox({
   base_case <- sim_data()
-  S1 <- scenario_one()
   total_frax_cost <- (0)
   duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
   for(i in 1:duration) {
-    total_frax_cost <- (total_frax_cost) + ((S1[[i]]$grand_total/1000000) - (base_case[[i]]$grand_total/1000000))
+    total_frax_cost <- (total_frax_cost) + ((base_case[[i]]$grand_total_s1/1000000) - (base_case[[i]]$grand_total/1000000))
   }
   print(total_frax_cost)
   subtitle_text <- ifelse(total_frax_cost > 0, "Change to New Scenario Results in Cost Increases ($MM)", "Change to New Scenario Results in Cost Decreases ($MM)")
@@ -504,10 +638,8 @@ output$CostBox <- renderInfoBox({
     
     
     sim <- sim_data()
-    progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/4, detail = "Preparing Plot")
-    scenario_1 <- scenario_one()
-    progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/4, detail = "Preparing Plot")
-   
+    progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/3, detail = "Preparing Plot")
+  
     start_year <- 2018
     end_year   <- as.integer(substring(input$endYear, 1, 4))
     
@@ -520,10 +652,10 @@ output$CostBox <- renderInfoBox({
     for(i in 1:length(xbc)) {
       if(i > 1) {
         ybc <- cbind(ybc, sim[[i]]$total_fractures + ybc[i-1])
-        ys1 <- cbind(ys1, scenario_1[[i]]$total_fractures + ys1[i-1])  
+        ys1 <- cbind(ys1, sim[[i]]$total_fractures_s1 + ys1[i-1])  
       } else {
         ybc <- cbind(ybc, sim[[i]]$total_fractures)
-        ys1 <- cbind(ys1, scenario_1[[i]]$total_fractures)
+        ys1 <- cbind(ys1, sim[[i]]$total_fractures_s1)
       }
     }
 
@@ -532,7 +664,7 @@ output$CostBox <- renderInfoBox({
     dummybc <- data.frame(xbc, ybc, ys1)#, frames)
 
     
-    progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/4, detail = "Preparing Plot")
+    progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/3, detail = "Preparing Plot")
     color_pal <- brewer.pal(3, "Paired")
     p <- plot_ly(dummybc, x = ~xbc) %>% 
       add_trace(y = ~ybc, name = "Base Case", mode = 'lines', line = list(color = color_pal[1]) ) %>% 
@@ -554,7 +686,7 @@ output$CostBox <- renderInfoBox({
         )
       )
     
-    progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/4, detail = "Preparing Plot")
+    progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/3, detail = "Preparing Plot")
     return(p)
   })
   
@@ -562,7 +694,6 @@ output$CostBox <- renderInfoBox({
   output$costplot <- renderPlotly({
     
     sim <- sim_data()
-    scenario_1 <- scenario_one()
     
     start_year <- 2018
     end_year   <- as.integer(substring(input$endYear, 1, 4))
@@ -574,10 +705,10 @@ output$CostBox <- renderInfoBox({
     for(i in 1:length(xbc)) {
       if(i > 1) {
         costybc <- cbind(costybc, sim[[i]]$grand_total + costybc[i-1])
-        costys1 <- cbind(costys1, scenario_1[[i]]$grand_total + costys1[i-1])
+        costys1 <- cbind(costys1, sim[[i]]$grand_total_s1 + costys1[i-1])
       } else {
         costybc <- cbind(costybc, sim[[i]]$grand_total)
-        costys1 <- cbind(costys1, scenario_1[[i]]$grand_total) 
+        costys1 <- cbind(costys1, sim[[i]]$grand_total_s1) 
       }
     }
     

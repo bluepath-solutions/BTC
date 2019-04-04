@@ -144,3 +144,40 @@ getMedicationUtilization <- function(BASE_MEDICATION_ADHERENCE,
                                    YEAR) {
   return(BASE_MEDICATION_ADHERENCE - 0.026 * log(YEAR - 2013))
 }
+
+getDXAScans <- function(POPULATION_SIZE,
+                        FRAX_MAJOR,
+                        DXA_PROB) {
+  if(DXA_PROB == 0) {
+    return(replicate(POPULATION_SIZE,0))
+  } else {
+    return(FRAX_MAJOR >= quantile(FRAX_MAJOR, 1 - DXA_PROB))  
+  }
+}
+
+getMedPatients <- function(POPULATION_SIZE,
+                           FRAX_MAJOR,
+                           MED_PROB,
+                           YEAR) {
+  if(MED_PROB == 0 || getMedicationUtilization(MED_PROB, YEAR) <= 0) {
+    return(replicate(POPULATION_SIZE, 0))
+  } else {
+    return(FRAX_MAJOR >= quantile(FRAX_MAJOR, 1 - getMedicationUtilization(MED_PROB, YEAR) ))
+  }  
+}
+getFracture <- function(MED_PATIENTS,
+                        FRACTURE_AVERAGE,
+                        FRAX,
+                        SAMPLE) {
+  return(ifelse(MED_PATIENTS,
+                         SAMPLE < (FRACTURE_AVERAGE*(1-exp(-(-log(1-FRAX)/10)))),
+                         SAMPLE < (1-exp(-(-log(1-FRAX)/10)))))  
+}
+
+getMultiFraxCost <- function(TOTAL_FRAX,
+                             FRAX_FACTOR,
+                             WO_COST,
+                             W_COST) {
+  return(TOTAL_FRAX * (1/FRAX_FACTOR)*WO_COST + 
+           TOTAL_FRAX * ((FRAX_FACTOR-1)/FRAX_FACTOR)*W_COST)  
+}

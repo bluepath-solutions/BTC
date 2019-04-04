@@ -230,7 +230,7 @@ dashboardPagePlus(
                   column(width = 3, numericInput(inputId = "RE_hisp", label = "Hispanic", value = 15.4, min = 0, max = 100)),
                     bsTooltip("RE_hisp", "Centers for Disease Control and Prevention. NHANES - National Health and Nutrition Examination Survey. https://www.cdc.gov/nchs/nhanes/. Accessed May 3, 2017.",
                             "right", options = list(container = "body")),
-                  column(width = 3, numericInput(inputId = "RE_asian", label = "Asian", value = 4.3, min = 0, max = 100)),
+                  column(width = 3, numericInput(inputId = "RE_asian", label = "Asian", value = 4.5, min = 0, max = 100)),
                     bsTooltip("RE_asian", "Centers for Disease Control and Prevention. NHANES - National Health and Nutrition Examination Survey. https://www.cdc.gov/nchs/nhanes/. Accessed May 3, 2017.",
                             "left", options = list(container = "body")),
                   column(width = 3, numericInput(inputId = "RE_black", label = "Black", value = 11.8, min = 0, max = 100)),
