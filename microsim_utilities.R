@@ -165,3 +165,19 @@ getMedPatients <- function(POPULATION_SIZE,
     return(FRAX_MAJOR >= quantile(FRAX_MAJOR, 1 - getMedicationUtilization(MED_PROB, YEAR) ))
   }  
 }
+getFracture <- function(MED_PATIENTS,
+                        FRACTURE_AVERAGE,
+                        FRAX,
+                        SAMPLE) {
+  return(ifelse(MED_PATIENTS,
+                         SAMPLE < (FRACTURE_AVERAGE*(1-exp(-(-log(1-FRAX)/10)))),
+                         SAMPLE < (1-exp(-(-log(1-FRAX)/10)))))  
+}
+
+getMultiFraxCost <- function(TOTAL_FRAX,
+                             FRAX_FACTOR,
+                             WO_COST,
+                             W_COST) {
+  return(TOTAL_FRAX * (1/FRAX_FACTOR)*WO_COST + 
+           TOTAL_FRAX * ((FRAX_FACTOR-1)/FRAX_FACTOR)*W_COST)  
+}
