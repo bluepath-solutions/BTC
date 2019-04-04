@@ -106,3 +106,4 @@ accumulate_by <- function(dat, var) {
   dplyr::bind_rows(dats)
 }
 
+`%then%` <- shiny:::`%OR%`
