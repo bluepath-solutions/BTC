@@ -167,6 +167,12 @@ sim_data <- reactive({
   costpharm1 <- input$costpharm1
   costpharm2 <- input$costpharm2
   
+  costprod1 <- input$costprod1
+  costprod2 <- input$costprod2
+  
+  costcare1 <- input$costcare1
+  costcare2 <- input$costcare2
+  
   start_year <- 2018
   end_year   <- as.integer(substring(input$endYear, 1, 4))
   
@@ -243,6 +249,12 @@ sim_data <- reactive({
                                                  
                                                  costpharm1,
                                                  costpharm2,
+                                                 
+                                                 costprod1,
+                                                 costprod2,
+                                                 
+                                                 costcare1,
+                                                 costcare2,
                                                  i, 0)})
                               })
 })

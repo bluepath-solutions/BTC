@@ -16,7 +16,8 @@ microsim <- function(POP, CAUC, HISP, ASIAN, BLACK, BMD_MEAN, BMD_SD, RA_INP,
                      FXR_INP, PARFXR_INP, SMOKER, ALCO, GLUCO_TX, BASECASEID,
                      BASECASETX, S1ID, S1TX, COSTINPT1, COSTINPT2, COSTOUTPT1, COSTOUTPT2,
                      COSTLTC1, COSTLTC2, COSTED1, COSTED2, COSTOTHER1, COSTOTHER2,
-                     COSTPHARM1, COSTPHARM2, YEAR, CASE) {
+                     COSTPHARM1, COSTPHARM2, COSTPROD1, COSTPROD2, COSTCARE1,
+                     COSTCARE2, YEAR, CASE) {
 
 # Setup Hashmap for lookups    
 id_to_frax_hash <- hashmap(ID_lookup$ID, ID_lookup$`FRAX- HIP`)
@@ -171,8 +172,12 @@ other_w_subsequent_fracture <-  COSTOTHER2#4295
 pharmacy_wo_subsequent_fracture <- COSTPHARM1#2174
 pharmacy_w_subsequent_fracture <-  COSTPHARM2#2488
 
-productivity_unit_cost <- 2445
-caregiver_costs <- 1770.60
+productivity_wo_subsequent_fracture <- COSTPROD1#2445
+productivity_w_subsequent_fracture <- COSTPROD2#2445
+
+caregiver_wo_subsequent_fracture <- COSTCARE1#2445
+caregiver_w_subsequent_fracture <- COSTCARE2#2445
+
 
 # 2. Create Population based on input parameters
 # Simulate population
@@ -348,11 +353,27 @@ total_pharmacy_cost_s1 <- getMultiFraxCost(total_fractures_s1,
                                         pharmacy_wo_subsequent_fracture,
                                         pharmacy_w_subsequent_fracture)
 
-total_productivity_losses <- total_fractures * productivity_unit_cost
-total_caregiver_losses <- total_fractures *caregiver_costs
 
-total_productivity_losses_s1 <- total_fractures_s1 * productivity_unit_cost
-total_caregiver_losses_s1 <- total_fractures_s1 *caregiver_costs
+total_productivity_losses <- getMultiFraxCost(total_fractures,
+                                              MULTI_FRACTURE_FACTOR,
+                                              productivity_wo_subsequent_fracture,
+                                              productivity_w_subsequent_fracture)
+
+total_productivity_losses_s1 <- getMultiFraxCost(total_fractures_s1,
+                                              MULTI_FRACTURE_FACTOR,
+                                              productivity_wo_subsequent_fracture,
+                                              productivity_w_subsequent_fracture)
+
+total_caregiver_losses <- getMultiFraxCost(total_fractures,
+                                           MULTI_FRACTURE_FACTOR,
+                                           caregiver_wo_subsequent_fracture,
+                                           caregiver_w_subsequent_fracture)
+
+total_caregiver_losses_s1 <- getMultiFraxCost(total_fractures_s1,
+                                              MULTI_FRACTURE_FACTOR,
+                                              caregiver_wo_subsequent_fracture,
+                                              caregiver_w_subsequent_fracture)
+
 
 total_direct_cost <- total_dxa_cost + total_med_cost + total_inpatient_cost +
                      total_outpatient_cost + total_ltc_cost + total_ed_cost +
