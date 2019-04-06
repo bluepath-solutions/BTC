@@ -112,11 +112,6 @@ dashboardPagePlus(
                 solidHeader = FALSE, 
                 collapsible = FALSE
               ))
-              # fluidRow(
-              #   column(11),
-              #   column(1,
-              #   hidden(actionBttn(inputId="Next", label=icon("arrow-right"),color="primary",style="float", size="xs")))
-              # )
       ),
       
       tabItem(tabName = "Overview",
@@ -348,7 +343,7 @@ dashboardPagePlus(
                           column(width = 4, numericInput(inputId = "costpharm2", label = NULL, value = "2487.71"))),
                     fluidRow(
                       box(id="IndirectCosts", "", color = "blue", width = 12, height = 4),
-                      column(width = 4, prettyCheckbox("IndirectCosts", strong("Include Indirect Costs"), value = TRUE, shape = "square"))),
+                      column(width = 4, prettyCheckbox(inputId = "IndirectCosts", strong("Include Indirect Costs"), value = TRUE, shape = "square"))),
                       fluidRow(
                         column(width = 4, h5("Productivity Losses", align = "left")),
                         column(width = 4, numericInput(inputId = "costprod1", label = NULL, value = "2445.00")),
@@ -428,16 +423,9 @@ dashboardPagePlus(
             fluidRow(
               boxPlus(title = "Total Estimated Costs", 
                     closable = FALSE, status = "warning", solidHeader = FALSE, collapsible = TRUE, width = 8,
-                    p("Total estimated costs during the timeframe entered were $XY ")
+                    p(textOutput('totalcost_content'))
             ),
             infoBoxOutput("CostBox"))
-            # ,
-                      # infoBoxOutput("S2Box"), infoBoxOutput("S3Box"), width = 12),
-              # tags$style("#BaseCaseBox {width:25%}"),
-              # tags$style("#S1Box {width:25%}")
-            # ,
-            #   tags$style("#S2Box {width:25%}"),
-            #   tags$style("#S3Box {width:25%}")
             ,
         fluidRow(
           boxPlus(title = "Thank you for visiting.", 
@@ -606,16 +594,9 @@ o	This study was funded by Amgen Inc.<br/>
                 )
               )
             ),
-            # fluidRow(
-            #   column(10),
-            #   column(2, offset=11,
-            #          actionBttn(inputId="Previous", label=icon("arrow-left"),color="primary",style="float", size="xs"),
-            #          actionBttn(inputId="Next", label=icon("arrow-right"),color="primary",style="float", size="xs"))
-            # ),
             tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
     )
     
     )
   )
   ))
-

@@ -24,27 +24,15 @@ id_to_frax_hash <- hashmap(ID_lookup$ID, ID_lookup$`FRAX- HIP`)
 MAX_HIP_FRACTURE_RATE <- max(ID_lookup$`FRAX- HIP`)
 id_to_frax_major_hash <- hashmap(ID_lookup$ID,ID_lookup$`FRAX- MAJOR`)
 MAX_MAJOR_FRACTURE_RATE <- max(ID_lookup$`FRAX- MAJOR`)
-  
+
+# Gather and Assign inputs
 year <- YEAR
-
 index <- which(age_probabilities$Year == year)
-
 age_prob <- c(age_probabilities[index,2:37])
 
-EXTRAPOLATION_FACTOR <- 1.0
-# 1. Gather Inputs
-# Input list
-# 
-
-# Population Size
-population_size <- 100000 #10000000 #10000000/13
-EXTRAPOLATION_FACTOR <- POP/population_size
-
-
-#if(population_size >= 1000000) {
-#  EXTRAPOLATION_FACTOR <- 20
-#  population_size <- population_size*(1/EXTRAPOLATION_FACTOR)
-#}
+# Population Size - THIS VALUE IS CURRENTLY FIXED, IT WILL NOT CHANGE WITH UI INPUTS
+population_size <- 100000 
+#EXTRAPOLATION_FACTOR <- POP/population_size
 
 # Demographic Percentages
 race_prob <- c(CAUC, 
@@ -77,12 +65,12 @@ alcohol_prob <- ALCO
 gluco_prob <- GLUCO_TX
 
 # 0.113 in Copy version
-dxa_prob <- BASECASEID # 11.3% in paper ... 33.1% for one scenario
-med_base_prob <-  BASECASETX #0.104 # THIS SHOULD DECAY LOGARITHMICALLY
+dxa_prob <- BASECASEID 
+med_base_prob <-  BASECASETX  
 
 dxa_prob_s1 <- S1ID
 med_base_prob_s1 <- S1TX
-# Treatment Mix
+# Treatment Mix - THIS IS NOT DYNAMIC
 treatment_mix <-c(0.439, # Alendronate  PRIMARY (BISPHOSPHONATES?)
                   0.061,  # Ibandronate 150 MG
                   0.03,  # Risedronate
@@ -106,8 +94,6 @@ treatment_monthly_cost <-c(10.00,  # Alendronate PRIMARY 10.00
                            69.30,  # Raloxifene
                            2997.90,# Forteo 
                            1625.00)# Tymlos
-
-# Is this correct?
 
 treatment_efficacy_hip <- c(0.65, # Alendronate Primary
                             0.73, # Ibandronate 150 MG
@@ -141,10 +127,13 @@ MEDICATION_COST <- treatment_mix %*% treatment_monthly_cost
 HIP_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_hip  
 ANY_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_other
 
-# Weird Coefficent
+# Weird Coefficent - This extrapolates the simulated population to the projected 
+#                    US population of women 65+ in the US.  2040 is the last possible
+#                    year that can be simulated with the provided data.
 
+# THIS IS NOT DYNAMIC
 dxa_cost <- 41.63
-
+# Taken from the Excel Model
 weird_coefficient <- c(25.892946, 26.700267, 27.525255, 28.376817, 29.276951,
                        30.224627, 31.221119, 32.207436, 33.237197, 34.256655,
                        35.256342, 36.291667, 37.283552, 38.213439, 39.112738,
@@ -179,11 +168,7 @@ caregiver_wo_subsequent_fracture <- COSTCARE1#2445
 caregiver_w_subsequent_fracture <- COSTCARE2#2445
 
 
-# 2. Create Population based on input parameters
-# Simulate population
-#set.seed(2)
-
-
+# Simulate Population and Assign Index Scores
 age_index <- getAgeIndex(minimum_age,
                          maximum_age,
                          population_size,
@@ -209,11 +194,18 @@ risk_factor_index <- getRiskFactorIndex(population_size,
 
 index <- as.integer(age_index + race_index + bmd_index + risk_factor_index)
 
+# This is where index scores are assigned
+# THIS IS THE MOST TIME CONSUMING STEP
+# Hashmaps were purposefully used here to minimize lookup time
+# Direct FRAX calculations are not available as the model is proprietary.
+
 frax       <- id_to_frax_hash[[ index ]] # frax hip
 frax[is.na(frax)] <- MAX_HIP_FRACTURE_RATE
 
 frax_major <- id_to_frax_major_hash[[ index ]] # frax major
 frax_major[is.na(frax_major)] <- MAX_MAJOR_FRACTURE_RATE
+
+# Determine Identification and Treatment Populations
 
 dxa_scans <- getDXAScans(population_size,
                          frax_major,
@@ -234,6 +226,7 @@ med_patients_s1 <- getMedPatients(population_size,
                                med_base_prob_s1,
                                year)
 
+# Determine Fractures
 
 samples <- runif(population_size)
 
@@ -267,9 +260,8 @@ other_fracture_s1 <- ifelse(!any_fracture_s1,
                             F,
                             !hip_fracture_s1)
 
-# Should be more parameterized
-
-
+# Use hip and other fracture data to extrapolate to other types of fractures
+# There is excessive extrapolation here, but it follows the model.
 
 total_other_fracture <- sum(other_fracture)
 total_other_fracture_s1 <- sum(other_fracture_s1)
@@ -292,6 +284,8 @@ total_fractures <- total_hip + total_shoulder + total_vertebral + total_forearm 
 total_other_s1 <- HIP_FRACTURE_RATIO * total_hip_s1 - total_shoulder_s1 - total_vertebral_s1 - total_forearm_s1
 total_fractures_s1 <- total_hip_s1 + total_shoulder_s1 + total_vertebral_s1 + total_forearm_s1 + total_other_s1
 
+# End of Clinical Data, Beginning of Financial Data
+# Calculate Costs
 
 total_dxa_cost <- sum(dxa_scans) * dxa_cost* weird_coefficient[year-2013]
 total_med_cost <- sum(med_patients) * MEDICATION_COST * MEDICATION_ADHERENCE* weird_coefficient[year-2013]
@@ -353,27 +347,36 @@ total_pharmacy_cost_s1 <- getMultiFraxCost(total_fractures_s1,
                                         pharmacy_wo_subsequent_fracture,
                                         pharmacy_w_subsequent_fracture)
 
-
-total_productivity_losses <- getMultiFraxCost(total_fractures,
-                                              MULTI_FRACTURE_FACTOR,
-                                              productivity_wo_subsequent_fracture,
-                                              productivity_w_subsequent_fracture)
-
-total_productivity_losses_s1 <- getMultiFraxCost(total_fractures_s1,
-                                              MULTI_FRACTURE_FACTOR,
-                                              productivity_wo_subsequent_fracture,
-                                              productivity_w_subsequent_fracture)
-
-total_caregiver_losses <- getMultiFraxCost(total_fractures,
-                                           MULTI_FRACTURE_FACTOR,
-                                           caregiver_wo_subsequent_fracture,
-                                           caregiver_w_subsequent_fracture)
-
-total_caregiver_losses_s1 <- getMultiFraxCost(total_fractures_s1,
-                                              MULTI_FRACTURE_FACTOR,
-                                              caregiver_wo_subsequent_fracture,
-                                              caregiver_w_subsequent_fracture)
-
+# Indirect Costs can be turned off
+if(CASE) {
+  total_productivity_losses <- getMultiFraxCost(total_fractures,
+                                                MULTI_FRACTURE_FACTOR,
+                                                productivity_wo_subsequent_fracture,
+                                                productivity_w_subsequent_fracture)
+  
+  total_productivity_losses_s1 <- getMultiFraxCost(total_fractures_s1,
+                                                   MULTI_FRACTURE_FACTOR,
+                                                   productivity_wo_subsequent_fracture,
+                                                   productivity_w_subsequent_fracture)
+  
+  total_caregiver_losses <- getMultiFraxCost(total_fractures,
+                                             MULTI_FRACTURE_FACTOR,
+                                             caregiver_wo_subsequent_fracture,
+                                             caregiver_w_subsequent_fracture)
+  
+  total_caregiver_losses_s1 <- getMultiFraxCost(total_fractures_s1,
+                                                MULTI_FRACTURE_FACTOR,
+                                                caregiver_wo_subsequent_fracture,
+                                                caregiver_w_subsequent_fracture)  
+} else {
+  total_productivity_losses <- 0
+  
+  total_productivity_losses_s1 <- 0
+  
+  total_caregiver_losses <- 0
+  
+  total_caregiver_losses_s1 <- 0  
+}
 
 total_direct_cost <- total_dxa_cost + total_med_cost + total_inpatient_cost +
                      total_outpatient_cost + total_ltc_cost + total_ed_cost +

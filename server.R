@@ -117,7 +117,7 @@ function(input, output, session) {
     reset("costcare1")
     reset("costcare2")
   })  
-  ###############INPUT VALIDATION#####################
+###############INPUT VALIDATION#####################
   pop_input <- reactive({
     validate(
       need(input$pop_input > 0, "Population must be greater than 0.")
@@ -222,29 +222,29 @@ function(input, output, session) {
   
   Base_Case_ID <- reactive({
     validate(
-      need(input$basecaseID >= 0 && input$basecaseID <= 100.0, 
-           "Base case identification rate must be within the range [0, 100.0]"))
+      need(input$basecaseID >= 11.3 && input$basecaseID <= 100.0, 
+           "Base case identification rate must be within the range [11.3, 100.0]"))
     return(input$basecaseID/100.0)
   })
   
   Base_Case_Treatment <- reactive({
     validate(
-      need(input$basecaseTx >= 0 && input$basecaseTx <= 100.0, 
-           "Base case treatment percentage must be within the range [0, 100.0]"))
+      need(input$basecaseTx >= 10.4 && input$basecaseTx <= 100.0, 
+           "Base case treatment percentage must be within the range [10.4, 100.0]"))
     return(input$basecaseTx/100.0)
   })
   
   S1_ID <- reactive({
     validate(
-      need(input$scenario1ID >= 0 && input$scenario1ID <= 100.0, 
-           "New scenario identification rate must be within the range [0, 100.0]"))
+      need(input$scenario1ID >= 11.3 && input$scenario1ID <= 100.0, 
+           "New scenario identification rate must be within the range [11.3, 100.0]"))
     return(input$scenario1ID/100.0)
   })
   
   S1_Treatment <- reactive({
     validate(
-      need(input$scenario1Tx >= 0 && input$scenario1Tx <= 100.0, 
-           "New scenario treatment percentage must be within the range [0, 100.0]"))
+      need(input$scenario1Tx >= 10.4 && input$scenario1Tx <= 100.0, 
+           "New scenario treatment percentage must be within the range [10.4, 100.0]"))
     return(input$scenario1Tx/100.0)
   })
   costinpt1 <- reactive({
@@ -345,14 +345,10 @@ function(input, output, session) {
     return(input$costcare2)
   })
 ###############REACTIVE ACTIONS#####################
-# TODO
-# Make Copies of microsim function for 3 additional scenarios
-# Put scenarios in graph
-# Cumulative plot at bottom
-# labels in charts, pretty them up
-   
-  
+
+# Reactive Function for Simulation Data
 sim_data <- reactive({
+  # Validate Inputs
   population <-     pop_input()
   caucasian_rate <- cauc_rate()
   hispanic_rate <-  hisp_rate()
@@ -369,6 +365,7 @@ sim_data <- reactive({
   alcohol_rate <-   ALCO_rate()
   gluco_rate <-     GLUCO_rate()
   
+  enable_indirect_costs <- input$IndirectCosts
   dxa_prob <-       Base_Case_ID()
   med_base_prob <-  Base_Case_Treatment()
   
@@ -402,8 +399,7 @@ sim_data <- reactive({
   start_year <- 2018
   end_year   <- as.integer(substring(input$endYear, 1, 4))
   
-  print(start_year)
-  print(end_year)
+  # Utilize parallelization to increase speed
   return(foreach(i=start_year:end_year,
                               .packages = c('readxl',
                                             'hashmap'),
@@ -438,7 +434,7 @@ sim_data <- reactive({
                                         'getMedPatients',
                                         'getFracture',
                                         'getMultiFraxCost'
-                                        ), .verbose = T) %dopar% {
+                                        )) %dopar% {
                                isolate({microsim(population,
                                                  caucasian_rate,
                                                  hispanic_rate,
@@ -480,13 +476,14 @@ sim_data <- reactive({
                                                  
                                                  costcare1,
                                                  costcare2,
-                                                 i, 0)})
+                                                 i, enable_indirect_costs)})
                               })
 })
 
 ###############RENDERING BOXES & PLOTS######################
 uiOutput("nlp_sentences_tree")
 
+# Summary Info Box Details
 output$totalfxr_content <- renderText({
   base_case <- sim_data()
   inp_year <- as.Date(input$endYear, "%Y")
@@ -501,7 +498,18 @@ output$totalfxr_content <- renderText({
                                              formatted_fxrs, 
                                              " during the years 2018-", inp_year, sep = "", collapse = NULL)
                                             })
-
+output$totalcost_content <- renderText({
+  base_case <- sim_data()
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  total_frax_cost <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  for(i in 1:duration) {
+    total_frax_cost <- total_frax_cost + (base_case[[i]]$grand_total_s1 - base_case[[i]]$grand_total)}
+  paste("The total cost is estimated to ", ifelse(total_frax_cost > 0, "increase by ", "decrease by "),
+        dollar_format()(abs(total_frax_cost)), 
+        " during the years 2018-", inp_year, sep = "", collapse = NULL)
+})
 output$FraxBox_R <- renderInfoBox({
   base_case <- sim_data()
   total_frax <- 0
@@ -599,9 +607,6 @@ output$CostBox <- renderInfoBox({
     costsx <- c("One per Year", "> One per Year")
     costsx <- factor(costsx, levels = costsx)
     allcostdf <- allcost.df[, c(input$inpt, input$outpt, input$LTC, input$ED, input$other, input$pharm),]
-    #allcostdf$costsx <- ordered(allcostdf$costsx, c("One per Year", "> One per Year"))
-    
-    #custom_palette = brewer.pal(6,"Paired")#c('#46005D','#7A4791','#CFA8D5','#D58DC8','#B964AA')
     plot_ly(allcost.df, x = ~costsx, y = ~inpt, type = 'bar', name = 'Inpatient', colors = "GnBu", color = as.factor('first_trace'), 
             hoverinfo = 'text', 
             text = ~paste('Cost:', inpt),
@@ -617,23 +622,11 @@ output$CostBox <- renderInfoBox({
         xaxis = list(title = 'Fracture Frequency', zeroline = FALSE, showgrid = FALSE), 
         barmode = 'stack')
   })
-  
-  #observeEvent(input$add,{
-  #  
-  #  
-  #  #output$coststbl <- renderTable({
-  #  #  allcost.df[, c(input$inpt, input$outpt, input$LTC, input$ED, input$other, input$pharm), drop = FALSE]
-  #  #}, rownames = TRUE)
-  #  
-  #  
-  #})
-  
+  # Fractures Plot
   output$fxrplot <- renderPlotly({
     
     progress <- shiny::Progress$new()
     progress$set(message = "Simulating Population", value = 0)
-    
-    # Close the progress when this reactive exits (even if there's an error)
     on.exit(progress$close())
     
     
@@ -658,12 +651,7 @@ output$CostBox <- renderInfoBox({
         ys1 <- cbind(ys1, sim[[i]]$total_fractures_s1)
       }
     }
-
-    
-    
-    dummybc <- data.frame(xbc, ybc, ys1)#, frames)
-
-    
+    dummybc <- data.frame(xbc, ybc, ys1)
     progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/3, detail = "Preparing Plot")
     color_pal <- brewer.pal(3, "Paired")
     p <- plot_ly(dummybc, x = ~xbc) %>% 
@@ -690,7 +678,7 @@ output$CostBox <- renderInfoBox({
     return(p)
   })
   
-  
+  # Cumulative Cost Plot
   output$costplot <- renderPlotly({
     
     sim <- sim_data()
@@ -732,7 +720,5 @@ output$CostBox <- renderInfoBox({
                   zeroline = TRUE
                 )
               ) 
-    
-    
   })
 }

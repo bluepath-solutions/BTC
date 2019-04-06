@@ -1,16 +1,3 @@
-#rm(list = ls())  # remove any variables in R's memory
-#setwd("C:/Users/Sophie Snyder/Documents/R/BTC3") #Set up a working directory
-# 
-# ##load packages, message=FALSE--------------------------------------------------------------
-# pkg <- c("aws.signature", "bcrypt", "digest", "dplyr", "lubridate", "ggplot2",
-#          "ggvis", "gganimate","hashmap","htmlwidgets", "magrittr", "plotly", 
-#          "prettyR", "readxl", "rsconnect", "RColorBrewer","shiny", "shinyEffects",
-#          "shinythemes", "shinyLP", "shinyBS", "shinyjs", "shinyWidgets", "shinydashboard",
-#          "shinydashboardPlus","scales", "stringr", "tidyverse", "foreach", "doParallel", "shinycssloaders")
-# new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
-# if (length(new.pkg)) install.packages(new.pkg, dependencies = TRUE)
-# sapply(pkg, require, character.only = TRUE)
-
 library(aws.signature)
 library(digest)
 library(doParallel)
@@ -92,10 +79,6 @@ ID_lookup <- (read_excel("id_lookup.xlsx"))
 MEDICATION_ADHERENCE <- (6+6*0.41)
 HIP_FRACTURE_RATIO <- (45603/5024)
 MULTI_FRACTURE_FACTOR <- 1.226
-
-#HIP_FRACTURE_AVERAGE <- 0.837
-#ANY_FRACTURE_AVERAGE <- 0.849
-
 
 accumulate_by <- function(dat, var) {
   var <- lazyeval::f_eval(var, dat)

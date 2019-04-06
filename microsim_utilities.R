@@ -144,7 +144,12 @@ getMedicationUtilization <- function(BASE_MEDICATION_ADHERENCE,
                                    YEAR) {
   return(BASE_MEDICATION_ADHERENCE - 0.026 * log(YEAR - 2013))
 }
-
+# getDXAScans
+# @param POPULATION_SIZE int, the population size being simulated
+# @param FRAX_MAJOR list, a list of doubles corresponding to the fracture rates of the population
+# @param DXA_PROB double, the identification rate for DXA scans
+# Returns a boolean list of length POPULATION_SIZE corresponding to the number of people
+# who receive DXA scans.
 getDXAScans <- function(POPULATION_SIZE,
                         FRAX_MAJOR,
                         DXA_PROB) {
@@ -154,7 +159,12 @@ getDXAScans <- function(POPULATION_SIZE,
     return(FRAX_MAJOR >= quantile(FRAX_MAJOR, 1 - DXA_PROB))  
   }
 }
-
+# getMedPatients
+# @param POPULATION_SIZE int, the population size being simulated
+# @param FRAX_MAJOR list, a list of doubles corresponding to the fracture rates of the population
+# @param MED_PROB double, the base treatment rate in 2014
+# Returns a boolean list of length POPULATION_SIZE corresponding to the number of people
+# who receive treatment.
 getMedPatients <- function(POPULATION_SIZE,
                            FRAX_MAJOR,
                            MED_PROB,
@@ -165,6 +175,14 @@ getMedPatients <- function(POPULATION_SIZE,
     return(FRAX_MAJOR >= quantile(FRAX_MAJOR, 1 - getMedicationUtilization(MED_PROB, YEAR) ))
   }  
 }
+# getFracture
+# @param MED_PATIENTS list, a list of booleans corresponding to treatment and no-treatment
+# @param FRACTURE_AVERAGE double, a double corresponding to the fracture average, a CONSTANT
+# @param FRAX list, a list of doubles that corresponds to fracture risk percentage
+# @param SAMPLE list, a list of pseudo-randomly generated doubles for determining risk
+# This function returns a boolean list of the patients who experienced fractures
+# over the course of a given year.  Note that 10 year averages are used which 
+# accounts for the 10 found in the calculations.
 getFracture <- function(MED_PATIENTS,
                         FRACTURE_AVERAGE,
                         FRAX,
@@ -173,7 +191,15 @@ getFracture <- function(MED_PATIENTS,
                          SAMPLE < (FRACTURE_AVERAGE*(1-exp(-(-log(1-FRAX)/10)))),
                          SAMPLE < (1-exp(-(-log(1-FRAX)/10)))))  
 }
-
+# getMultiFraxCost
+# @param TOTAL_FRAX double, the total number of fractures that occured in a given year
+# @param FRAX_FACTOR double, a factor used to compensate for the people who experience multiple fractures
+#                            in a given year, 1.226 in this case, value taken from literature
+# @param WO_COST double, the cost corresponding to a given factor for people who experience 1 fracture in a year
+# @param W_COST double, the cost corresponding to a given factor for people who experience >1 fractures in a year
+# This function returns the cost for a given category provided the total number of fractures in the population
+# and the costs associated with that factor.  The justification for the multi-fracture costing scheme can
+# be found in the referenced literature and the associated paper.
 getMultiFraxCost <- function(TOTAL_FRAX,
                              FRAX_FACTOR,
                              WO_COST,
