@@ -116,7 +116,15 @@ function(input, output, session) {
     reset("costprod2")
     reset("costcare1")
     reset("costcare2")
-  })  
+  })
+  observeEvent(input$scenario1ID, {
+    isolate(updateNumericInput(session,
+                       inputId = 'scenario1Tx',
+                       label = NULL,
+                       value = 0.44*(input$scenario1ID - input$basecaseID) + input$basecaseTx))
+  },
+  ignoreInit = T, 
+  priority = 1000)
 ###############INPUT VALIDATION#####################
   pop_input <- reactive({
     validate(
@@ -721,4 +729,13 @@ output$CostBox <- renderInfoBox({
                 )
               ) 
   })
+###############Priority Manipulation###################################
+outputOptions(output, "costp", priority = 1)
+outputOptions(output, "fxrplot", priority = 1)
+outputOptions(output, "totalfxr_content", priority = 0)
+outputOptions(output, 'totalcost_content', priority = 0)
+outputOptions(output, 'FraxBox', priority = 0)
+outputOptions(output, 'CostBox', priority = 0)
+outputOptions(output, 'FraxBox_R', priority = 0)
+outputOptions(output, 'CostBox_R', priority = 0)
 }
