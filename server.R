@@ -490,10 +490,11 @@ sim_data <- reactive({
 
 ###############RENDERING BOXES & PLOTS######################
 uiOutput("nlp_sentences_tree")
-
+sim_data_d <- sim_data %>% debounce(500)
+  
 # Summary Info Box Details
 output$totalfxr_content <- renderText({
-  base_case <- sim_data()
+  base_case <- sim_data_d()
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
   total_frax <- 0
@@ -507,7 +508,7 @@ output$totalfxr_content <- renderText({
                                              " during the years 2018-", inp_year, sep = "", collapse = NULL)
                                             })
 output$totalcost_content <- renderText({
-  base_case <- sim_data()
+  base_case <- sim_data %>% debounce(2000)
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
   total_frax_cost <- 0
@@ -519,7 +520,7 @@ output$totalcost_content <- renderText({
         " during the years 2018-", inp_year, sep = "", collapse = NULL)
 })
 output$FraxBox_R <- renderInfoBox({
-  base_case <- sim_data()
+  base_case <- sim_data_d()
   total_frax <- 0
   duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
   for(i in 1:duration) {
@@ -539,7 +540,7 @@ output$FraxBox_R <- renderInfoBox({
 })
 
 output$CostBox_R <- renderInfoBox({
-  base_case <- sim_data()
+  base_case <- sim_data_d()
   total_frax_cost <- (0)
   duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
   for(i in 1:duration) {
@@ -560,7 +561,7 @@ output$CostBox_R <- renderInfoBox({
 })
 
 output$FraxBox <- renderInfoBox({
-  base_case <- sim_data()
+  base_case <- sim_data_d()
   total_frax <- 0
   duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
   for(i in 1:duration) {
@@ -580,7 +581,7 @@ output$FraxBox <- renderInfoBox({
 })
 
 output$CostBox <- renderInfoBox({
-  base_case <- sim_data()
+  base_case <- sim_data_d()
   total_frax_cost <- (0)
   duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
   for(i in 1:duration) {
@@ -638,7 +639,7 @@ output$CostBox <- renderInfoBox({
     on.exit(progress$close())
     
     
-    sim <- sim_data()
+    sim <- sim_data_d()
     progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/3, detail = "Preparing Plot")
   
     start_year <- 2018
@@ -689,7 +690,7 @@ output$CostBox <- renderInfoBox({
   # Cumulative Cost Plot
   output$costplot <- renderPlotly({
     
-    sim <- sim_data()
+    sim <- sim_data_d()
     
     start_year <- 2018
     end_year   <- as.integer(substring(input$endYear, 1, 4))
