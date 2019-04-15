@@ -140,9 +140,9 @@ getRiskFactorIndex <- function(POPULATION_SIZE,
 # @param YEAR int, the current year being simulated
 # Returns the medication utilization rate based on the current year.  This 
 # implementation scheme utilizes logarithmic decay as described in the Excel Model.
-getMedicationUtilization <- function(BASE_MEDICATION_ADHERENCE,
+getMedicationUtilization <- function(BASE_MEDICATION_UTILIZATION,
                                    YEAR) {
-  return(BASE_MEDICATION_ADHERENCE - 0.026 * log(YEAR - 2013))
+  return(BASE_MEDICATION_UTILIZATION - 0.026 * log(YEAR - 2013))
 }
 # getDXAScans
 # @param POPULATION_SIZE int, the population size being simulated
