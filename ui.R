@@ -389,7 +389,7 @@ dashboardPagePlus(
                           column(width = 4, numericInput(inputId = "scenario1Tx", label = NULL, value = "17.8"))),
                       fluidRow(
                         column(width = 4, align="center", h5("Time Horizon")),
-                        column(width = 7,
+                        column(width = 6,
                         sliderInput(inputId = "endYear", 
                                     label = NULL,
                                     min = as.Date("2022", '%Y'),
@@ -397,7 +397,12 @@ dashboardPagePlus(
                                     value = as.Date("2040", '%Y'),
                                     step = 365,
                                     timeFormat = "%Y"), align = "center"),
-                        column(width = 1)
+                        column(width = 2,
+                               actionBttn(inputId = 'run_simulation',
+                                          label = 'Run Simulation',
+                                          color="primary",
+                                          style="material-flat"),
+                               align = 'center')
                         ))),
               boxPlus(width = 12, closable = FALSE, collapsible = TRUE,
                       fluidRow(

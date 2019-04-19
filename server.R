@@ -10,7 +10,6 @@ tab_id <- c("Home", "Overview", "Inputs", "Fracture", "Scenarios", "Results", "A
 function(input, output, session) {
   output$value <- renderText({ input$inpt })
   
-
 ###############DEFAULT ACTIONS###################################
   observe({
     lapply(c("Next", "Previous"),
@@ -125,6 +124,19 @@ function(input, output, session) {
   },
   ignoreInit = T, 
   priority = 1000)
+  observeEvent(input$gluco_tx, {
+    simulation_data$sim <- sim_data()
+  }, ignoreInit = F,
+  priority = 1500,
+  once = T,  
+  autoDestroy = T
+  )
+  observeEvent(input$run_simulation, {
+    simulation_data$sim <- sim_data()
+  }, 
+  ignoreInit = F,
+  priority = 1,
+  autoDestroy = F, once = F)
 ###############INPUT VALIDATION#####################
   pop_input <- reactive({
     validate(
@@ -356,6 +368,9 @@ function(input, output, session) {
 
 # Reactive Function for Simulation Data
 sim_data <- reactive({
+  progress <- shiny::Progress$new()
+  progress$set(message = "Simulating Population", value = 0)
+  on.exit(progress$close())
   # Validate Inputs
   population <-     pop_input()
   caucasian_rate <- cauc_rate()
@@ -407,6 +422,9 @@ sim_data <- reactive({
   start_year <- 2018
   end_year   <- as.integer(substring(input$endYear, 1, 4))
   
+  progressB <- function() progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/(end_year - start_year), detail = "Preparing Plot")
+  opts <- list(progress = progressB)
+  
   # Utilize parallelization to increase speed
   return(foreach(i=start_year:end_year,
                               .packages = c('readxl',
@@ -442,7 +460,8 @@ sim_data <- reactive({
                                         'getMedPatients',
                                         'getFracture',
                                         'getMultiFraxCost'
-                                        )) %dopar% {
+                                        ),
+                                        .options.snow = opts) %dopar% {
                                isolate({microsim(population,
                                                  caucasian_rate,
                                                  hispanic_rate,
@@ -490,11 +509,14 @@ sim_data <- reactive({
 
 ###############RENDERING BOXES & PLOTS######################
 uiOutput("nlp_sentences_tree")
-sim_data_d <- sim_data %>% debounce(500)
+simulation_data <- reactiveValues(sim = NULL)
+#simulation_data$sim <- sim_data()
+  
+#sim_data_d <- sim_data %>% debounce(2000)
   
 # Summary Info Box Details
 output$totalfxr_content <- renderText({
-  base_case <- sim_data_d()
+  base_case <- simulation_data$sim
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
   total_frax <- 0
@@ -508,7 +530,7 @@ output$totalfxr_content <- renderText({
                                              " during the years 2018-", inp_year, sep = "", collapse = NULL)
                                             })
 output$totalcost_content <- renderText({
-  base_case <- sim_data %>% debounce(2000)
+  base_case <- simulation_data$sim
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
   total_frax_cost <- 0
@@ -520,7 +542,7 @@ output$totalcost_content <- renderText({
         " during the years 2018-", inp_year, sep = "", collapse = NULL)
 })
 output$FraxBox_R <- renderInfoBox({
-  base_case <- sim_data_d()
+  base_case <- simulation_data$sim
   total_frax <- 0
   duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
   for(i in 1:duration) {
@@ -540,7 +562,7 @@ output$FraxBox_R <- renderInfoBox({
 })
 
 output$CostBox_R <- renderInfoBox({
-  base_case <- sim_data_d()
+  base_case <- simulation_data$sim
   total_frax_cost <- (0)
   duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
   for(i in 1:duration) {
@@ -561,7 +583,7 @@ output$CostBox_R <- renderInfoBox({
 })
 
 output$FraxBox <- renderInfoBox({
-  base_case <- sim_data_d()
+  base_case <- simulation_data$sim
   total_frax <- 0
   duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
   for(i in 1:duration) {
@@ -581,7 +603,7 @@ output$FraxBox <- renderInfoBox({
 })
 
 output$CostBox <- renderInfoBox({
-  base_case <- sim_data_d()
+  base_case <- simulation_data$sim
   total_frax_cost <- (0)
   duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
   for(i in 1:duration) {
@@ -634,14 +656,14 @@ output$CostBox <- renderInfoBox({
   # Fractures Plot
   output$fxrplot <- renderPlotly({
     
-    progress <- shiny::Progress$new()
-    progress$set(message = "Simulating Population", value = 0)
-    on.exit(progress$close())
+    # progress <- shiny::Progress$new()
+    # progress$set(message = "Simulating Population", value = 0)
+    # on.exit(progress$close())
     
     
-    sim <- sim_data_d()
-    progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/3, detail = "Preparing Plot")
-  
+    sim <- simulation_data$sim
+    # progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/3, detail = "Preparing Plot")
+
     start_year <- 2018
     end_year   <- as.integer(substring(input$endYear, 1, 4))
     
@@ -661,7 +683,7 @@ output$CostBox <- renderInfoBox({
       }
     }
     dummybc <- data.frame(xbc, ybc, ys1)
-    progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/3, detail = "Preparing Plot")
+    # progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/3, detail = "Preparing Plot")
     color_pal <- brewer.pal(3, "Paired")
     p <- plot_ly(dummybc, x = ~xbc) %>% 
       add_trace(y = ~ybc, name = "Base Case", mode = 'lines', line = list(color = color_pal[1]) ) %>% 
@@ -682,15 +704,13 @@ output$CostBox <- renderInfoBox({
           zeroline = TRUE
         )
       )
-    
-    progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/3, detail = "Preparing Plot")
     return(p)
   })
   
   # Cumulative Cost Plot
   output$costplot <- renderPlotly({
     
-    sim <- sim_data_d()
+    sim <- simulation_data$sim
     
     start_year <- 2018
     end_year   <- as.integer(substring(input$endYear, 1, 4))

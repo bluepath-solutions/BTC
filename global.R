@@ -25,14 +25,19 @@ library(shinyWidgets)
 library(shinydashboard)
 library(shinydashboardPlus)
 library(snow)
+library(doSNOW)
 library(stringr)
 library(tidyverse)
+
 
 source("microsim_utilities.R")
 source("microsim.R")
 
+# cl <- makeCluster(detectCores() - 1)
+# registerDoParallel(cl)
 cl <- makeCluster(detectCores() - 1)
-registerDoParallel(cl)
+registerDoSNOW(cl)
+
 
 tab_id <- c("Overview", "Inputs", "Fracture", "Scenarios", "Results", "Assumptions", "Break", "Disclosures", "Terms", "References")
 
