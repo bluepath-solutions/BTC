@@ -816,6 +816,7 @@ sim_data <- reactive({
                                         #'id_to_frax_major_hash',
                                         #'MAX_MAJOR_FRACTURE_RATE',
                                         'MEDICATION_ADHERENCE',
+                                        'NON_ADHERENT_INCREASED_FRACTURE_RISK',
                                         'HIP_FRACTURE_RATIO',
                                         'MULTI_FRACTURE_FACTOR',
                                         'input',

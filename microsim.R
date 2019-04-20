@@ -130,8 +130,10 @@ risk_factor_prob <- c(rheu_arth_prob, prev_fracture_prob, hist_fracture_prob,
 
 
 MEDICATION_COST <- treatment_mix %*% treatment_monthly_cost
-HIP_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_hip  
-ANY_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_other
+HIP_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_hip * MEDICATION_ADHERENCE +
+                        treatment_mix %*% treatment_efficacy_hip * (1 - MEDICATION_ADHERENCE) * NON_ADHERENT_INCREASED_FRACTURE_RISK
+ANY_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_other * MEDICATION_ADHERENCE +
+                        treatment_mix %*% treatment_efficacy_other * (1 - MEDICATION_ADHERENCE) * NON_ADHERENT_INCREASED_FRACTURE_RISK   
 
 # Weird Coefficent - This extrapolates the simulated population to the projected 
 #                    US population of women 65+ in the US.  2040 is the last possible
@@ -295,10 +297,10 @@ total_fractures_s1 <- total_hip_s1 + total_shoulder_s1 + total_vertebral_s1 + to
 # Calculate Costs
 
 total_dxa_cost <- sum(dxa_scans) * dxa_cost* weird_coefficient[year-2013]
-total_med_cost <- sum(med_patients) * MEDICATION_COST * MEDICATION_ADHERENCE* weird_coefficient[year-2013]
+total_med_cost <- sum(med_patients) * MEDICATION_COST * (6 + 6*MEDICATION_ADHERENCE) * weird_coefficient[year-2013]
 
 total_dxa_cost_s1 <- sum(dxa_scans_s1) * dxa_cost* weird_coefficient[year-2013]
-total_med_cost_s1 <- sum(med_patients_s1) * MEDICATION_COST * MEDICATION_ADHERENCE* weird_coefficient[year-2013]
+total_med_cost_s1 <- sum(med_patients_s1) * MEDICATION_COST * (6 + 6*MEDICATION_ADHERENCE) * weird_coefficient[year-2013]
 
 total_inpatient_cost <- getMultiFraxCost(total_fractures,
                                          MULTI_FRACTURE_FACTOR,
