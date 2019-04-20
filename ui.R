@@ -184,7 +184,7 @@ dashboardPagePlus(
                                                                 reflect an annual risk. This risk is used to estimate the probability of fracture. Total fractures are<br/>
                                                                 aggreated by type and monetized using direct and indirect costs."))),
                 fluidRow(
-                  column(width = 4, numericInput(inputId = "pop_input", label = "Eligible Population", value = 1000000, min = 0, max = 30000000))),
+                  column(width = 4, numericInput(inputId = "pop_input", label = "Eligible Population", value = 10000000, min = 0, max = 30000000))),
                     # bsTooltip("pop_input", "Enter eligible population. Default value of 1 million is based on ....","right", options = list(container = "body"))),
                 box(id="riskdesc", tags$p("Risk Factors", tags$sup(style="font-size: 50px")), align = "left", color = "blue", width = 16, height = 4),
                   bsTooltip("riskdesc", "Risk factor prevalence was estimated from analyzing NHANES. Fracture risks for individual women in the model is estimated using FRAX simplified tables based on the baseline population demographics and charactersitics.",

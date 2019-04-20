@@ -147,7 +147,7 @@ function(input, output, session) {
     return(input$pop_input)
   })
   observeEvent(input$pop_input, {
-    if(input$pop_input <= 0) {
+    if(!is.numeric(input$pop_input) || input$pop_input <= 0) {
       shinyalert("Population Error", "Population must be greater than 0.", type = "error")
     }
   },
@@ -164,10 +164,17 @@ function(input, output, session) {
     return(input$RE_cauc/100.0)
   })
   observeEvent(input$RE_cauc, {
-    if(input$RE_cauc < 0 || input$RE_cauc > 100) {
+    if(!is.numeric(input$RE_cauc) || input$RE_cauc < 0 || input$RE_cauc > 100) {
       shinyalert("Demographic Breakdown Error", 
                  "Caucasian demographic must be within range of [0,100].", 
                  type = "error")
+    }
+    if(!is.numeric(input$RE_cauc) || !is.numeric(input$RE_hisp) ||
+       !is.numeric(input$RE_asian) || !is.numeric(input$RE_black)) {
+      shinyalert("Demographic Breakdown Error", 
+                 "Demographic breakdown values must be numeric.", 
+                 type = "error")
+      return()
     }
     if(input$RE_cauc + input$RE_hisp +
        input$RE_asian + input$RE_black != 100) {
@@ -189,10 +196,17 @@ function(input, output, session) {
     return(input$RE_hisp/100.0)
   })
   observeEvent(input$RE_hisp, {
-    if(input$RE_hisp < 0 || input$RE_hisp > 100) {
+    if(!is.numeric(input$RE_hisp) || input$RE_hisp < 0 || input$RE_hisp > 100) {
       shinyalert("Demographic Breakdown Error", 
                  "Hispanic demographic must be within range of [0,100].", 
                  type = "error")
+    }
+    if(!is.numeric(input$RE_cauc) || !is.numeric(input$RE_hisp) ||
+       !is.numeric(input$RE_asian) || !is.numeric(input$RE_black)) {
+      shinyalert("Demographic Breakdown Error", 
+                 "Demographic breakdown values must be numeric.", 
+                 type = "error")
+      return()
     }
     if(input$RE_cauc + input$RE_hisp +
        input$RE_asian + input$RE_black != 100) {
@@ -214,10 +228,17 @@ function(input, output, session) {
     return(input$RE_asian/100.0)
   })
   observeEvent(input$RE_asian, {
-    if(input$RE_asian < 0 || input$RE_asian > 100) {
+    if(!is.numeric(input$RE_asian) || input$RE_asian < 0 || input$RE_asian > 100) {
       shinyalert("Demographic Breakdown Error", 
                  "Asian demographic must be within range of [0,100].", 
                  type = "error")
+    }
+    if(!is.numeric(input$RE_cauc) || !is.numeric(input$RE_hisp) ||
+       !is.numeric(input$RE_asian) || !is.numeric(input$RE_black)) {
+      shinyalert("Demographic Breakdown Error", 
+                 "Demographic breakdown values must be numeric.", 
+                 type = "error")
+      return()
     }
     if(input$RE_cauc + input$RE_hisp +
        input$RE_asian + input$RE_black != 100) {
@@ -239,10 +260,17 @@ function(input, output, session) {
     return(input$RE_black/100.0)
   })
   observeEvent(input$RE_black, {
-    if(input$RE_black < 0 || input$RE_black > 100) {
+    if(!is.numeric(input$RE_black) || input$RE_black < 0 || input$RE_black > 100) {
       shinyalert("Demographic Breakdown Error", 
                  "Black demographic must be within range of [0,100].", 
                  type = "error")
+    }
+    if(!is.numeric(input$RE_cauc) || !is.numeric(input$RE_hisp) ||
+       !is.numeric(input$RE_asian) || !is.numeric(input$RE_black)) {
+      shinyalert("Demographic Breakdown Error", 
+                 "Demographic breakdown values must be numeric.", 
+                 type = "error")
+      return()
     }
     if(input$RE_cauc + input$RE_hisp +
        input$RE_asian + input$RE_black != 100) {
@@ -262,7 +290,7 @@ function(input, output, session) {
     return(input$BMD_mean)
   })
   observeEvent(input$BMD_mean, {
-    if(input$BMD_mean <= 0 || input$BMD_mean > 1.0) {
+    if(!is.numeric(input$BMD_mean) || input$BMD_mean <= 0 || input$BMD_mean > 1.0) {
       shinyalert("BMD Parameter Error", 
                  "Mean bone mineral density must be within the range (0, 1.0].", 
                  type = "error")
@@ -278,7 +306,7 @@ function(input, output, session) {
     return(input$BMD_SD)
   })  
   observeEvent(input$BMD_SD, {
-    if(input$BMD_SD <= 0 || input$BMD_SD > 1.0) {
+    if(!is.numeric(input$BMD_SD) || input$BMD_SD <= 0 || input$BMD_SD > 1.0) {
       shinyalert("BMD Parameter Error", 
                  "Bone mineral density standard deviation must be within the range (0, 1.0].", 
                  type = "error")
@@ -294,7 +322,7 @@ function(input, output, session) {
     return(input$RA_inp/100.0)
   })
   observeEvent(input$RA_inp, {
-    if(input$RA_inp <= 0 || input$RA_inp > 100.0) {
+    if(!is.numeric(input$RA_inp) || input$RA_inp <= 0 || input$RA_inp > 100.0) {
       shinyalert("Risk Factor Error", 
                  "Rheumatoid arthritis percentage must be within the range (0, 100.0].", 
                  type = "error")
@@ -310,7 +338,7 @@ function(input, output, session) {
     return(input$fxr_inp/100.0)
   })
   observeEvent(input$fxr_inp, {
-    if(input$fxr_inp <= 0 || input$fxr_inp > 100.0) {
+    if(!is.numeric(input$fxr_inp) || input$fxr_inp <= 0 || input$fxr_inp > 100.0) {
       shinyalert("Risk Factor Error", 
                  "Previous fracture percentage must be within the range (0, 100.0].", 
                  type = "error")
@@ -326,7 +354,7 @@ function(input, output, session) {
     return(input$parfxr_inp/100.0)
   })
   observeEvent(input$parfxr_inp, {
-    if(input$parfxr_inp <= 0 || input$parfxr_inp > 100.0) {
+    if(!is.numeric(input$parfxr_inp) || input$parfxr_inp <= 0 || input$parfxr_inp > 100.0) {
       shinyalert("Risk Factor Error", 
                  "Parent history of hip fracture percentage must be within the range (0, 100.0].", 
                  type = "error")
@@ -341,6 +369,15 @@ function(input, output, session) {
            "Smoker percentage must be within the range (0, 100.0]"))
     return(input$smoker/100.0)
   })
+  observeEvent(input$smoker, {
+    if(!is.numeric(input$smoker) || input$smoker <= 0 || input$smoker > 100.0) {
+      shinyalert("Risk Factor Error", 
+                 "Smoker percentage must be within the range (0, 100.0].", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
   
   ALCO_rate <- reactive({
     validate(
@@ -348,13 +385,31 @@ function(input, output, session) {
            "Excessive alcohol use percentage must be within the range (0, 100.0]"))
     return(input$alco/100.0)
   })
+  observeEvent(input$alco, {
+    if(!is.numeric(input$alco) || input$alco <= 0 || input$alco > 100.0) {
+      shinyalert("Risk Factor Error", 
+                 "Excessive alcohol use percentage must be within the range (0, 100.0].", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
   
   GLUCO_rate <- reactive({
     validate(
       need(input$gluco_tx > 0 && input$gluco_tx <= 100.0, 
-           "Long-term glucocorticoid therpay percentage must be within the range (0, 100.0]"))
+           "Long-term glucocorticoid therapy percentage must be within the range (0, 100.0]"))
     return(input$gluco_tx/100.0)
   })
+  observeEvent(input$gluco_tx, {
+    if(!is.numeric(input$gluco_tx) || input$gluco_tx <= 0 || input$gluco_tx > 100.0) {
+      shinyalert("Risk Factor Error", 
+                 "Long-term glucocorticoid therapy percentage must be within the range (0, 100.0].", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
   
   Base_Case_ID <- reactive({
     validate(
@@ -362,13 +417,31 @@ function(input, output, session) {
            "Base case identification rate must be within the range [11.3, 100.0]"))
     return(input$basecaseID/100.0)
   })
+  observeEvent(input$basecaseID, {
+    if(!is.numeric(input$basecaseID) ||input$basecaseID < 11.3 || input$basecaseID > 100.0) {
+      shinyalert("Identification Rate Error", 
+                 "Base case identification rate must be within the range [11.3, 100.0].", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
   
   Base_Case_Treatment <- reactive({
     validate(
-      need(input$basecaseTx >= 10.4 && input$basecaseTx <= 100.0, 
-           "Base case treatment percentage must be within the range [10.4, 100.0]"))
+      need(input$basecaseTx >= 9.0 && input$basecaseTx <= 100.0, 
+           "Base case treatment percentage must be within the range [9.0, 100.0]"))
     return(input$basecaseTx/100.0)
   })
+  observeEvent(input$basecaseTx, {
+    if(!is.numeric(input$basecaseTx) || input$basecaseTx < 9.0 || input$basecaseTx > 100.0) {
+      shinyalert("Treatment Rate Error", 
+                 "Base case treatment percentage must be within the range [9.0, 100.0].", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)  
   
   S1_ID <- reactive({
     validate(
@@ -376,49 +449,129 @@ function(input, output, session) {
            "New scenario identification rate must be within the range [11.3, 100.0]"))
     return(input$scenario1ID/100.0)
   })
+  observeEvent(input$scenario1ID, {
+    if(!is.numeric(input$scenario1ID) || input$scenario1ID < 11.3 || input$scenario1ID > 100.0) {
+      shinyalert("Identification Rate Error", 
+                 "New scenario identification rate must be within the range [11.3, 100.0].", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
   
   S1_Treatment <- reactive({
     validate(
-      need(input$scenario1Tx >= 10.4 && input$scenario1Tx <= 100.0, 
-           "New scenario treatment percentage must be within the range [10.4, 100.0]"))
+      need(input$scenario1Tx >= 9.0 && input$scenario1Tx <= 100.0, 
+           "New scenario treatment percentage must be within the range [9.0, 100.0]"))
     return(input$scenario1Tx/100.0)
   })
+  observeEvent(input$scenario1Tx, {
+    if(!is.numeric(input$scenario1Tx) || input$scenario1Tx < 9.0 || input$scenario1Tx > 100.0) {
+      shinyalert("Treatment 
+                 Rate Error", 
+                 "New scenario treatment percentage must be within the range [9.0, 100.0].", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
+  
+  
   costinpt1 <- reactive({
     validate(
       need(input$costinpt1 >= 0, 
            "Inpatient costs must be greater than or equal to 0."))
     return(input$costinpt1)
   })
+  observeEvent(input$costinpt1 , {
+    if(!is.numeric(input$costinpt1) || input$costinpt1 < 0) {
+      shinyalert("Cost Error", 
+                 "Inpatient costs must be greater than or equal to 0.", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
+  
   costinpt2 <- reactive({
     validate(
       need(input$costinpt2 >= 0, 
            "Inpatient costs must be greater than or equal to 0."))
     return(input$costinpt2)
   })
+  observeEvent(input$costinpt2 , {
+    if(!is.numeric(input$costinpt2) || input$costinpt2 < 0) {
+      shinyalert("Cost Error", 
+                 "Inpatient costs must be greater than or equal to 0.", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
+  
   costoutpt1 <- reactive({
     validate(
       need(input$costoutpt1 >= 0, 
            "outpatient costs must be greater than or equal to 0."))
     return(input$costoutpt1)
   })
+  observeEvent(input$costoutpt1 , {
+    if(!is.numeric(input$costoutpt1) || input$costoutpt1 < 0) {
+      shinyalert("Cost Error", 
+                 "Outpatient costs must be greater than or equal to 0.", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
+  
   costoutpt2 <- reactive({
     validate(
       need(input$costoutpt2 >= 0, 
            "Outpatient costs must be greater than or equal to 0."))
     return(input$costoutpt2)
   })
+  observeEvent(input$costoutpt2 , {
+    if(!is.numeric(input$costoutpt2) || input$costoutpt2 < 0) {
+      shinyalert("Cost Error", 
+                 "Outpatient costs must be greater than or equal to 0.", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)  
+  
   costLTC1 <- reactive({
     validate(
       need(input$costLTC1 >= 0, 
            "Long-term care costs must be greater than or equal to 0."))
     return(input$costLTC1)
   })
+  observeEvent(input$costLTC1 , {
+    if(!is.numeric(input$costLTC1) || input$costLTC1 < 0) {
+      shinyalert("Cost Error", 
+                 "Long-term care costs must be greater than or equal to 0.", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
+  
   costLTC2 <- reactive({
     validate(
       need(input$costLTC2 >= 0, 
            "Long-term care costs must be greater than or equal to 0."))
     return(input$costLTC2)
   })
+  observeEvent(input$costLTC2 , {
+    if(!is.numeric(input$costLTC2) || input$costLTC2 < 0) {
+      shinyalert("Cost Error", 
+                 "Long-term care costs must be greater than or equal to 0.", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
   
   costED1 <- reactive({
     validate(
@@ -426,60 +579,160 @@ function(input, output, session) {
            "Emergency department costs must be greater than or equal to 0."))
     return(input$costED1)
   })
+  observeEvent(input$costED1 , {
+    if(!is.numeric(input$costED1) || input$costED1 < 0) {
+      shinyalert("Cost Error", 
+                 "Emergency department costs must be greater than or equal to 0.", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
+  
   costED2 <- reactive({
     validate(
       need(input$costED2 >= 0, 
            "Emergency department costs must be greater than or equal to 0."))
     return(input$costED2)
   })
+  observeEvent(input$costED2 , {
+    if(!is.numeric(input$costED2) || input$costED2 < 0) {
+      shinyalert("Cost Error", 
+                 "Emergency department costs must be greater than or equal to 0.", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
+  
   costOTHER1 <- reactive({
     validate(
       need(input$costother1 >= 0, 
            "Other costs must be greater than or equal to 0."))
     return(input$costother1)
   })
+  observeEvent(input$costother1 , {
+    if(!is.numeric(input$costother1) || input$costother1 < 0) {
+      shinyalert("Cost Error", 
+                 "Other costs must be greater than or equal to 0.", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
+  
   costOTHER2 <- reactive({
     validate(
       need(input$costother2 >= 0, 
            "Other costs must be greater than or equal to 0."))
     return(input$costother2)
   })
+  observeEvent(input$costother2 , {
+    if(!is.numeric(input$costother2) || input$costother2 < 0) {
+      shinyalert("Cost Error", 
+                 "Other costs must be greater than or equal to 0.", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
+  
+  
   costpharm1 <- reactive({
     validate(
       need(input$costpharm1 >= 0, 
            "Pharmacy costs must be greater than or equal to 0."))
     return(input$costpharm1)
   })
+  observeEvent(input$costpharm1 , {
+    if(!is.numeric(input$costpharm1) || input$costpharm1 < 0) {
+      shinyalert("Cost Error", 
+                 "Pharmacy costs must be greater than or equal to 0.", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
+  
   costpharm2 <- reactive({
     validate(
       need(input$costpharm2 >= 0, 
            "Pharmacy costs must be greater than or equal to 0."))
     return(input$costpharm2)
   })
+  observeEvent(input$costpharm2 , {
+    if(!is.numeric(input$costpharm2) || input$costpharm2 < 0) {
+      shinyalert("Cost Error", 
+                 "Pharmacy costs must be greater than or equal to 0.", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
+  
   costprod1 <- reactive({
     validate(
       need(input$costprod1 >= 0, 
            "Productivity loss costs must be greater than or equal to 0."))
     return(input$costprod1)
   })
+  observeEvent(input$costprod1 , {
+    if(!is.numeric(input$costprod1) || input$costprod1 < 0) {
+      shinyalert("Cost Error", 
+                 "Productivity loss costs must be greater than or equal to 0.", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
+  
   costprod2 <- reactive({
     validate(
       need(input$costprod2 >= 0, 
            "Productivity loss costs must be greater than or equal to 0."))
     return(input$costprod2)
   })
+  observeEvent(input$costprod2 , {
+    if(!is.numeric(input$costprod2) || input$costprod2 < 0) {
+      shinyalert("Cost Error", 
+                 "Productivity loss costs must be greater than or equal to 0.", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
+  
   costcare1 <- reactive({
     validate(
       need(input$costcare1 >= 0, 
            "Caregiver costs must be greater than or equal to 0."))
     return(input$costcare1)
   })
+  observeEvent(input$costcare1 , {
+    if(!is.numeric(input$costcare1) || input$costcare1 < 0) {
+      shinyalert("Cost Error", 
+                 "Caregiver costs must be greater than or equal to 0.", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
+  
   costcare2 <- reactive({
     validate(
       need(input$costcare2 >= 0, 
            "Caregiver costs must be greater than or equal to 0."))
     return(input$costcare2)
   })
+  observeEvent(input$costcare2 , {
+    if(!is.numeric(input$costcare2) || input$costcare2 < 0) {
+      shinyalert("Cost Error", 
+                 "Caregiver costs must be greater than or equal to 0.", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
 ###############REACTIVE ACTIONS#####################
 
 # Reactive Function for Simulation Data
