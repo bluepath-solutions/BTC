@@ -6,7 +6,7 @@ references <- data.frame(refs = c("Brauer CA, Coca-Perraillon M, Cutler DM, Rose
 #########################################################################################################################################
 fluidPage(
 useShinyjs(),
-
+useShinyalert(),
 dashboardPagePlus(
   skin = "blue",
   header = dashboardHeaderPlus(

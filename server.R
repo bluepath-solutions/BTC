@@ -138,12 +138,21 @@ function(input, output, session) {
   priority = 1,
   autoDestroy = F, once = F)
 ###############INPUT VALIDATION#####################
+  # valid <- reactiveValues(pop = T)
   pop_input <- reactive({
     validate(
-      need(input$pop_input > 0, "Population must be greater than 0.")
+      need(input$pop_input > 0, 
+           'Population must be greater than 0.')
     )
     return(input$pop_input)
   })
+  observeEvent(input$pop_input, {
+    if(input$pop_input <= 0) {
+      shinyalert("Population Error", "Population must be greater than 0.", type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
   
   cauc_rate <- reactive({
     validate(
@@ -154,6 +163,21 @@ function(input, output, session) {
                   "Demographic percentages must sum to 100"))
     return(input$RE_cauc/100.0)
   })
+  observeEvent(input$RE_cauc, {
+    if(input$RE_cauc < 0 || input$RE_cauc > 100) {
+      shinyalert("Demographic Breakdown Error", 
+                 "Caucasian demographic must be within range of [0,100].", 
+                 type = "error")
+    }
+    if(input$RE_cauc + input$RE_hisp +
+       input$RE_asian + input$RE_black != 100) {
+      shinyalert("Demographic Breakdown Error", 
+                 "Demographic percentages must sum to 100.", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
   
   hisp_rate <- reactive({
     validate(
@@ -164,6 +188,21 @@ function(input, output, session) {
                   "Demographic percentages must sum to 100"))
     return(input$RE_hisp/100.0)
   })
+  observeEvent(input$RE_hisp, {
+    if(input$RE_hisp < 0 || input$RE_hisp > 100) {
+      shinyalert("Demographic Breakdown Error", 
+                 "Hispanic demographic must be within range of [0,100].", 
+                 type = "error")
+    }
+    if(input$RE_cauc + input$RE_hisp +
+       input$RE_asian + input$RE_black != 100) {
+      shinyalert("Demographic Breakdown Error", 
+                 "Demographic percentages must sum to 100.", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
   
   asian_rate <- reactive({
     validate(
@@ -174,6 +213,21 @@ function(input, output, session) {
                   "Demographic percentages must sum to 100"))
     return(input$RE_asian/100.0)
   })
+  observeEvent(input$RE_asian, {
+    if(input$RE_asian < 0 || input$RE_asian > 100) {
+      shinyalert("Demographic Breakdown Error", 
+                 "Asian demographic must be within range of [0,100].", 
+                 type = "error")
+    }
+    if(input$RE_cauc + input$RE_hisp +
+       input$RE_asian + input$RE_black != 100) {
+      shinyalert("Demographic Breakdown Error", 
+                 "Demographic percentages must sum to 100.", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
   
   black_rate <- reactive({
     validate(
@@ -184,12 +238,38 @@ function(input, output, session) {
                   "Demographic percentages must sum to 100"))
     return(input$RE_black/100.0)
   })
+  observeEvent(input$RE_black, {
+    if(input$RE_black < 0 || input$RE_black > 100) {
+      shinyalert("Demographic Breakdown Error", 
+                 "Black demographic must be within range of [0,100].", 
+                 type = "error")
+    }
+    if(input$RE_cauc + input$RE_hisp +
+       input$RE_asian + input$RE_black != 100) {
+      shinyalert("Demographic Breakdown Error", 
+                 "Demographic percentages must sum to 100.", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
+  
+  
   BMD_mean <- reactive({
     validate(
       need(input$BMD_mean > 0 && input$BMD_mean <= 1.0, 
            "Mean bone mineral density must be within the range (0, 1.0]"))
     return(input$BMD_mean)
   })
+  observeEvent(input$BMD_mean, {
+    if(input$BMD_mean <= 0 || input$BMD_mean > 1.0) {
+      shinyalert("BMD Parameter Error", 
+                 "Mean bone mineral density must be within the range (0, 1.0].", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
   
   BMD_SD <- reactive({
     validate(
@@ -197,6 +277,15 @@ function(input, output, session) {
            "Bone mineral density standard deviation must be within the range (0, 1.0]"))
     return(input$BMD_SD)
   })  
+  observeEvent(input$BMD_SD, {
+    if(input$BMD_SD <= 0 || input$BMD_SD > 1.0) {
+      shinyalert("BMD Parameter Error", 
+                 "Bone mineral density standard deviation must be within the range (0, 1.0].", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
   
   RA_rate <- reactive({
     validate(
@@ -204,6 +293,15 @@ function(input, output, session) {
            "Rheumatoid arthritis percentage must be within the range (0, 100.0]"))
     return(input$RA_inp/100.0)
   })
+  observeEvent(input$RA_inp, {
+    if(input$RA_inp <= 0 || input$RA_inp > 100.0) {
+      shinyalert("Risk Factor Error", 
+                 "Rheumatoid arthritis percentage must be within the range (0, 100.0].", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
   
   FXR_rate <- reactive({
     validate(
@@ -211,6 +309,15 @@ function(input, output, session) {
            "Previous fracture percentage must be within the range (0, 100.0]"))
     return(input$fxr_inp/100.0)
   })
+  observeEvent(input$fxr_inp, {
+    if(input$fxr_inp <= 0 || input$fxr_inp > 100.0) {
+      shinyalert("Risk Factor Error", 
+                 "Previous fracture percentage must be within the range (0, 100.0].", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
   
   PARFXR_rate <- reactive({
     validate(
@@ -218,6 +325,15 @@ function(input, output, session) {
            "Parent history of hip fracture percentage must be within the range (0, 100.0]"))
     return(input$parfxr_inp/100.0)
   })
+  observeEvent(input$parfxr_inp, {
+    if(input$parfxr_inp <= 0 || input$parfxr_inp > 100.0) {
+      shinyalert("Risk Factor Error", 
+                 "Parent history of hip fracture percentage must be within the range (0, 100.0].", 
+                 type = "error")
+    }
+  },
+  ignoreInit = T,
+  priority = 500)
   
   SMOKER_rate <- reactive({
     validate(
