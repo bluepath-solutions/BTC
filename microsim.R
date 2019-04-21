@@ -31,7 +31,13 @@ index <- which(age_probabilities$Year == year)
 age_prob <- c(age_probabilities[index,2:37])
 
 # Population Size - THIS VALUE IS CURRENTLY FIXED, IT WILL NOT CHANGE WITH UI INPUTS
-population_size <- 100000 
+if(POP < 100000){
+  population_size <- POP
+  EXTRAPOLATION_FACTOR <- 1.0
+} else if(POP >= 100001) {
+  population_size <- 100000
+  EXTRAPOLATION_FACTOR <- POP/population_size
+}
 #EXTRAPOLATION_FACTOR <- POP/population_size
 
 # Demographic Percentages
@@ -124,8 +130,10 @@ risk_factor_prob <- c(rheu_arth_prob, prev_fracture_prob, hist_fracture_prob,
 
 
 MEDICATION_COST <- treatment_mix %*% treatment_monthly_cost
-HIP_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_hip  
-ANY_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_other
+HIP_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_hip * MEDICATION_ADHERENCE +
+                        treatment_mix %*% treatment_efficacy_hip * (1 - MEDICATION_ADHERENCE) * NON_ADHERENT_INCREASED_FRACTURE_RISK
+ANY_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_other * MEDICATION_ADHERENCE +
+                        treatment_mix %*% treatment_efficacy_other * (1 - MEDICATION_ADHERENCE) * NON_ADHERENT_INCREASED_FRACTURE_RISK   
 
 # Weird Coefficent - This extrapolates the simulated population to the projected 
 #                    US population of women 65+ in the US.  2040 is the last possible
@@ -141,7 +149,8 @@ weird_coefficient <- c(25.892946, 26.700267, 27.525255, 28.376817, 29.276951,
                        43.018822, 43.619101, 44.170949, 44.581490, 44.882428,
                        45.124642, 45.392507)
 
-weird_coefficient <- weird_coefficient*1000000/population_size
+#weird_coefficient <- weird_coefficient*1000000/population_size # Coefficient here extrapolates to census data
+weird_coefficient <- weird_coefficient/min(weird_coefficient)
 
 inpatient_wo_subsequent_fracture <- COSTINPT1 #9576
 inpatient_w_subsequent_fracture <-  COSTINPT2 #16477
@@ -288,10 +297,10 @@ total_fractures_s1 <- total_hip_s1 + total_shoulder_s1 + total_vertebral_s1 + to
 # Calculate Costs
 
 total_dxa_cost <- sum(dxa_scans) * dxa_cost* weird_coefficient[year-2013]
-total_med_cost <- sum(med_patients) * MEDICATION_COST * MEDICATION_ADHERENCE* weird_coefficient[year-2013]
+total_med_cost <- sum(med_patients) * MEDICATION_COST * (6 + 6*MEDICATION_ADHERENCE) * weird_coefficient[year-2013]
 
 total_dxa_cost_s1 <- sum(dxa_scans_s1) * dxa_cost* weird_coefficient[year-2013]
-total_med_cost_s1 <- sum(med_patients_s1) * MEDICATION_COST * MEDICATION_ADHERENCE* weird_coefficient[year-2013]
+total_med_cost_s1 <- sum(med_patients_s1) * MEDICATION_COST * (6 + 6*MEDICATION_ADHERENCE) * weird_coefficient[year-2013]
 
 total_inpatient_cost <- getMultiFraxCost(total_fractures,
                                          MULTI_FRACTURE_FACTOR,
@@ -412,5 +421,5 @@ financial_data_s1 <- data.frame(total_dxa_cost_s1, total_med_cost_s1, total_inpa
                              grand_total_s1)
 
 packaged_data <- data.frame(clinical_data, financial_data, clinical_data_s1, financial_data_s1)
-return(packaged_data)
+return(packaged_data*EXTRAPOLATION_FACTOR)
 }

@@ -6,7 +6,7 @@ references <- data.frame(refs = c("Brauer CA, Coca-Perraillon M, Cutler DM, Rose
 #########################################################################################################################################
 fluidPage(
 useShinyjs(),
-
+useShinyalert(),
 dashboardPagePlus(
   skin = "blue",
   header = dashboardHeaderPlus(
@@ -184,7 +184,7 @@ dashboardPagePlus(
                                                                 reflect an annual risk. This risk is used to estimate the probability of fracture. Total fractures are<br/>
                                                                 aggreated by type and monetized using direct and indirect costs."))),
                 fluidRow(
-                  column(width = 4, numericInput(inputId = "pop_input", label = "Eligible Population", value = 1000000, min = 0, max = 30000000))),
+                  column(width = 4, numericInput(inputId = "pop_input", label = "Eligible Population", value = 10000000, min = 0, max = 30000000))),
                     # bsTooltip("pop_input", "Enter eligible population. Default value of 1 million is based on ....","right", options = list(container = "body"))),
                 box(id="riskdesc", tags$p("Risk Factors", tags$sup(style="font-size: 50px")), align = "left", color = "blue", width = 16, height = 4),
                   bsTooltip("riskdesc", "Risk factor prevalence was estimated from analyzing NHANES. Fracture risks for individual women in the model is estimated using FRAX simplified tables based on the baseline population demographics and charactersitics.",
@@ -389,7 +389,7 @@ dashboardPagePlus(
                           column(width = 4, numericInput(inputId = "scenario1Tx", label = NULL, value = "17.8"))),
                       fluidRow(
                         column(width = 4, align="center", h5("Time Horizon")),
-                        column(width = 7,
+                        column(width = 6,
                         sliderInput(inputId = "endYear", 
                                     label = NULL,
                                     min = as.Date("2022", '%Y'),
@@ -397,7 +397,12 @@ dashboardPagePlus(
                                     value = as.Date("2040", '%Y'),
                                     step = 365,
                                     timeFormat = "%Y"), align = "center"),
-                        column(width = 1)
+                        column(width = 2,
+                               actionBttn(inputId = 'run_simulation',
+                                          label = 'Run Simulation',
+                                          color="primary",
+                                          style="material-flat"),
+                               align = 'center')
                         ))),
               boxPlus(width = 12, closable = FALSE, collapsible = TRUE,
                       fluidRow(

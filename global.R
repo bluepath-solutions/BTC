@@ -21,18 +21,24 @@ library(shinythemes)
 library(shinyLP)
 library(shinyBS)
 library(shinyjs)
+library(shinyalert)
 library(shinyWidgets)
 library(shinydashboard)
 library(shinydashboardPlus)
 library(snow)
+library(doSNOW)
 library(stringr)
 library(tidyverse)
+
 
 source("microsim_utilities.R")
 source("microsim.R")
 
+# cl <- makeCluster(detectCores() - 1)
+# registerDoParallel(cl)
 cl <- makeCluster(detectCores() - 1)
-registerDoParallel(cl)
+registerDoSNOW(cl)
+
 
 tab_id <- c("Overview", "Inputs", "Fracture", "Scenarios", "Results", "Assumptions", "Break", "Disclosures", "Terms", "References")
 
@@ -76,7 +82,8 @@ ID_lookup <- (read_excel("id_lookup.xlsx"))
 #MAX_MAJOR_FRACTURE_RATE <- max(ID_lookup$`FRAX- MAJOR`)
 
 
-MEDICATION_ADHERENCE <- (6+6*0.41)
+MEDICATION_ADHERENCE <- 0.41
+NON_ADHERENT_INCREASED_FRACTURE_RISK <- 1.5
 HIP_FRACTURE_RATIO <- (45603/5024)
 MULTI_FRACTURE_FACTOR <- 1.226
 
