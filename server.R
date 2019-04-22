@@ -158,8 +158,8 @@ function(input, output, session) {
     validate(
       need(input$RE_cauc >= 0 && input$RE_cauc <= 100, 
            "Caucasion demographic must be within range of [0,100]")
-      %then% need(input$RE_cauc + input$RE_hisp +
-                    input$RE_asian + input$RE_black == 100,
+      %then% need(abs(100 - (input$RE_cauc + input$RE_hisp +
+                    input$RE_asian + input$RE_black)) < 0.0001,
                   "Demographic percentages must sum to 100"))
     return(input$RE_cauc/100.0)
   })
@@ -176,8 +176,8 @@ function(input, output, session) {
                  type = "error")
       return()
     }
-    if(input$RE_cauc + input$RE_hisp +
-       input$RE_asian + input$RE_black != 100) {
+    if(abs(100 - (input$RE_cauc + input$RE_hisp +
+                  input$RE_asian + input$RE_black)) >= 0.0001) {
       shinyalert("Demographic Breakdown Error", 
                  "Demographic percentages must sum to 100.", 
                  type = "error")
@@ -190,8 +190,8 @@ function(input, output, session) {
     validate(
       need(input$RE_hisp >= 0 && input$RE_hisp <= 100, 
            "Hispanic demographic must be within range of [0,100]")
-      %then% need(input$RE_cauc + input$RE_hisp +
-                    input$RE_asian + input$RE_black == 100,
+      %then% need(abs(100 - (input$RE_cauc + input$RE_hisp +
+                               input$RE_asian + input$RE_black)) < 0.0001,
                   "Demographic percentages must sum to 100"))
     return(input$RE_hisp/100.0)
   })
@@ -208,8 +208,8 @@ function(input, output, session) {
                  type = "error")
       return()
     }
-    if(input$RE_cauc + input$RE_hisp +
-       input$RE_asian + input$RE_black != 100) {
+    if(abs(100 - (input$RE_cauc + input$RE_hisp +
+                  input$RE_asian + input$RE_black)) >= 0.0001) {
       shinyalert("Demographic Breakdown Error", 
                  "Demographic percentages must sum to 100.", 
                  type = "error")
@@ -222,8 +222,8 @@ function(input, output, session) {
     validate(
       need(input$RE_asian >= 0 && input$RE_asian <= 100, 
            "Asian demographic must be within range of [0,100]")
-      %then% need(input$RE_cauc + input$RE_hisp +
-                    input$RE_asian + input$RE_black == 100,
+      %then% need(abs(100 - (input$RE_cauc + input$RE_hisp +
+                               input$RE_asian + input$RE_black)) < 0.0001,
                   "Demographic percentages must sum to 100"))
     return(input$RE_asian/100.0)
   })
@@ -240,8 +240,8 @@ function(input, output, session) {
                  type = "error")
       return()
     }
-    if(input$RE_cauc + input$RE_hisp +
-       input$RE_asian + input$RE_black != 100) {
+    if(abs(100 - (input$RE_cauc + input$RE_hisp +
+                  input$RE_asian + input$RE_black)) >= 0.0001) {
       shinyalert("Demographic Breakdown Error", 
                  "Demographic percentages must sum to 100.", 
                  type = "error")
@@ -254,8 +254,8 @@ function(input, output, session) {
     validate(
       need(input$RE_black >= 0 && input$RE_black <= 100, 
            "Black demographic must be within range of [0,100]")
-      %then% need(input$RE_cauc + input$RE_hisp +
-                    input$RE_asian + input$RE_black == 100,
+      %then% need(abs(100 - (input$RE_cauc + input$RE_hisp +
+                               input$RE_asian + input$RE_black)) < 0.0001,
                   "Demographic percentages must sum to 100"))
     return(input$RE_black/100.0)
   })
@@ -272,8 +272,8 @@ function(input, output, session) {
                  type = "error")
       return()
     }
-    if(input$RE_cauc + input$RE_hisp +
-       input$RE_asian + input$RE_black != 100) {
+    if(abs(100 - (input$RE_cauc + input$RE_hisp +
+                  input$RE_asian + input$RE_black)) >= 0.0001) {
       shinyalert("Demographic Breakdown Error", 
                  "Demographic percentages must sum to 100.", 
                  type = "error")
@@ -793,7 +793,6 @@ sim_data <- reactive({
   
   progressB <- function() progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/(end_year - start_year), detail = "Preparing Plot")
   opts <- list(progress = progressB)
-  
   # Utilize parallelization to increase speed
   return(foreach(i=start_year:end_year,
                               .packages = c('readxl',
@@ -830,7 +829,7 @@ sim_data <- reactive({
                                         'getMedPatients',
                                         'getFracture',
                                         'getMultiFraxCost'
-                                        ),
+                                        ), .verbose = F,
                                         .options.snow = opts) %dopar% {
                                isolate({microsim(population,
                                                  caucasian_rate,
@@ -938,7 +937,6 @@ output$CostBox_R <- renderInfoBox({
   for(i in 1:duration) {
     total_frax_cost <- (total_frax_cost) + ((base_case[[i]]$grand_total_s1/1000000) - (base_case[[i]]$grand_total/1000000))
   }
-  print(total_frax_cost)
   subtitle_text <- ifelse(total_frax_cost > 0, "Change to New Scenario Results in Cost Increases ($MM)", "Change to New Scenario Results in Cost Decreases ($MM)")
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")

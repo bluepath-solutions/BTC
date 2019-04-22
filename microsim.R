@@ -128,12 +128,12 @@ treatment_efficacy_other <- c(0.66, # Aledronate Primary
 risk_factor_prob <- c(rheu_arth_prob, prev_fracture_prob, hist_fracture_prob,
                       smoker_prob, alcohol_prob, gluco_prob)
 
-
 MEDICATION_COST <- treatment_mix %*% treatment_monthly_cost
 HIP_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_hip * MEDICATION_ADHERENCE +
                         treatment_mix %*% treatment_efficacy_hip * (1 - MEDICATION_ADHERENCE) * NON_ADHERENT_INCREASED_FRACTURE_RISK
 ANY_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_other * MEDICATION_ADHERENCE +
                         treatment_mix %*% treatment_efficacy_other * (1 - MEDICATION_ADHERENCE) * NON_ADHERENT_INCREASED_FRACTURE_RISK   
+
 
 # Weird Coefficent - This extrapolates the simulated population to the projected 
 #                    US population of women 65+ in the US.  2040 is the last possible

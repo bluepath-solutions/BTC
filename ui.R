@@ -219,16 +219,16 @@ dashboardPagePlus(
                             "left", options = list(container = "body"))),
                 h5("Race/Ethnicity Distribution (%)"),
                 fluidRow(
-                  column(width = 3, numericInput(inputId = "RE_cauc", label = "Caucasian", value = 68.3, min = 0, max = 100)),
+                  column(width = 3, numericInput(inputId = "RE_cauc", label = "Caucasian", value = 80.1, min = 0, max = 100)),
                     bsTooltip("RE_cauc", "Centers for Disease Control and Prevention. NHANES - National Health and Nutrition Examination Survey. https://www.cdc.gov/nchs/nhanes/. Accessed May 3, 2017.",
                             "right", options = list(container = "body")),
-                  column(width = 3, numericInput(inputId = "RE_hisp", label = "Hispanic", value = 15.4, min = 0, max = 100)),
+                  column(width = 3, numericInput(inputId = "RE_hisp", label = "Hispanic", value = 9.1, min = 0, max = 100)),
                     bsTooltip("RE_hisp", "Centers for Disease Control and Prevention. NHANES - National Health and Nutrition Examination Survey. https://www.cdc.gov/nchs/nhanes/. Accessed May 3, 2017.",
                             "right", options = list(container = "body")),
-                  column(width = 3, numericInput(inputId = "RE_asian", label = "Asian", value = 4.5, min = 0, max = 100)),
+                  column(width = 3, numericInput(inputId = "RE_asian", label = "Asian", value = 0.5, min = 0, max = 100)),
                     bsTooltip("RE_asian", "Centers for Disease Control and Prevention. NHANES - National Health and Nutrition Examination Survey. https://www.cdc.gov/nchs/nhanes/. Accessed May 3, 2017.",
                             "left", options = list(container = "body")),
-                  column(width = 3, numericInput(inputId = "RE_black", label = "Black", value = 11.8, min = 0, max = 100)),
+                  column(width = 3, numericInput(inputId = "RE_black", label = "Black", value = 10.3, min = 0, max = 100)),
                   bsTooltip("RE_black", "Centers for Disease Control and Prevention. NHANES - National Health and Nutrition Examination Survey. https://www.cdc.gov/nchs/nhanes/. Accessed May 3, 2017.",
                             "left", options = list(container = "body")))
                 )),
@@ -407,7 +407,7 @@ dashboardPagePlus(
               boxPlus(width = 12, closable = FALSE, collapsible = TRUE,
                       fluidRow(
                         column(width = 6, infoBoxOutput("FraxBox_R"), tags$style("#FraxBox_R {width:100%}")),
-                        column(width = 6, infoBoxOutput("CostBox_R"), tags$style("#CostBox_R {width:100%}") ))),
+                      column(width = 6, infoBoxOutput("CostBox_R"), tags$style("#CostBox_R {width:100%}") ))),
               fluidRow(
                 boxPlus(withSpinner(plotlyOutput("fxrplot")), width = 6),
                 boxPlus(withSpinner(plotlyOutput("costplot")), width = 6)),
