@@ -2,7 +2,7 @@
 abbreviations <- data.frame(abbrev = c("BMD", "CPI", "DXA", "FRAX", "NHANES"),
                             full = c("bone mineral density", "Consumer Price Index", "dual-energy X-ray absorptiometry", "Fracture Risk Assessment Tool", "National Health and Nutrition Examination Survey"))
 
-tab_id <- c("Home", "Overview", "Inputs", "Fracture", "Scenarios", "Results", "Assumptions", "Disclosures", "Terms", "References")
+tab_id <- c("Home", "Overview", "Pop_Inputs", "ClinEcon_Inputs", "Scenarios", "Results", "Assumptions", "Disclosures", "Terms", "References")
 
 
 
