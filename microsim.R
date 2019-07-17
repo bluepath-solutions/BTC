@@ -431,7 +431,8 @@ financial_data_s1 <- data.frame(total_dxa_cost_s1, total_med_cost_s1, total_inpa
                              total_caregiver_losses_s1, total_direct_cost_s1, total_indirect_cost_s1, 
                              grand_total_s1)
 
-prevFracData <- data.frame(multi_fracture = sum((prevFractures + any_fracture) == 2), current_fracture = sum(any_fracture))
+prevFracData <- data.frame(multi_fracture = sum((prevFractures + any_fracture) == 2)* weird_coefficient[year-2013],
+                           current_fracture = sum(any_fracture)* weird_coefficient[year-2013])
 
 packaged_data <- data.frame(clinical_data, prevFracData, financial_data, clinical_data_s1, financial_data_s1)
 
