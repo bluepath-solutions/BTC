@@ -1,3 +1,5 @@
+#setwd("C:/Users/Sophie Snyder/Documents/R/BTC4") #Set up a working directory
+
 library(aws.signature)
 library(digest)
 library(doParallel)
@@ -40,9 +42,9 @@ cl <- makeCluster(detectCores() - 1)
 registerDoSNOW(cl)
 
 
-tab_id <- c("Overview", "Inputs", "Fracture", "Scenarios", "Results", "Assumptions", "Break", "Disclosures", "Terms", "References")
+tab_id <- c("Overview", "Pop_Inputs", "ClinEcon_Inputs", "Scenarios", "Results", "Assumptions", "Break", "Disclosures", "Terms", "References")
 
-NUM_PAGES <- 11
+NUM_PAGES <- length(tab_id) + 1
 
 age_probabilities <- (read_excel("age_distribution.xlsx"))
 
@@ -82,8 +84,8 @@ ID_lookup <- (read_excel("id_lookup.xlsx"))
 #MAX_MAJOR_FRACTURE_RATE <- max(ID_lookup$`FRAX- MAJOR`)
 
 
-MEDICATION_ADHERENCE <- 0.41
-NON_ADHERENT_INCREASED_FRACTURE_RISK <- 1.5
+MEDICATION_ADHERENCE <- 0.418
+NON_ADHERENT_INCREASED_FRACTURE_RISK <- 1.46
 HIP_FRACTURE_RATIO <- (45603/5024)
 MULTI_FRACTURE_FACTOR <- 1.226
 
