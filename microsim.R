@@ -127,6 +127,7 @@ treatment_efficacy_other <- c(0.66, # Aledronate Primary
 
 risk_factor_prob <- c(rheu_arth_prob, prev_fracture_prob, hist_fracture_prob,
                       smoker_prob, alcohol_prob, gluco_prob)
+risk_names <- c('arthritis', 'prevFrac', 'parentFrac', 'smoker', 'alcohol', 'gluco')
 
 MEDICATION_COST <- treatment_mix %*% treatment_monthly_cost
 HIP_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_hip * MEDICATION_ADHERENCE +
@@ -197,8 +198,18 @@ bmd_index <- getBMDIndex(population_size,
                          bmd_cutoffs,
                          bmd_index_scores
 )
-risk_factor_index <- getRiskFactorIndex(population_size,
-                                        risk_factor_prob)
+
+## detailed risk assignment ####
+riskTable <- getRiskFactors(population_size, risk_factor_prob, risk_names)
+# n_prev_frac <- riskTable[, sum(prevFrac)] # can be used to count number of patients assigned prevFrac = 1
+
+prevFractures <- riskTable[, prevFrac]
+risk_factor_index <- countPatientRiskFactorFactorIndex(riskTable)
+rm(riskTable)
+#####
+
+# risk_factor_index <- getRiskFactorIndex(population_size,
+#                                         risk_factor_prob)
 
 
 index <- as.integer(age_index + race_index + bmd_index + risk_factor_index)
@@ -421,5 +432,11 @@ financial_data_s1 <- data.frame(total_dxa_cost_s1, total_med_cost_s1, total_inpa
                              grand_total_s1)
 
 packaged_data <- data.frame(clinical_data, financial_data, clinical_data_s1, financial_data_s1)
+
+## look at number of current fractures that had a previous fracture
+n_frac_w_prevFrac <- sum(prevFractures + any_fracture == 2)
+paste0('number of fractures in', year, 'that had previous fractures:', n_frac_w_prevFrac)
+
+
 return(packaged_data*EXTRAPOLATION_FACTOR)
 }

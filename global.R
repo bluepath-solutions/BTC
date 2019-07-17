@@ -31,6 +31,7 @@ library(snow)
 library(doSNOW)
 library(stringr)
 library(tidyverse)
+library(data.table)
 
 
 source("microsim_utilities.R")
