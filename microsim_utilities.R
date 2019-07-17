@@ -136,8 +136,7 @@ getRiskFactorIndex <- function(POPULATION_SIZE,
   return(risk_factor_index)
 }
 
-
-## MICAH ####
+# getRiskFactors
 # @param POPULATION_SIZE int, the total number of people to be included
 # @param FACTOR_PROBABILITES vector, a vector of floats corresponding to an arbitrary
 #                                  number of additional risk factors
@@ -172,7 +171,7 @@ countPatientRiskFactorIndex <- function(riskFactorTable){
   return(riskFactorTable[, rowSums(.SD)])
 }
 
-#####
+
 
 
 

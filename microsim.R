@@ -204,7 +204,7 @@ riskTable <- getRiskFactors(population_size, risk_factor_prob, risk_names)
 # n_prev_frac <- riskTable[, sum(prevFrac)] # can be used to count number of patients assigned prevFrac = 1
 
 prevFractures <- riskTable[, prevFrac]
-risk_factor_index <- countPatientRiskFactorFactorIndex(riskTable)
+risk_factor_index <- countPatientRiskFactorIndex(riskTable)
 rm(riskTable)
 #####
 

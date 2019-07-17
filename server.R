@@ -796,7 +796,8 @@ sim_data <- reactive({
   # Utilize parallelization to increase speed
   return(foreach(i=start_year:end_year,
                               .packages = c('readxl',
-                                            'hashmap'),
+                                            'hashmap',
+                                            'data.table'),
                               .export=c('microsim',
                                         'age_probabilities',
                                         'minimum_age',
@@ -824,6 +825,8 @@ sim_data <- reactive({
                                         'getRaceIndex',
                                         'getBMDIndex',
                                         'getRiskFactorIndex',
+                                        'getRiskFactors',
+                                        'countPatientRiskFactorIndex',
                                         'getMedicationUtilization',
                                         'getDXAScans',
                                         'getMedPatients',
