@@ -412,9 +412,12 @@ total_indirect_cost_s1 <- total_productivity_losses_s1 + total_caregiver_losses_
 grand_total <- total_direct_cost + total_indirect_cost
 grand_total_s1 <- total_direct_cost_s1 + total_indirect_cost_s1
 
+####
+n_frac_w_prevFrac <- sum((prevFractures + any_fracture) == 2)
+####
 
 clinical_data <- data.frame(total_hip, total_shoulder, total_vertebral, 
-                            total_forearm, total_other, total_fractures)
+                            total_forearm, total_other, total_fractures, n_frac_w_prevFrac)
 
 financial_data <- data.frame(total_dxa_cost, total_med_cost, total_inpatient_cost,
                              total_outpatient_cost, total_ltc_cost, total_ed_cost,
@@ -434,9 +437,8 @@ financial_data_s1 <- data.frame(total_dxa_cost_s1, total_med_cost_s1, total_inpa
 packaged_data <- data.frame(clinical_data, financial_data, clinical_data_s1, financial_data_s1)
 
 ## look at number of current fractures that had a previous fracture
-n_frac_w_prevFrac <- sum(prevFractures + any_fracture == 2)
-paste0('number of fractures in', year, 'that had previous fractures:', n_frac_w_prevFrac)
-
+#n_frac_w_prevFrac <- sum(prevFractures + any_fracture == 2)
+#paste0('number of fractures in', year, 'that had previous fractures:', n_frac_w_prevFrac)
 
 return(packaged_data*EXTRAPOLATION_FACTOR)
 }
