@@ -275,6 +275,10 @@ hip_fracture_s1 <- getFracture(med_patients_s1,
 other_fracture <- ifelse(!any_fracture,
                          F,
                          !hip_fracture)
+## this is saying if you had any_fracture and it was a hip, no other_fracture.
+## if you had any_fracture, and it was not a hip, other_fracture.
+## if you did not have any_fracture, then you did not have other_fracture.
+
 
 other_fracture_s1 <- ifelse(!any_fracture_s1,
                             F,
@@ -300,12 +304,15 @@ total_forearm_s1 <- fracture_breakdown[3] * total_other_fracture_s1* MULTI_FRACT
 
 total_other <- HIP_FRACTURE_RATIO * total_hip - total_shoulder - total_vertebral - total_forearm
 total_fractures <- total_hip + total_shoulder + total_vertebral + total_forearm + total_other
+# total_fractures is equivalent to (1 + HIP_FRACTURE_RATIO)*total_hip
 
 total_other_s1 <- HIP_FRACTURE_RATIO * total_hip_s1 - total_shoulder_s1 - total_vertebral_s1 - total_forearm_s1
 total_fractures_s1 <- total_hip_s1 + total_shoulder_s1 + total_vertebral_s1 + total_forearm_s1 + total_other_s1
 
 # End of Clinical Data, Beginning of Financial Data
 # Calculate Costs
+
+# the 6 + 6*med_adhere is from the excel model
 
 total_dxa_cost <- sum(dxa_scans) * dxa_cost* weird_coefficient[year-2013]
 total_med_cost <- sum(med_patients) * MEDICATION_COST * (6 + 6*MEDICATION_ADHERENCE) * weird_coefficient[year-2013]
