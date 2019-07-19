@@ -438,10 +438,14 @@ financial_data_s1 <- data.frame(total_dxa_cost_s1, total_med_cost_s1, total_inpa
                              total_caregiver_losses_s1, total_direct_cost_s1, total_indirect_cost_s1, 
                              grand_total_s1)
 
-prevFracData <- data.frame(total_frac_from_hip = total_hip*(1 + HIP_FRACTURE_RATIO),
+noisy_sbsqnt_rate <- rnorm(1, mean = .1843393, sd = .003325)
+prevFracData <- data.frame(total_frac = total_hip*(1 + HIP_FRACTURE_RATIO),
                            # do total_frac*rnorm(.226) and do calculation with total_frac_from_hip 
-                           n_sbsqnt = total_fractures*rnorm(1, mean = .1843393, sd = .003325))
-prevFracData$solo_fracs <- prevFracData$total_frac_from_hip - prevFracData$n_sbsqnt
+                           n_sbsqnt = total_fractures*noisy_sbsqnt_rate,
+                           total_frac_s1 = total_hip_s1*(1 + HIP_FRACTURE_RATIO),
+                           n_sbsqnt_s1 = total_fractures_s1*noisy_sbsqnt_rate)
+prevFracData$first_fracs <- prevFracData$total_frac - prevFracData$n_sbsqnt
+prevFracData$first_fracs_s1 <- prevFracData$total_frac_s1 - prevFracData$n_sbsqnt_s1
 
 packaged_data <- data.frame(clinical_data, prevFracData, financial_data, clinical_data_s1, financial_data_s1)
 
@@ -450,7 +454,7 @@ packaged_data <- data.frame(clinical_data, prevFracData, financial_data, clinica
 #paste0('number of fractures in', year, 'that had previous fractures:', n_frac_w_prevFrac)
 
 return_data <- packaged_data*EXTRAPOLATION_FACTOR
-return_data$percent_subsequent <- return_data$n_sbsqnt/return_data$solo_fracs
+return_data$percent_subsequent <- return_data$n_sbsqnt/return_data$first_fracs
 
 return(return_data)
 }
