@@ -200,16 +200,16 @@ bmd_index <- getBMDIndex(population_size,
 )
 
 ## detailed risk assignment ####
-riskTable <- getRiskFactors(population_size, risk_factor_prob, risk_names)
-# n_prev_frac <- riskTable[, sum(prevFrac)] # can be used to count number of patients assigned prevFrac = 1
-
-prevFractures <- riskTable[, prevFrac]
-risk_factor_index <- countPatientRiskFactorIndex(riskTable)
-rm(riskTable)
+# riskTable <- getRiskFactors(population_size, risk_factor_prob, risk_names)
+# # n_prev_frac <- riskTable[, sum(prevFrac)] # can be used to count number of patients assigned prevFrac = 1
+# 
+# prevFractures <- riskTable[, prevFrac]
+# risk_factor_index <- countPatientRiskFactorIndex(riskTable)
+# rm(riskTable)
 #####
 
-# risk_factor_index <- getRiskFactorIndex(population_size,
-#                                         risk_factor_prob)
+risk_factor_index <- getRiskFactorIndex(population_size,
+                                       risk_factor_prob)
 
 
 index <- as.integer(age_index + race_index + bmd_index + risk_factor_index)
@@ -236,12 +236,12 @@ dxa_scans_s1 <- getDXAScans(population_size,
                             dxa_prob_s1) 
 
 
-med_patients <- getMedPatients(population_size,
+med_patients <- getMedPatients(#population_size,
                                frax_major,
                                med_base_prob,
                                year)
 
-med_patients_s1 <- getMedPatients(population_size,
+med_patients_s1 <- getMedPatients(#population_size,
                                frax_major,
                                med_base_prob_s1,
                                year)
@@ -256,7 +256,7 @@ any_fracture <- getFracture(med_patients,
                             samples)
 
 any_fracture_s1 <- getFracture(med_patients_s1,
-                            ANY_FRACTURE_AVERAGE,
+                            ANY_FRACTURE_AVERAGE, 
                             frax_major,
                             samples)
 
@@ -438,8 +438,10 @@ financial_data_s1 <- data.frame(total_dxa_cost_s1, total_med_cost_s1, total_inpa
                              total_caregiver_losses_s1, total_direct_cost_s1, total_indirect_cost_s1, 
                              grand_total_s1)
 
-prevFracData <- data.frame(multi_fracture = sum((prevFractures + any_fracture) == 2)* weird_coefficient[year-2013],
-                           current_fracture = sum(any_fracture)* weird_coefficient[year-2013])
+prevFracData <- data.frame(total_frac_from_hip = total_hip*(1 + HIP_FRACTURE_RATIO),
+                           # do total_frac*rnorm(.226) and do calculation with total_frac_from_hip 
+                           n_sbsqnt = total_fractures*rnorm(1, mean = .1843393, sd = .003325))
+prevFracData$solo_fracs <- prevFracData$total_frac_from_hip - prevFracData$n_sbsqnt
 
 packaged_data <- data.frame(clinical_data, prevFracData, financial_data, clinical_data_s1, financial_data_s1)
 
@@ -447,5 +449,8 @@ packaged_data <- data.frame(clinical_data, prevFracData, financial_data, clinica
 #n_frac_w_prevFrac <- sum(prevFractures + any_fracture == 2)
 #paste0('number of fractures in', year, 'that had previous fractures:', n_frac_w_prevFrac)
 
-return(packaged_data*EXTRAPOLATION_FACTOR)
+return_data <- packaged_data*EXTRAPOLATION_FACTOR
+return_data$percent_subsequent <- return_data$n_sbsqnt/return_data$solo_fracs
+
+return(return_data)
 }
