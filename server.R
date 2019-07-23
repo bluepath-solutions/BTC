@@ -847,10 +847,6 @@ sim_data <- reactive({
                                         'bmd_index_scores',
                                         'bmd_cutoffs',
                                         'ID_lookup',
-                                        #'id_to_frax_hash', TODO investigate if hashmaps can be passed directly
-                                        #'MAX_HIP_FRACTURE_RATE',
-                                        #'id_to_frax_major_hash',
-                                        #'MAX_MAJOR_FRACTURE_RATE',
                                         'MEDICATION_ADHERENCE',
                                         'NON_ADHERENT_INCREASED_FRACTURE_RISK',
                                         'HIP_FRACTURE_RATIO',
@@ -934,7 +930,7 @@ output$totalfxr_content <- renderText({
   formatted_fxrs <- formatC(round(total_frax), format = 'd', big.mark=',')
   paste("The total number of fractures is estimated to ", 
                                             ifelse(total_frax > 0, "increase by ", "decrease by "), 
-                                             formatted_fxrs, 
+                                             abs(formatted_fxrs), 
                                              " during the years 2018-", inp_year, sep = "", collapse = NULL)
                                             })
 output$totalcost_content <- renderText({
@@ -956,7 +952,7 @@ output$FraxBox_R <- renderInfoBox({
   for(i in 1:duration) {
     total_frax <- total_frax + (base_case[[i]]$total_fractures_s1 - base_case[[i]]$total_fractures)
   }
-  subtitle_text <- ifelse(total_frax > 0, "Change to New Scenario Results in Fracture Incidence Increasing", "Change to New Scenario Results in Fracture Incidence Decreasing")
+  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Results in Fracture Incidence Increasing", "Efforts to Improve PMO Management Results in Fracture Incidence Decreasing")
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
   title_text <- paste("Change in Fracture Occurrence, 2018-", inp_year, sep = "", collapse = NULL)
@@ -976,7 +972,7 @@ output$CostBox_R <- renderInfoBox({
   for(i in 1:duration) {
     total_frax_cost <- (total_frax_cost) + ((base_case[[i]]$grand_total_s1/1000000) - (base_case[[i]]$grand_total/1000000))
   }
-  subtitle_text <- ifelse(total_frax_cost > 0, "Change to New Scenario Results in Cost Increases ($MM)", "Change to New Scenario Results in Cost Decreases ($MM)")
+  subtitle_text <- ifelse(total_frax_cost > 0, "Efforts to Improve PMO Management Results in Cost Increases ($MM)", "Efforts to Improve PMO Management Results in Cost Decreases ($MM)")
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
   title_text <- paste("Change in Total Costs, 2018-", inp_year, sep = "", collapse = NULL)
@@ -996,7 +992,7 @@ output$FraxBox <- renderInfoBox({
   for(i in 1:duration) {
     total_frax <- total_frax + (base_case[[i]]$total_fractures_s1 - base_case[[i]]$total_fractures)
   }
-  subtitle_text <- ifelse(total_frax > 0, "Change to New Scenario Results in Fracture Incidence Increasing", "Change to New Scenario Results in Fracture Incidence Decreasing")
+  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Results in Fracture Incidence Increasing", "Efforts to Improve PMO Management Results in Fracture Incidence Decreasing")
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
   title_text <- paste("Change in Fracture Occurrence, 2018-", inp_year, sep = "", collapse = NULL)
@@ -1017,7 +1013,7 @@ output$CostBox <- renderInfoBox({
     total_frax_cost <- (total_frax_cost) + ((base_case[[i]]$grand_total_s1/1000000) - (base_case[[i]]$grand_total/1000000))
   }
   print(total_frax_cost)
-  subtitle_text <- ifelse(total_frax_cost > 0, "Change to New Scenario Results in Cost Increases ($MM)", "Change to New Scenario Results in Cost Decreases ($MM)")
+  subtitle_text <- ifelse(total_frax_cost > 0, "Efforts to Improve PMO Management Results in Cost Increases ($MM)", "Efforts to Improve PMO Management Results in Cost Decreases ($MM)")
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
   title_text <- paste("Change in Total Costs, 2018-", inp_year, sep = "", collapse = NULL)
