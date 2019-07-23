@@ -2,7 +2,7 @@
 abbreviations <- data.frame(abbrev = c("BMD", "CPI", "DXA", "FRAX", "NHANES"),
                             full = c("bone mineral density", "Consumer Price Index", "dual-energy X-ray absorptiometry", "Fracture Risk Assessment Tool", "National Health and Nutrition Examination Survey"))
 
-tab_id <- c("Home", "Overview", "Pop_Inputs", "ClinEcon_Inputs", "Scenarios", "Results", "Assumptions", "Disclosures", "Terms", "References")
+tab_id <- c("Home", "Overview", "Mechanics", "Pop_Inputs", "ClinEcon_Inputs", "Scenarios", "Results", "Assumptions", "Disclosures", "Terms", "References")
 
 
 
@@ -50,6 +50,12 @@ function(input, output, session) {
   
   
   observeEvent(input$restoreall, {
+	sendSweetAlert(
+      session = session,
+      title = "Restored",
+      text = "All Default Inputs Have Been Restored",
+      type = "info"
+    )
     reset("pop_input")
     reset("BMD_mean")
     reset("BMD_SD")
@@ -80,9 +86,19 @@ function(input, output, session) {
     reset("costprod2")
     reset("costcare1")
     reset("costcare2")
+	reset("basecaseID")
+    reset("basecaseTx")
+    reset("scenario1ID")
+    reset("scenario1Tx")
   })  
   
   observeEvent(input$restorepop, {
+	sendSweetAlert(
+      session = session,
+      title = "Restored",
+      text = "Population & Demographic Default Inputs Have Been Restored",
+      type = "info"
+    )
     reset("pop_input")
     reset("BMD_mean")
     reset("BMD_SD")
@@ -99,6 +115,12 @@ function(input, output, session) {
   })  
   
   observeEvent(input$restorefxrcosts, {
+	sendSweetAlert(
+      session = session,
+      title = "Restored",
+      text = "All Cost Default Inputs Have Been Restored",
+      type = "info"
+    )
     reset("costinpt1")
     reset("costinpt2")
     reset("costoutpt1")
@@ -116,6 +138,20 @@ function(input, output, session) {
     reset("costcare1")
     reset("costcare2")
   })
+  
+    observeEvent(input$restorescenarios, {
+    sendSweetAlert(
+      session = session,
+      title = "Restored",
+      text = "All Default Scenario Inputs Have Been Restored",
+      type = "info"
+    )
+    reset("basecaseID")
+    reset("basecaseTx")
+    reset("scenario1ID")
+    reset("scenario1Tx")
+  })
+  
   observeEvent(input$scenario1ID, {
     isolate(updateNumericInput(session,
                        inputId = 'scenario1Tx',
@@ -1057,8 +1093,8 @@ output$CostBox <- renderInfoBox({
     # progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/3, detail = "Preparing Plot")
     color_pal <- brewer.pal(3, "Paired")
     p <- plot_ly(dummybc, x = ~xbc) %>% 
-      add_trace(y = ~ybc, name = "Base Case", mode = 'lines', line = list(color = color_pal[1]) ) %>% 
-      add_trace(y = ~ys1, name = "New Scenario", mode = 'lines', line = list(color = color_pal[2])) %>%
+      add_trace(y = ~ybc, name = "Base Case", mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
+      add_trace(y = ~ys1, name = "Improved PMO Management", mode = 'lines', line = list(color = color_pal[2]),text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
       config(displayModeBar = F) %>%
       layout(
         title = "Cumulative Fractures vs. Time",
@@ -1105,9 +1141,10 @@ output$CostBox <- renderInfoBox({
     p <- plot_ly(dummybc, 
                  x = ~xbc) %>%
          add_trace(y = ~costybc, name = "Base Case", type = 'scatter', 
-                   mode = "markers", marker = list(color = color_pal[1]) ) %>%
-         add_trace(y = ~costys1, name = "New Scenario", type = 'scatter',
-                   mode = "markers", marker = list(color = color_pal[2]) ) %>%
+                   mode = "markers", marker = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>%
+         add_trace(y = ~costys1, name = "Improved PMO Management", type = 'scatter',
+                   mode = "markers", marker = list(color = color_pal[2]), text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
+              
               config(displayModeBar = F) %>%
               layout(
                 title = "Cumulative Total Cost vs. Time",
@@ -1131,3 +1168,6 @@ outputOptions(output, 'CostBox', priority = 0)
 outputOptions(output, 'FraxBox_R', priority = 0)
 outputOptions(output, 'CostBox_R', priority = 0)
 }
+
+
+# left in width = NULL#3, sophie's version has width = 6#3. Not sure yet what this is doing.

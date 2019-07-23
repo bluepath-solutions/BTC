@@ -78,9 +78,9 @@ dxa_prob_s1 <- S1ID
 med_base_prob_s1 <- S1TX
 # Treatment Mix - THIS IS NOT DYNAMIC
 treatment_mix <-c(0.439, # Alendronate  PRIMARY (BISPHOSPHONATES?)
-                  0.061,  # Ibandronate 150 MG
+                  0.031,  # Ibandronate 150 MG
                   0.03,  # Risedronate
-                  0.0,  # Ibandronate IV
+                  0.03,  # Ibandronate IV
                   0.093,  # Zoledronic   PRIMARY
                   0.292, # Denosumab    PRIMARY
                   0.0,  # Conjugated Estrogens/Bazedoxifene
@@ -91,15 +91,15 @@ treatment_mix <-c(0.439, # Alendronate  PRIMARY (BISPHOSPHONATES?)
 
 # Monthly Costs
 treatment_monthly_cost <-c(10.00,  # Alendronate PRIMARY 10.00
-                           14.17,  # Ibandronate 150 MG
-                           118.50, # Risedronate
+                           28.33,  # Ibandronate 150 MG
+                           212.54, # Risedronate
                            80.00,  # Ibandronate IV
                            18.75,  # Zoledronic  PRIMARY
-                           195.62, # Denosumab   PRIMARY
-                           158.84, # Conjugated Estrogens/Bazedoxifene
+                           203.18, # Denosumab   PRIMARY
+                           176.79, # Conjugated Estrogens/Bazedoxifene
                            69.30,  # Raloxifene
-                           2997.90,# Forteo 
-                           1625.00)# Tymlos
+                           3426.50,# Forteo 
+                           1822.41)# Tymlos
 
 treatment_efficacy_hip <- c(0.65, # Alendronate Primary
                             0.73, # Ibandronate 150 MG
@@ -112,16 +112,16 @@ treatment_efficacy_hip <- c(0.65, # Alendronate Primary
                             0.25, # Forteo
                             0.41) # Tymlos
 
-treatment_efficacy_other <- c(0.66, # Aledronate Primary
-                              0.72, # Ibandronate 150 MG
-                              0.71, # Risedronate
-                              0.55, # Ibandronate IV
-                              0.47, # Zoledronic
+treatment_efficacy_other <- c(0.67, # Aledronate Primary
+                              0.68, # Ibandronate 150 MG
+                              0.70, # Risedronate
+                              0.54, # Ibandronate IV
+                              0.43, # Zoledronic
                               0.58, # Denosumab
                               0.59, # Conjugated Estrogens/Bazedoxifene
                               0.59, # Raloxifene
-                              0.34, # Forteo
-                              0.34) # Tymlos
+                              0.37, # Forteo
+                              0.37) # Tymlos
 
 # CONSTANTS
 
@@ -311,6 +311,7 @@ total_fractures_s1 <- total_hip_s1 + total_shoulder_s1 + total_vertebral_s1 + to
 
 # End of Clinical Data, Beginning of Financial Data
 # Calculate Costs
+
 
 # the 6 + 6*med_adhere is from the excel model
 

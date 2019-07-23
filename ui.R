@@ -1,29 +1,49 @@
 abbreviations <- data.frame(abbrev = c("BMD", "CPI", "DXA", "FRAX", "NHANES", "RANKL", "SERMs"),
                             full = c("bone mineral density", "Consumer Price Index", "dual-energy X-ray absorptiometry", "Fracture Risk Assessment Tool", "National Health and Nutrition Examination Survey",  
                                      "receptor activator of nuclear factor kappa-B ligand", "selective estrogen receptor modulators"))
-references <- data.frame(refs = c("Brauer CA, Coca-Perraillon M, Cutler DM, Rosen AB. Incidence and Mortality of Hip Fractures in the United States. JAMA. 2009;302(14):1573-1579. doi:10.1001/jama.2009.1462", "Lewiecki EM, Wright NC, Curtis JR, et al. Hip fracture trends in the United States, 2002 to 2015. Osteoporos Int. 2018;29(3):717-722. doi:10.1007/s00198-017-4345-0", "Blume SW, Curtis JR. Medical costs of osteoporosis in the elderly Medicare population. Osteoporos Int. 2011;22(6):1835-1844. doi:10.1007/s00198-010-1419-7", "King AB, Fiorentino DM. Medicare Payment Cuts For Osteoporosis Testing Reduced Use Despite Tests’ Benefit In Reducing Fractures. Health Aff (Millwood). 2011;30(12):2362-2370. doi:10.1377/hlthaff.2011.0233", "Lewiecki EM, Adler R, Curtis J, et al. Hip Fractures and Declining DXA Testing: At a Breaking Point? J Bone Miner Res. 2016;31(S1):S1-S411. doi:10.1002/jbmr.3107", "Office of the Surgeon General (US). Bone Health and Osteoporosis: A Report of the Surgeon General. Rockville (MD): Office of the Surgeon General (US); 2004. http://www.ncbi.nlm.nih.gov/books/NBK45513/. Accessed July 12, 2018.", "U.S. Preventive Services Task Force. Screening for osteoporosis: U.S. preventive services task force recommendation statement. Ann Intern Med. 2011;154(5):356-364. doi:10.7326/0003-4819-154-5-201103010-00307", "Gillespie CW, Morin PE. Trends and Disparities in Osteoporosis Screening Among Women in the United States, 2008-2014. Am J Med. 2017;130(3):306-316. doi:10.1016/j.amjmed.2016.10.018", "Freemantle N, Cooper C, Diez-Perez A, et al. Results of indirect and mixed treatment comparison of fracture efficacy for osteoporosis treatments: a meta-analysis. Osteoporos Int. 2013;24(1):209-217. doi:10.1007/s00198-012-2068-9", "Yusuf AA, Matlon TJ, Grauer A, Barron R, Chandler D, Peng Y. Utilization of osteoporosis medication after a fragility fracture among elderly Medicare beneficiaries. Arch Osteoporos. 2016;11(1):31. doi:10.1007/s11657-016-0285-0", "Iba K, Takada J, Hatakeyama N, et al. Underutilization of antiosteoporotic drugs by orthopedic surgeons for prevention of a secondary osteoporotic fracture. J Orthop Sci. 2006;11(5):446-449. doi:10.1007/s00776-006-1050-9", "Andrade SE, Majumdar SR, Chan KA, et al. Low frequency of treatment of osteoporosis among postmenopausal women following a fracture. Arch Intern Med. 2003;163(17):2052-2057. doi:10.1001/archinte.163.17.2052", "Boudreau DM, Yu O, Balasubramanian A, et al. A Survey of Women’s Awareness of and Reasons for Lack of Postfracture Osteoporotic Care. J Am Geriatr Soc. 2017;65(8):1829-1835. doi:10.1111/jgs.14921", "Burge R, Dawson-Hughes B, Solomon DH, Wong JB, King A, Tosteson A. Incidence and Economic Burden of Osteoporosis-Related Fractures in the United States, 2005–2025. J Bone Miner Res. 2006;22(3):465–475.", "Goeree R, Blackhouse G, Adachi J. Cost-effectiveness of alternative treatments for women with osteoporosis in Canada. Curr Med Res Opin. 2006;22(7):1425-1436. doi:10.1185/030079906X115568", "Hiligsmann M, Bruyère O, Ethgen O, Gathon H-J, Reginster J-Y. Lifetime absolute risk of hip and other osteoporotic fracture in Belgian women. Bone. 2008;43(6):991-994. doi:10.1016/j.bone.2008.08.119", "Konnopka A, Jerusel N, König H-H. The health and economic consequences of osteopenia- and osteoporosis-attributable hip fractures in Germany: estimation for 2002 and projection until 2050. Osteoporos Int. 2009;20(7):1117-1129. doi:10.1007/s00198-008-0781-1", "Si L, Winzenberg TM, Jiang Q, Chen M, Palmer AJ. Projection of osteoporosis-related fractures and costs in China: 2010–2050. Osteoporos Int. 2015;26(7):1929-1937. doi:10.1007/s00198-015-3093-2", "Centre for Metabolic Bone Diseases, University of Sheffield, UK. FRAX® Fracture Risk Assessment Tool. https://www.sheffield.ac.uk/FRAX/. Accessed November 14, 2017.", "Centers for Disease Control and Prevention. NHANES - National Health and Nutrition Examination Survey. https://www.cdc.gov/nchs/nhanes/. Accessed May 3, 2017.", "Weaver J, Sajjan S, Lewiecki EM, Harris ST, Marvos P. Prevalence and Cost of Subsequent Fractures Among U.S. Patients with an Incident Fracture. J Manag Care Spec Pharm. 2017;23(4):461-471. doi:10.18553/jmcp.2017.23.4.461", "Colby, Sandra L., Ortman, Jennifer M. Projections of the Size and Composition of the U.S. Population: 2014 to 2060. US Census Bur Wash DC. 2014;Current Population Reports, P25-1143:13.", "United States Census Bureau. https://www.census.gov/.", "Imaz I, Zegarra P, González-Enríquez J, Rubio B, Alcazar R, Amate JM. Poor bisphosphonate adherence for treatment of osteoporosis increases fracture risk: systematic review and meta-analysis. Osteoporos Int. 2010;21(11):1943-1951. doi:10.1007/s00198-009-1134-4", "Durden E, Pinto L, Lopez-Gonzalez L, Juneau P, Barron R. Two-year persistence and compliance with osteoporosis therapies among postmenopausal women in a commercially insured population in the United States. Arch Osteoporos. 2017;12(1). doi:10.1007/s11657-017-0316-5", "King AB, Saag KG, Burge RT, Pisu M, Goel N. Fracture Reduction Affects Medicare Economics (FRAME): Impact of increased osteoporosis diagnosis and treatment. Osteoporos Int. 2005;16(12):1545-1557. doi:10.1007/s00198-005-1869-5", "Wolters Kluwer. Price Rx. https://pricerx.medispan.com/. Published 2018. Accessed May 14, 2018.", "2018 Physicians’ Fee & Coding Guide. InHealth; 2018.", "Pike C, Birnbaum HG, Schiller M, Sharma H, Burge R, Edgell ET. Direct and indirect costs of non-vertebral fracture patients with osteoporosis in the US. PharmacoEconomics. 2010;28(5):395-409. doi:10.2165/11531040-000000000-00000", "Vanness DJ, Tosteson ANA. Estimating the Opportunity Costs of Osteoporosis in the United States: Top Geriatr Rehabil. 2005;21(1):4-16. doi:10.1097/00013614-200501000-00003", "United States Department of Labor, Bureau of Labor Statistics. CPI (Consumer Price Index) Inflation Calculator. http://www.bls.gov/data/inflation_calculator.htm. Published 2018.", "Leslie WD, Majumdar SR, Morin SN, et al. FRAX for fracture prediction shorter and longer than 10 years: the Manitoba BMD registry. Osteoporos Int. 2017;28(9):2557-2564. doi:10.1007/s00198-017-4091-3", "Stout NK, Goldie SJ. Keeping the noise down: common random numbers for disease simulation modeling. Health Care Manag Sci. 2008;11(4):399-406. doi:10.1007/s10729-008-9067-6", "Leader Jr. D, Williams SA, Curtis JR, Gut R. Osteoporosis-Related Fracture Events in the U.S. Presented at the: AMCP Nexus; October 16, 2017; Dallas, TX, USA.", "Zhang J, Delzell E, Zhao H, et al. Central DXA utilization shifts from office-based to hospital-based settings among medicare beneficiaries in the wake of reimbursement changes. J Bone Miner Res. 2012;27(4):858-864. doi:10.1002/jbmr.1534", "Laliberté M-C, Perreault S, Dragomir A, et al. Impact of a primary care physician workshop on osteoporosis medical practices. Osteoporos Int. 2010;21(9):1471-1485. doi:10.1007/s00198-009-1116-6", "Majumdar SR, Johnson JA, McAlister FA, et al. Multifaceted intervention to improve diagnosis and treatment of osteoporosis in patients with recent wrist fracture: a randomized controlled trial. CMAJ. 2008;178(5):569-575. doi:10.1503/cmaj.070981", "Cranney A, Wells GA, Yetisir E, et al. Ibandronate for the prevention of nonvertebral fractures: a pooled analysis of individual patient data. Osteoporos Int. 2009;20(2):291-297. doi:10.1007/s00198-008-0653-8", "Miki RA, Oetgen ME, Kirk J, Insogna KL, Lindskog DM. Orthopaedic management improves the rate of early osteoporosis treatment after hip fracture. A randomized clinical trial. J Bone Joint Surg Am. 2008;90(11):2346-2353. doi:10.2106/JBJS.G.01246", "Majumdar SR, Beaupre LA, Harley CH, et al. Use of a case manager to improve osteoporosis treatment after hip fracture: results of a randomized controlled trial. Arch Intern Med. 2007;167(19):2110-2115. doi:10.1001/archinte.167.19.2110", "Solomon DH, Patrick AR, Schousboe J, Losina E. The Potential Economic Benefits of Improved Postfracture Care: A Cost-Effectiveness Analysis of a Fracture Liaison Service in the US Health-Care System. J Bone Miner Res. 2014;29(7):1667-1674. doi:10.1002/jbmr.2180", "Greenspan SL, Bilezikian JP, Watts NB, et al. A Clinician Performance Initiative to Improve Quality of Care for Patients with Osteoporosis. J Womens Health. 2013;22(10):853-861. doi:10.1089/jwh.2013.4388", "Goldshtein I, Gerber Y, Ish-Shalom S, Leshno M. Fracture Risk Assessment With FRAX Using Real-World Data in a Population-Based Cohort From Israel. Am J Epidemiol. 2018;187(1):94-102. doi:10.1093/aje/kwx128", "Bonaccorsi G, Messina C, Cervellati C, et al. Fracture risk assessment in postmenopausal women with diabetes: comparison between DeFRA and FRAX tools. Gynecol Endocrinol. 2018;34(5):404-408. doi:10.1080/09513590.2017.1407308", "Schousboe JT, Riekkinen O, Karjalainen J. Prediction of hip osteoporosis by DXA using a novel pulse-echo ultrasound device. Osteoporos Int. 2017;28(1):85-93. doi:10.1007/s00198-016-3722-4", "Cohen JT, Neumann PJ, Weinstein MC. Does Preventive Care Save Money? Health Economics and the Presidential Candidates. N Engl J Med. 2008;358(7):661-663. doi:10.1056/NEJMp0708558", "Winn AN, Ekwueme DU, Guy GP, Neumann PJ. Cost-Utility Analysis of Cancer Prevention, Treatment, and Control. Am J Prev Med. 2016;50(2):241-248. doi:10.1016/j.amepre.2015.08.009"
+references <- data.frame(refs = c("Lewiecki EM, Adler R, Curtis J, Gagel R, Saag K, Singer A, et al. Hip Fractures and Declining DXA Testing: At a Breaking Point? J Bone Miner Res. 2016 Sep;31(S1):S1–411.", "Freemantle N, Cooper C, Diez-Perez A, Gitlin M, Radcliffe H, Shepherd S, et al. Results of indirect and mixed treatment comparison of fracture efficacy for osteoporosis treatments: a meta-analysis. Osteoporos Int. 2013 Jan;24(1):209–1", "Centre for Metabolic Bone Diseases, University of Sheffield, UK. FRAX® Fracture Risk Assessment Tool [Internet]. [cited 2017 Nov 14]. Available from: https://www.sheffield.ac.uk/FRAX/", "Centers for Disease Control and Prevention. NHANES - National Health and Nutrition Examination Survey [Internet]. [cited 2017 May 3]. Available from: https://www.cdc.gov/nchs/nhanes/", "Weaver J, Sajjan S, Lewiecki EM, Harris ST, Marvos P. Prevalence and Cost of Subsequent Fractures Among U.S. Patients with an Incident Fracture. J Manag Care Spec Pharm. 2017 Apr;23(4):461–71.", "Colby, Sandra L., Ortman, Jennifer M. Projections of the Size and Composition of the U.S. Population: 2014 to 2060. US Census Bur Wash DC. 2014 Mar;Current Population Reports, P25-1143:13.  www.census.gov /population/projections/data/national/2014.html>.", "United States Census Bureau [Internet]. Available from: https://www.census.gov/", "Imaz I, Zegarra P, González-Enríquez J, Rubio B, Alcazar R, Amate JM. Poor bisphosphonate adherence for treatment of osteoporosis increases fracture risk: systematic review and meta-analysis. Osteoporos Int. 2010 Nov;21(11):1943–51.", "Durden E, Pinto L, Lopez-Gonzalez L, Juneau P, Barron R. Two-year persistence and compliance with osteoporosis therapies among postmenopausal women in a commercially insured population in the United States. Arch Osteoporos [Internet].2017 Dec [cited 2018 Jun 20];12(1). Available from: http://link.springer.com/10.1007/s11657-017-0316-5", "King AB, Saag KG, Burge RT, Pisu M, Goel N. Fracture Reduction Affects Medicare Economics (FRAME): Impact of increased osteoporosis diagnosis and treatment. Osteoporos Int. 2005 Dec;16(12):1545–57.", "Pike, CT, Birnbaum HG, Schiller M, Swallow E, Burge RT, Edgell ET. Prevalence and costs of osteoporotic patients with subsequent non-vertebral fractures in the US.  Osteoporos Int. 2011;22:2611–2621.", "United States Department of Labor, Bureau of Labor Statistics. Medicare Care CPI (Consumer Price Index) Data Tables. 2019. Available from: https://data.bls.gov/pdq/SurveyOutputServlet", "Pike C, Birnbaum HG, Schiller M, Sharma H, Burge R, Edgell ET. Direct and indirect costs of non-vertebral fracture patients with osteoporosis in the US. PharmacoEconomics. 2010;28(5):395–409.", "Vanness DJ, Tosteson ANA. Estimating the Opportunity Costs of Osteoporosis in the United States: Top Geriatr Rehabil. 2005 Jan;21(1):4–16.", "Leader Jr. D, Williams SA, Curtis JR, Gut R. Osteoporosis-Related Fracture Events in the U.S (M19). AMCP Nexus; 2017 Oct 16; Dallas, TX, USA. S78.", "IBM Micromedex RED BOOK 2019.", "Center for Medicare and Medicaid Services (CMS) Physician Fee Schedule Current Procedural Terminology (CPT) payment rates. Access on March 29, 2019. https://www.cms.gov/apps/physician-fee-schedule/license-agreement.aspx"
 ))
 #########################################################################################################################################
 fluidPage(
+  #setting up tables for alignment
+  tags$head(
+    tags$style(
+      HTML(
+        "
+        #inputs-table {
+        border-collapse: collapse;
+        }
+        
+        #inputs-table td {
+        padding: 10px;
+        vertical-align: bottom;
+        }
+        "
+      ) #/ HTML
+      ) #/ style
+      ), #/ head
   useShinyjs(),
   useShinyalert(),
+  useSweetAlert(),
   dashboardPagePlus(
     skin = "blue",
     header = dashboardHeaderPlus(
       titleWidth=270,
       #tags$li(class = "dropdown", actionBttn(inputId="Next", label=icon("arrow-right"),color="primary",style="minimal", size="xs")),
-      enable_rightsidebar = TRUE,
-      rightSidebarIcon = "info-circle",
+      enable_rightsidebar = FALSE,
+      # rightSidebarIcon = "grip-lines-vertical",
       title = tagList(span(class = "logo-lg", "Bending the Curve"),
                       img(src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRb4Eku7HH9tk3KfqEtF5BXU5obNhUmWRT9rS_z8_U_U_0pWf-m")),
-      dropdownBlock(
-        id = "defaultDD",
-        title = "Restore Defaults",
-        badgeStatus = NULL,
-        actionBttn(inputId="restoreall", label="Reset All Default Inputs",color="primary",style="minimal", size="xs"),
-        actionBttn(inputId="restorepop", label="Reset Population Inputs",color="primary",style="minimal", size="xs"),
-        actionBttn(inputId="restorefxrcosts", label="Reset Fracture Cost Inputs",color="primary",style="minimal", size="xs")
-      )
+      left_menu = tagList(
+        dropdownBlock(
+          id = "defaultDD",
+          title = "Restore Defaults",
+          badgeStatus = NULL,
+          div(style="display:inline-block", actionBttn(inputId="restoreall", label="Reset All Default Inputs",color="primary",style="minimal", size="xs"), style="float:right"),
+          actionBttn(inputId="restorepop", label="Reset Population Inputs",color="primary",style="minimal", size="xs"),
+          actionBttn(inputId="restorefxrcosts", label="Reset Fracture Cost Inputs",color="primary",style="minimal", size="xs"),
+          actionBttn(inputId="restorescenarios", label="Reset Scenario Inputs",color="primary",style="minimal", size="xs")
+        ))
     ),
     sidebar = 
       dashboardSidebar(
@@ -31,38 +51,39 @@ fluidPage(
         sidebarMenu(id = "tabs",
                     menuItem("Home", tabName = "Home", icon = icon("home")),
                     menuItem("Overview", icon = icon("sitemap"), tabName = "Overview"),
+                    menuItem("Simulation Mechanics", icon = icon("code-branch"), tabName = "Mechanics"),
                     menuItem("Population Inputs", icon = icon("file-prescription"), tabName = "Pop_Inputs"),
-                    menuItem("Clinical & Economic Inputs", icon = icon("file-invoice-dollar"), tabName = "ClinEcon_Inputs"),
+                    menuItem("Treatment & Economic Inputs", icon = icon("file-invoice-dollar"), tabName = "ClinEcon_Inputs"),
                     menuItem("Results", icon = icon("th-list"), tabName = "Scenarios"),
                     menuItem("Conclusions", icon = icon("sign-out-alt"), tabName = "Results"),
                     menuItem("Assumptions & Limitations", icon = icon("exclamation-triangle"), tabName = "Assumptions"),
                     menuItem("_______________________________", tabName = "Break"),
                     menuItem("Disclosures & Study Descriptions", icon = icon("file-alt"), tabName = "Disclosures"),
-                    menuItem("Abbreviations & Terminology", icon = icon("book-open"), tabName = "Terms"),
+                    #menuItem("Abbreviations & Terminology", icon = icon("book-open"), tabName = "Terms"),
                     menuItem("References", icon = icon("asterisk"), tabName = "References")
         )
       ),
-    rightsidebar = rightSidebar(
-      background = "dark",
-      rightSidebarTabContent(
-        id = 1,
-        icon = "sitemap",
-        title = "Model Overview",
-        active = TRUE,
-        rightSidebarMenu(
-          rightSidebarMenuItem(
-            icon = menuIcon(
-              name = "lightbulb",
-              color = "red"
-            ),
-            info = menuInfo(
-              title = "Model Information",
-              description = tags$p("The model analyzes US women age 65 years and older. Each patient is randomly assigned a unique set of demographics and characteristics based on a probabilsitic distribution. The resulting average across the patients reflects the population evarage inputs customized on the left. 
-                                   Based on the profile of each patient, a 10-year fracture risk is applied and adjusted to reflect an annual risk. This risk is used to estimate the probability of fracture. 
-                                   Total fractures are aggreated by type and monetized using direct and indirect costs. For each calendar year, hypothetical cohorts of a specified number of women are simulated within each model scenario.
-                                   ",style = "font-size: 90%;")
-              ))))
-              ),
+    # rightsidebar = rightSidebar(
+    #   background = "dark",
+    #   rightSidebarTabContent(
+    #     id = 1,
+    #     icon = "sitemap",
+    #     title = "Model Overview",
+    #     active = TRUE,
+    #     rightSidebarMenu(
+    #       rightSidebarMenuItem(
+    #         icon = menuIcon(
+    #           name = "lightbulb",
+    #           color = "red"
+    #         ),
+    #         info = menuInfo(
+    #           title = "Model Information",
+    #           description = tags$p("The model analyzes US women age 65 years and older. Each patient is randomly assigned a unique set of demographics and characteristics based on a probabilsitic distribution. The resulting average across the patients reflects the population evarage inputs customized on the left. 
+    #                                Based on the profile of each patient, a 10-year fracture risk is applied and adjusted to reflect an annual risk. This risk is used to estimate the probability of fracture. 
+    #                                Total fractures are aggreated by type and monetized using direct and indirect costs. For each calendar year, hypothetical cohorts of a specified number of women are simulated within each model scenario.
+    #                                ",style = "font-size: 90%;")
+    #           ))))
+    #           ),
     
     body <- dashboardBody(
       
@@ -75,14 +96,15 @@ fluidPage(
       
       tabItems(
         tabItem(tabName = "Home",
-                h2("BENDING THE CURVE", align = "center"),
+                #h2("", align = "center"),
+                br(),
                 fluidRow(
                   widgetUserBox(
                     title = "",
                     subtitle = "",
                     type = NULL,
                     width = 12,
-                    height = 250,
+                    height = 350,
                     src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRb4Eku7HH9tk3KfqEtF5BXU5obNhUmWRT9rS_z8_U_U_0pWf-m",
                     color = "gray",
                     boxToolSize = "lg",
@@ -90,19 +112,37 @@ fluidPage(
                     backgroundUrl = "https://dlg7f0e93aole.cloudfront.net/wp-content/uploads/Osteoporosis.jpg",
                     collapsible = FALSE,
                     closable = FALSE,
-                    HTML(paste(br(),"The Estimated Long-Term Value of Improving Patient Identification and Treatment in Post-Menopausal Osteoporosis")), align = "center", style = "font-size: 175%;"
-                    #footer = "This model estimates the economic burden of osteoporosis in a representative population and is intended for formulary committees. The model includes estimated treatment costs by drug class and not specific individual drug costs.", align = "center"
-                  )),
+                    HTML(paste(br(),"BENDING THE CURVE<br/>
+                               The Estimated Long-Term Value of Improving <br/>
+                               Patient Identification and Treatment Rates in <br/>
+                               Post-Menopausal Osteoporosis", br())), align = "center", style = "font-size: 190%;"
+                    
+                    #footer = "This model estimates the economic burden of osteoporosis in a representative population and is intended for formulary committees. The model includes estimated treatment costs by drug class and does not specify individual drug costs.", align = "center"
+                    )),
+                #fluidRow(h4("")),
+                fluidRow(
+                  actionBttn(
+                    inputId = "Id_enter",
+                    label = "ENTER", 
+                    style = "stretch",
+                    color = "primary",
+                    icon = icon("external-link-square-alt")
+                  ), align = "center"),
                 headerPanel(""),
                 fluidRow(boxPlus(
-                  title = "Disclaimer", 
+                  title = "Model Rationale", 
                   closable = FALSE, 
                   status = "info",
                   width = 12,
                   solidHeader = FALSE, 
                   collapsible = TRUE,
-                  p("This resource contains healthcare economic information and is intended  only for formulary committees or other similar entities with drug selection responsibilities, pursuant to Section 114 of the FDA Modernization Act.")
-                )),
+                  p(HTML("This model estimates the economic burden of osteoporosis in a representative population and is intended for audiences involved in population health decision making. The model includes estimated treatment costs by drug class and does not specify individual drug costs.<br/><br/>
+                    <h4>Important Disclosure</h4>
+                    <h4></h4>
+                         The information contained in this resource is not intended to assess or compare efficacy or safety of products. The data and results associated with this model are based on estimates.")
+                ))),
+                headerPanel(""),
+                #headerPanel(""),
                 fluidRow(boxPlus(
                   title = "USA-785-80269",
                   closable = FALSE, 
@@ -112,306 +152,356 @@ fluidPage(
                   solidHeader = FALSE, 
                   collapsible = FALSE
                 ))
-        ),
+                  ),
         
         tabItem(tabName = "Overview",
                 fluidRow(
-                  h3("Bending the Curve: The Estimated Long-Term Value of Improving Patient Identification and Treatment in Post-Menopausal Osteoporosis", align = "center"),
-                  fluidRow(
-                    box(title = "Model Overview", width = 12, status = "primary",
-                        footer = fluidRow(
-                          column(
-                            width = 12,
-                            descriptionBlock(    
-                              tags$img(src="Model_Flow.PNG", width = "800px", height = "150px", style="display: block; margin-left: auto; margin-right: auto;")),
-                            text = "Model Flow")
-                        ))),
-                  fluidRow(
-                    box(
-                      title = "Objective", width = 6,  status = "primary",
-                      "To estimate the future clinical and economic burden of osteoporotic fractures in the US with and without policy changes."),
-                    box(
-                      title = "Structure", width = 6,  status = "primary",
-                      "An R-based invidual-level microsimulation model, informed by NHANES estimates of risk factors and utilizing the FRAX risk prediction tool (based on publicly available risk tables)")),
-                  fluidRow(
-                    box(
-                      title = "Time Horizon", width = 6,  status = "primary",
-                      HTML("•	Cross-sectional calendar year <br/>
-                           •	The model evaluates the impact by calendar year from 2019 through 2040")),
-                    box(
-                      title = "Population", width = 6, status = "primary",
-                      HTML("US women aged 65 years and older, including those with and without a history of fractures<br/>
-                           &nbsp"))),
-                  fluidRow(
-                    box(
-                      title = "Clinical Inputs", width = 6, status = "primary",
-                      HTML("•	Population demographics and charactersitics <br/>
-                           • Fracture risk for untreated and treated population by therapy")),
-                    box(
-                      title = "Economic Inputs", width = 6,  status = "primary",
-                      HTML("•	Identification and treatment cost by therapy <br/>
-                           • Fracture costs (direct and indirect)"))),
-                  fluidRow(
-                    box(
-                      title = "Model Outputs", width = 12, status = "primary",
-                      column(width = 6, HTML("•	Annual costs (total and by category) <br/>
-                                             &nbsp;&nbsp;&nbsp;&nbsp  o	Cumulative costs")),
-                      column(width = 6, HTML("•	Annual fractures rates (total and by site)  <br/>
-                                             &nbsp;&nbsp;&nbsp;&nbsp o	Cumulative fractures"))
-                      ))),
-                tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
-                
+                  h3(tags$div("Bending the Curve:",
+                              tags$br(),
+                              "The Estimated Long-Term Value of Improving Patient Identification and Treatment Rates in Post-Menopausal Osteoporosis"), align = "center")),
+                fluidRow(
+                  box(id = "Model_Ov_Tbl",
+                      title = "Model Overview", width = 12,  status = "primary",
+                      footer = fluidRow(
+                        column(
+                          width = 12,
+                          descriptionBlock(    
+                            tags$img(src="Model_Overview.PNG", width = "80%", height = "80%", style="display: block; margin-left: auto; margin-right: auto;")),
+                          text = "Model Overview")
                       ),
-        
+                      bsPopover("Model_Ov_Tbl", title='<font size="2">Source:', content='<font size="3">DOF, Amgen, Bend the Curve PMO Microsimulation, 2019', placement="left", options = list(container = "body")))
+                ),
+                tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
+        ),
+        tabItem(tabName = "Mechanics",
+                fluidRow(
+                  h3(tags$div("Bending the Curve:",
+                              tags$br(),
+                              "The Estimated Long-Term Value of Improving Patient Identification and Treatment in Post-Menopausal Osteoporosis"), align = "center")),             # fluidRow(
+                box(id = "mod_mech", title = "Model Overview", width = 12, status = "primary",
+                    footer = fluidRow(
+                      column(
+                        width = 12,
+                        descriptionBlock(
+                          tags$img(src="model_mech.PNG", width = "95%", height = "90%", style="display: block; margin-left: auto; margin-right: auto;")),
+                        text = "Model Flow")
+                    )),
+                bsPopover("mod_mech", title='<font size="2">Source:', content='<font size="3">DOF, Amgen, Bend the Curve PMO Microsimulation, 2019', placement="left", options = list(container = "body")),
+                tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
+        ),
         tabItem(tabName = "Pop_Inputs",
                 fluidRow(
                   width = NULL, background = "black"
                 ),
-                h3("Bending the Curve: The Estimated Long-Term Value of Improving Patient Identification and Treatment in Post-Menopausal Osteoporosis", align = "center"),
+                h3(tags$div("Bending the Curve:",
+                            tags$br(),
+                            "The Estimated Long-Term Value of Improving Patient Identification and Treatment Rates in Post-Menopausal Osteoporosis"), align = "center"),
                 fluidRow(
-                  boxPlus(title = "Population Size", width = 12, closable = FALSE, collapsible = TRUE,
+                  boxPlus(id = "Pop_Demo", title = "Population Size & Demographics", width = 12, closable = FALSE, collapsible = TRUE,
+                          bsPopover("Pop_Demo", title='<font size="2">Source:', content='<font size="3">DOF, Amgen, Bend the Curve PMO Microsimulation, 2019', placement="left", options = list(container = "body")),
                           enable_dropdown = TRUE, dropdown_icon = "question-circle",
                           dropdown_menu = dropdownItemList(
                             dropdownDivider(),
-                            dropdownItem(name = HTML("Enter the desired population size to be analyzed. Among this population, risk factors are entered, <br/>
-                                                     which are used to estimate the number of women with a fracture based on the FRAX index. Risk <br/>
-                                                     factor prevalence was estimated from analyzing NHANES, a nationally-representative population-based <br/> 
-                                                     survey conducted every 2 years. Fracture risks for individual women in the model was estimated using <br/>
-                                                     FRAX simplified tables based on the baseline population demographics and charactersitics. Each patient<br/>
-                                                     is randomly assigned a unique set of demographics and characteristics based on a probabilsitic <br/>
-                                                     distribution. The resulting average across the patients reflects the population evarage inputs customized <br/>
-                                                     on the left. Based on the profile of each patient, a 10-year fracture risk is applied and adjusted to <br/>
-                                                     reflect an annual risk. This risk is used to estimate the probability of fracture. Total fractures are<br/>
-                                                     aggreated by type and monetized using direct and indirect costs."))),
-                          fluidRow(
-                            column(width = 4, numericInput(inputId = "pop_input", label = "Eligible Population", value = 1000000, min = 0, max = 30000000))),
+                            dropdownItem(name = HTML("Using the Census projection estimates for females of any race or ethnicity, <br/>
+                                                     the probability of each age starting at 65 years old was estimated using the <br/>
+                                                     Census projections for each calendar year included in the model (2018-2040). <br/>
+                                                     The distribution of race and ethnicity were estimated from Census data. <br/>
+                                                     The estimates for race and ethnicity were generated to be mutually exclusive <br/>
+                                                      and sum to 100%. Therefore, some races are not included in the model as the  <br/>
+                                                      FRAX&reg; algorithm only contains risk tables for three races (Caucasian, Black, Asian) <br/>
+                                                     and ethnicity (Hispanic)."))),
+                          tags$table(id = "inputs-table"
+                                     , style = "width: 100%"
+                                     , tags$tr(
+                                       tags$td(style = "width: 12.5%; text-align: left", p("Population, Women Aged 65 Years and Older")),
+                                       tags$td(style = "width: 12.5%; text-align: left",
+                                               tags$style("#pop_input {background-color:#dfdfdf;}"), numericInput(inputId = "pop_input", label = "", value = 1000000, min = 0, max = 30000000)),
+                                       tags$td(style = "width: 25%; text-align: left",
+                                               h5("")),
+                                       tags$td(style = "width: 25%; text-align: left",
+                                               tags$img(src="grey_boxes.PNG", width = "190px", height = "60px", style="display: block; margin-left: auto; margin-right: 0px;"))
+                                     )),
                           # bsTooltip("pop_input", "Enter eligible population. Default value of 1 million is based on ....","right", options = list(container = "body"))),
-                          h5("Race/Ethnicity Distribution (%)"),
-                          fluidRow(
-                            column(width = 3, numericInput(inputId = "RE_cauc", label = "Caucasian", value = 80.1, min = 0, max = 100)),
-                            bsTooltip("RE_cauc", "Centers for Disease Control and Prevention. NHANES - National Health and Nutrition Examination Survey. https://www.cdc.gov/nchs/nhanes/. Accessed May 3, 2017.",
-                                      "right", options = list(container = "body")),
-                            column(width = 3, numericInput(inputId = "RE_hisp", label = "Hispanic", value = 9.1, min = 0, max = 100)),
-                            bsTooltip("RE_hisp", "Centers for Disease Control and Prevention. NHANES - National Health and Nutrition Examination Survey. https://www.cdc.gov/nchs/nhanes/. Accessed May 3, 2017.",
-                                      "right", options = list(container = "body")),
-                            column(width = 3, numericInput(inputId = "RE_asian", label = "Asian", value = 0.5, min = 0, max = 100)),
-                            bsTooltip("RE_asian", "Centers for Disease Control and Prevention. NHANES - National Health and Nutrition Examination Survey. https://www.cdc.gov/nchs/nhanes/. Accessed May 3, 2017.",
-                                      "left", options = list(container = "body")),
-                            column(width = 3, numericInput(inputId = "RE_black", label = "Black", value = 10.3, min = 0, max = 100)),
-                            bsTooltip("RE_black", "Centers for Disease Control and Prevention. NHANES - National Health and Nutrition Examination Survey. https://www.cdc.gov/nchs/nhanes/. Accessed May 3, 2017.",
-                                      "left", options = list(container = "body"))),
                           
-                          box(id="riskdesc", tags$p("Risk Factors", tags$sup(style="font-size: 50px")), align = "left", color = "blue", width = 16, height = 4),
-                          bsTooltip("riskdesc", "Risk factor prevalence was estimated from analyzing NHANES. Fracture risks for individual women in the model is estimated using FRAX simplified tables based on the baseline population demographics and charactersitics.",
-                                    "left", options = list(container = "body")),
+                          tags$table(id = "inputs-table"
+                                     , style = "width: 100%"
+                                     , tags$tr(
+                                       tags$td(style = "width: 11.8%; text-align: left", p("Race/Ethnicity", br(), "Distribution (%)")),
+                                       tags$td(style = "width: 11.8%; text-align: left",
+                                               tags$style("#RE_cauc {background-color:#dfdfdf;}"), numericInput(inputId = "RE_cauc", label = "Caucasian", value = 80.1, min = 0, max = 100, step = 0.1)),
+                                       tags$td(style = "width: 11.8%; text-align: left",
+                                               tags$style("#RE_hisp {background-color:#dfdfdf;}"), numericInput(inputId = "RE_hisp", label = "Hispanic", value = 9.1, min = 0, max = 100, step = 0.1)),
+                                       tags$td(style = "width: 11.8%; text-align: left",
+                                               tags$style("#RE_asian {background-color:#dfdfdf;}"), numericInput(inputId = "RE_asian", label = "Asian", value = 0.5, min = 0, max = 100, step = 0.1)),
+                                       tags$td(style = "width: 11.8%; text-align: left",
+                                               tags$style("#RE_black {background-color:#dfdfdf;}"), numericInput(inputId = "RE_black", label = "Black", value = 10.3, min = 0, max = 100, step = 0.1)),
+                                       tags$td(style = "width: 11.8%; text-align: left",
+                                               h5(textOutput("sum_RE"), align="center",style="margin-right: 0px; padding-bottom:15px"))
+                                     ))),
+                  
+                  boxPlus(id = "Risk_Fact", title = "Risk Factors", width = 12, closable = FALSE, collapsible = TRUE,
+                          bsPopover("Risk_Fact", title='<font size="2">Source:', content='<font size="3">DOF, Amgen, Bend the Curve PMO Microsimulation, 2019', placement="left", options = list(container = "body")),
+                          enable_dropdown = TRUE, dropdown_icon = "question-circle",
+                          dropdown_menu = dropdownItemList(
+                            dropdownDivider(),
+                            dropdownItem(name = HTML("Risk factor prevalence was estimated from analyzing National Health and Nutrition Examination Survey (NHANES), <br/>
+                                                     a nationally-representative population-based survey conducted every 2 years. An analysis of the 2013-2014 data <br/>
+                                                     was conducted to estimate the population-level estimates of risk factors for the female population aged ≥ 65 years. <br/>
+                                                     Estimates for the prevalence of the following widely accepted fracture risk factors: smoking; rheumatoid arthritis; <br/>
+                                                     long-term glucocorticoid use; excessive alcohol use; parental history of a hip fracture; and previous fracture were <br/>
+                                                     generated for women ≥ 65 years old. NHANES data were used to estimate mean BMD and the standard deviation."))),
                           tags$br(),
-                          fluidRow(  
-                            column(width = 4, numericInput(inputId = "BMD_mean", label = "Mean Bone Mineral Density", value = 0.67, min = 0, max = 1)),
-                            bsTooltip("BMD_mean", "NHANES data (2013-2014) were used to estimate mean BMD and the standard deviation.",
-                                      "right", options = list(container = "body")),
-                            column(width = 4, numericInput(inputId = "BMD_SD", label = "Bone Mineral Density Standard Deviation", value = 0.12, min = 0, max = 1)),
-                            bsTooltip("BMD_SD", "NHANES data (2013-2014) were used to estimate mean BMD and the standard deviation.",
-                                      "right", options = list(container = "body"))),
-                          fluidRow(
-                            column(width = 4, numericInput(inputId = "RA_inp", label = "Rheumatoid Arthritis (%)", value = 8.6, min = 0, max = 100)),
-                            bsTooltip("RA_inp", "Centers for Disease Control and Prevention. NHANES - National Health and Nutrition Examination Survey. https://www.cdc.gov/nchs/nhanes/. Accessed May 3, 2017.",
-                                      "right", options = list(container = "body")),
-                            column(width = 4, numericInput(inputId = "fxr_inp", label = "Previous Fracture (%)", value = 14.2, min = 0, max = 100)),
-                            bsTooltip("fxr_inp", "Centers for Disease Control and Prevention. NHANES - National Health and Nutrition Examination Survey. https://www.cdc.gov/nchs/nhanes/. Accessed May 3, 2017.",
-                                      "right", options = list(container = "body")),
-                            column(width = 4, numericInput(inputId = "parfxr_inp", label = "Parent History of Hip Fracture (%)", value = 12.0, min = 0, max = 100)),
-                            bsTooltip("parfxr_inp", "Centers for Disease Control and Prevention. NHANES - National Health and Nutrition Examination Survey. https://www.cdc.gov/nchs/nhanes/. Accessed May 3, 2017.",
-                                      "left", options = list(container = "body"))),
-                          fluidRow(
-                            column(width = 4, numericInput(inputId = "smoker", label = "Smoker (%)", value = 8.1, min = 0, max = 100)),
-                            bsTooltip("smoker", "Centers for Disease Control and Prevention. NHANES - National Health and Nutrition Examination Survey. https://www.cdc.gov/nchs/nhanes/. Accessed May 3, 2017.",
-                                      "right", options = list(container = "body")),
-                            column(width = 4, numericInput(inputId = "alco", label = "Excessive Alcohol Use (%)", value = 2.9, min = 0, max = 100)),
-                            bsTooltip("alco", "Centers for Disease Control and Prevention. NHANES - National Health and Nutrition Examination Survey. https://www.cdc.gov/nchs/nhanes/. Accessed May 3, 2017.",
-                                      "right", options = list(container = "body")),
-                            column(width = 4, numericInput(inputId = "gluco_tx", label = "Long-Term Glucocorticoid Therapy (%)", value = 8.7, min = 0, max = 100)),
-                            bsTooltip("gluco_tx", "Centers for Disease Control and Prevention. NHANES - National Health and Nutrition Examination Survey. https://www.cdc.gov/nchs/nhanes/. Accessed May 3, 2017.",
-                                      "left", options = list(container = "body")))
+                          tags$table(id = "inputs-table"
+                                     , style = "width: 100%"
+                                     , tags$tr(
+                                       tags$td(style = "width: 25%; text-align: left",
+                                               tags$style("#BMD_mean {background-color:#dfdfdf}"), numericInput(inputId = "BMD_mean", label = "Mean Bone Mineral Density", value = 0.67, min = 0, max = 1, step = 0.01)),
+                                       tags$td(style = "width: 25%; text-align: left", 
+                                               tags$style("#BMD_SD {background-color:#dfdfdf}"), numericInput(inputId = "BMD_SD", label = "Bone Mineral Density Standard Deviation", value = 0.12, min = 0, max = 1, step = 0.01)),
+                                       tags$td(style = "width: 25%; text-align: left",
+                                               tags$style("#RA_inp {background-color:#dfdfdf}"), numericInput(inputId = "RA_inp", label = "Rheumatoid Arthritis (%)", value = 8.6, min = 0, max = 100, step = 0.01)),
+                                       tags$td(style = "width: 25%; text-align: left",
+                                               tags$style("#fxr_inp {background-color:#dfdfdf}"), numericInput(inputId = "fxr_inp", label = "Previous Fracture (%)", value = 14.2, min = 0, max = 100, step = 0.01)))),                      
+                          tags$table(id = "inputs-table"
+                                     , style = "width: 100%"
+                                     , tags$tr(
+                                       tags$td(style = "width: 25%; text-align: left",
+                                               tags$style("#parfxr_inp {background-color:#dfdfdf;}"), numericInput(inputId = "parfxr_inp", label = "Parent History of Hip Fracture (%)", value = 12.0, min = 0, max = 100, step = 0.01)),
+                                       tags$td(style = "width: 25%; text-align: left",
+                                               tags$style("#smoker {background-color:#dfdfdf;}"), numericInput(inputId = "smoker", label = "Smoker (%)", value = 8.1, min = 0, max = 100, step = 0.01)),
+                                       tags$td(style = "width: 25%; text-align: left",
+                                               tags$style("#alco {background-color:#dfdfdf;}"), numericInput(inputId = "alco", label = "Excessive Alcohol Use (%)", value = 2.9, min = 0, max = 100, step = 0.01)),
+                                       tags$td(style = "width: 25%; text-align: left",
+                                               tags$style("#gluco_tx {background-color:#dfdfdf;}"), numericInput(inputId = "gluco_tx", label = "Long-Term Glucocorticoid Therapy (%)", value = 8.7, min = 0, max = 100, step = 0.01))))      
                             ),
                   
                   tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
-                )
+                            )
                   ),
         tabItem(tabName = "ClinEcon_Inputs",
                 fluidRow(
                   width = NULL, background = "black"),
-                h3("Bending the Curve: The Estimated Long-Term Value of Improving Patient Identification and Treatment in Post-Menopausal Osteoporosis", align = "center"),
+                h3(tags$div("Bending the Curve:",
+                            tags$br(),
+                            "The Estimated Long-Term Value of Improving Patient Identification and Treatment Rates in Post-Menopausal Osteoporosis"), align = "center"),
                 fluidRow(
                   boxPlus(id="FxrCostInp", title = "Fracture Costs", width = 12, closable = FALSE, collapsible = TRUE,
                           enable_dropdown = TRUE, dropdown_icon = "question-circle",
                           dropdown_menu = dropdownItemList(
-                            dropdownItem(name = HTML("The entered costs represent annual payer amounts. Patients who incur a fracture also increase an <br/>
-                                                     increased risk of mortality. A hazard ratio of 2.27 was applied to those incurring a fracture.")),
+                            dropdownItem(name = HTML("Direct medical costs related to fracture were derived from Weaver et al. This retrospective claims analysis included<br/>
+                                                     45,603 patients (mean age of 78.1 years) with Humana Medicare Advantage who experienced an incident fracture between <br/>
+                                                     January 1, 2008, and December 31, 2013. <br/>
+                                                     <br/>
+                                                     All-cause health care costs (i.e., not limited to osteoporosis-specific resource use) incurred in the year following<br/>
+                                                     fracture were included. Outpatient services included claims for radiology, primary care, outpatient hospital visits, <br/>
+                                                     orthopedic specialist visits, and rehabilitation services. Long-term care services were defined as at least 1 long <br/>
+                                                     term care stay in a rehabilitation or skilled nursing facility. Pharmacy costs included all prescription drug usage, <br/>
+                                                     which likely corresponds to duplicate capture of osteoporosis medication costs in the model. “Other” costs were not<br/> 
+                                                     specified in the source but include remainder of services not included in the specified categories.
+                                                     <br/>
+                                                     The costs estimated from Weaver et al. and were adjusted from 2014 to 2018 based on the Bureau of Labor Statistics Medical <br/>
+                                                     Care Consumer Price Index.")),
                             dropdownDivider(),
-                            dropdownItem(name = HTML("All direct costs must be included in the analyses, but indirect costs can be excluded. If the <br/>
-                                                     'Include Indirect Costs' box is unchecked, both components of indirect costs will be excluded." ))
+                            dropdownItem(name = HTML("The costs associated with Productivity Losses were based on Pike et al. 2010. This retrospective analysis evaluated <br/>
+                                                     incremental lost wages due to medically related absenteeism among patients with a prior fracture compared to matched <br/>
+                                                     controls (n = 4,764; based on privately insured patients within an employer claims data from 1999-2006). <br/>
+                                                     <br/>
+                                                     Informal caregiver costs were estimated based on Vanness et al. 2005. Based on the publication, an average of 3 hours per <br/>
+                                                     patient per week incurred by caregivers was multiplied by an average 2002 wage of $9.16/hour to estimate caregiver costs.<br/>
+                                                     <br/>
+                                                     All direct costs must be included in the analyses, but indirect costs can be excluded. If the 'Include Indirect Costs' box <br/>
+                                                     is unchecked, both components of indirect costs will be excluded. When costing fractures, the source costs differentiate <br/>
+                                                     between those with a single versus multiple fractures in a calendar year. The estimates are applied across all fracture <br/>
+                                                     types." ))
                             ),
+                          bsPopover("FxrCostInp", title='<font size="2">Source:', content='<font size="3">DOF, Amgen, Bend the Curve PMO Microsimulation, 2019', placement="left", options = list(container = "body")),
                           fluidRow(
-                            column(width = 4, h5(" ")),
-                            column(width = 8, h5(strong("Costs ($)")), align = "center")),
+                            column(width = 4, tags$img(src="grey_boxes.PNG", width = "150px", height = "50px", style="display: block; margin-left: 0px; margin-right: auto;")),
+                            column(width = 8, h5(strong("Costs ($)")), align = "center", style="padding-top:35px;")),
                           fluidRow(
                             column(width = 4, h5(strong("Direct Cost Inputs")), align = "left"),
-                            column(width = 4, h5(strong("One per Year")), align = "center"),
-                            column(width = 4, h5(strong("> 1 Per Year")), align = "center")),
+                            column(width = 4, h5(strong("One Fracture per Year")), align = "center"),
+                            column(width = 4, h5(strong("> One Fracture Per Year")), align = "center")),
                           fluidRow(
                             column(width = 4, h5("Inpatient Stay", align = "left")),
-                            column(width = 4, numericInput(inputId = "costinpt1", label = NULL, value = "10314", step = 1)),
-                            column(width = 4, numericInput(inputId = "costinpt2", label = NULL, value = "17746"))),
+                            column(width = 4, tags$style("#costinpt1 {background-color:#dfdfdf;}"), numericInput(inputId = "costinpt1", label = NULL, value = "10314", step = 1)),
+                            column(width = 4, tags$style("#costinpt2 {background-color:#dfdfdf;}"), numericInput(inputId = "costinpt2", label = NULL, value = "17746"))),
                           fluidRow(
                             column(width = 4, h5("Outpatient Visit", align = "left")),
-                            column(width = 4, numericInput(inputId = "costoutpt1", label = NULL, value = "3062")),
-                            column(width = 4, numericInput(inputId = "costoutpt2", label = NULL, value = "4689"))),
+                            column(width = 4, tags$style("#costoutpt1 {background-color:#dfdfdf;}"), numericInput(inputId = "costoutpt1", label = NULL, value = "3062")),
+                            column(width = 4, tags$style("#costoutpt2 {background-color:#dfdfdf;}"), numericInput(inputId = "costoutpt2", label = NULL, value = "4689"))),
                           fluidRow(
                             column(width = 4, h5("Long-Term Care", align = "left")),
-                            column(width = 4, numericInput(inputId = "costLTC1", label = NULL, value = "4378")),
-                            column(width = 4, numericInput(inputId = "costLTC2", label = NULL, value = "9393"))),
+                            column(width = 4, tags$style("#costLTC1 {background-color:#dfdfdf;}"), numericInput(inputId = "costLTC1", label = NULL, value = "4378")),
+                            column(width = 4, tags$style("#costLTC2 {background-color:#dfdfdf;}"), numericInput(inputId = "costLTC2", label = NULL, value = "9393"))),
                           fluidRow(
                             column(width = 4, h5("Emergency Department Visit", align = "left")),
-                            column(width = 4, numericInput(inputId = "costED1", label = NULL, value = "938")),
-                            column(width = 4, numericInput(inputId = "costED2", label = NULL, value = "1311"))),
+                            column(width = 4, tags$style("#costED1 {background-color:#dfdfdf;}"), numericInput(inputId = "costED1", label = NULL, value = "938")),
+                            column(width = 4, tags$style("#costED2 {background-color:#dfdfdf;}"), numericInput(inputId = "costED2", label = NULL, value = "1311"))),
                           fluidRow(
                             column(width = 4, h5("Other", align = "left")),
-                            column(width = 4, numericInput(inputId = "costother1", label = NULL, value = "2694")),
-                            column(width = 4, numericInput(inputId = "costother2", label = NULL, value = "4626"))),
+                            column(width = 4, tags$style("#costother1 {background-color:#dfdfdf;}"), numericInput(inputId = "costother1", label = NULL, value = "2694")),
+                            column(width = 4, tags$style("#costother2 {background-color:#dfdfdf;}"), numericInput(inputId = "costother2", label = NULL, value = "4626"))),
                           fluidRow(
                             column(width = 4, h5("Pharmacy", align = "left")),
-                            column(width = 4, numericInput(inputId = "costpharm1", label = NULL, value = "2341")),
-                            column(width = 4, numericInput(inputId = "costpharm2", label = NULL, value = "2679"))),
+                            column(width = 4, tags$style("#costpharm1 {background-color:#dfdfdf;}"), numericInput(inputId = "costpharm1", label = NULL, value = "2341")),
+                            column(width = 4, tags$style("#costpharm2 {background-color:#dfdfdf;}"), numericInput(inputId = "costpharm2", label = NULL, value = "2679"))),
                           fluidRow(
                             box(id="IndirectCosts", "", color = "blue", width = 12, height = 4),
+                            bsPopover("IndirectCosts", title='<font size="2">Source:', content='<font size="3">DOF, Amgen, Bend the Curve PMO Microsimulation, 2019', placement="left", options = list(container = "body")),
                             column(width = 4, prettyCheckbox(inputId = "IndirectCosts", strong("Include Indirect Costs"), value = TRUE, shape = "square"))),
                           fluidRow(
                             column(width = 4, h5("Productivity Losses", align = "left")),
-                            column(width = 4, numericInput(inputId = "costprod1", label = NULL, value = "2820")),
-                            column(width = 4, numericInput(inputId = "costprod2", label = NULL, value = "2820"))),
+                            column(width = 4, tags$style("#costprod1 {background-color:#dfdfdf;}"), numericInput(inputId = "costprod1", label = NULL, value = "2820")),
+                            column(width = 4, tags$style("#costprod2 {background-color:#dfdfdf;}"), numericInput(inputId = "costprod2", label = NULL, value = "2820"))),
                           fluidRow(
                             column(width = 4, h5("Informal Caregiver", align = "left")),
-                            column(width = 4, numericInput(inputId = "costcare1", label = NULL, value = "2173")),
-                            column(width = 4, numericInput(inputId = "costcare2", label = NULL, value = "2173")))),
-                  bsTooltip("FxrCostInp", "Default direct costs following a fracture were based on a claims analysis, differed by category (i.e., inpatient, outpatient, emergency department, long-term care, pharmacy costs following a fracture, and other), and differed for individuals experiencing a single fracture within a year vs. those with a subsequent fracture. Outpatient services included claims for radiology, primary care, outpatient hospital visits, orthopedic specialist visits, and rehabilitation services. Long-term care services were defined as at least 1 longterm care stay in a rehabilitation or skilled nursing facility. Other costs include XYZ. All costs are updated to USD 2019 using the Medical Care index from the Bureau of Labor Statistics. ",
-                            "left", options = list(container = "body"))),
+                            column(width = 4, tags$style("#costcare1 {background-color:#dfdfdf;}"), numericInput(inputId = "costcare1", label = NULL, value = "2173")),
+                            column(width = 4, tags$style("#costcare2 {background-color:#dfdfdf;}"), numericInput(inputId = "costcare2", label = NULL, value = "2173")))
+                            )
+                            ),
                 fluidRow(
-                  box(id = "clin_inp", title = "Clinical Inputs", width = 12, closable = FALSE, collapsible = TRUE, collapsed = TRUE,
-                      enable_dropdown = TRUE, dropdown_icon = "question-circle",
-                      dropdown_menu = dropdownItemList(
-                        dropdownItem(name = "A pre-set market basket of treatments is analyzed with the market mix, monthly cost, and efficacy shown here.")),
-                      bsTooltip("clin_inp", "Efficacy is based on weighted averages within each class. The source data used came from a secondary analysis of the literature with the aim of estimating the relative efficacy of osteoporosis treatment among postmenopausal women (Freemantle et al 2013).  The analysis used multiple techniques including meta-analysis, adjusted indirect comparison, and mixed treatment comparison [MTC]) to provide comparisons of the relative efficacy of postmenopausal osteoporosis therapies in the absence of comprehensive head-to-head trials.",
-                                "left", options = list(container = "body")),
-                      fluidRow(
-                        column(width = 6, h5(" ")),
-                        column(width = 2, h5(" ")),
-                        column(width = 2, h5(strong("Efficacy")), align = "center"),
-                        column(width = 2, h5(strong("Adherence-Adjusted Efficacy")), align = "center")),
-                      fluidRow(
-                        column(width = 4, h5(strong("Medication")), align = "left"),
-                        column(width = 2, h5(strong("Treatment Mix (%)")), align = "center"), 
-                        column(width = 2, h5(strong("Monthly Cost ($)")), align = "center"),
-                        column(width = 2, h5(strong("Hip")), align = "center"),
-                        column(width = 2, h5(strong("Other")), align = "center")),
-                      
-                      fluidRow(
-                        column(width = 4, h5("Anti-Resorptive Agents")),
-                        column(width = 2, box(id="AR_MS", tags$p("91.4%", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
-                        # bsTooltip("AR_MS", "Market share inputs are based on utilization trends as of 2018, DOF.",
-                        #           "right", options = list(container = "body")),
-                        column(width = 2, box(id="AR_cost", tags$p("$82.15", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
-                        # bsTooltip("AR_cost", "Monthly costs are based on a weighted averge of costs - weighted by market share - from Medicare Part D files as of 2018.",
-                        #           "right", options = list(container = "body")),
-                        column(width = 1, box(id="AR_eff", tags$p("0.63", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
-                        # bsTooltip("AR_eff", "Class efficacy is based on a weighted average, weighted by estimated market share, with individual therapy efficacies based on Freemantle et al. 2013.",
-                        #           "left", options = list(container = "body")),
-                        column(width = 1, box(id="AR_effoth", tags$p("0.62", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
-                        # bsTooltip("AR_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
-                        #         "left", options = list(container = "body")),
-                        column(width = 1, box(id="AR_eff_adh", tags$p("0.80", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
-                        # bsTooltip("AR_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
-                        #       "left", options = list(container = "body")),
-                        column(width = 1, box(id="AR_effoth_adh", tags$p("0.78", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4))),
-                      # bsTooltip("AR_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
-                      #           "left", options = list(container = "body")),
-                      fluidRow(
-                        column(width = 4, h5("Selective Estrogen Receptor Modulators (SERMs)")),
-                        column(width = 2, box(id="SERM_MS", tags$p("7.5%", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
-                        # bsTooltip("SERM_MS", "Market share inputs are based on utilization trends as of 2018, DOF.",
-                        #           "right", options = list(container = "body")),
-                        column(width = 2, box(id="SERM_cost", tags$p("$69.30", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
-                        # bsTooltip("SERM_cost", "Monthly costs are based on a weighted averge of costs - weighted by market share - from Medicare Part D files as of 2018.",
-                        #           "right", options = list(container = "body")),
-                        column(width = 1, box(id="SERM_eff", tags$p("--", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
-                        bsTooltip("SERM_eff", "Research on efficacy of SERMs in reducing risk of hip fracture is limited.",
-                                  "left", options = list(container = "body")),
-                        column(width = 1, box(id="SERM_effoth", tags$p("0.59", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
-                        # bsTooltip("SERM_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
-                        #           "left", options = list(container = "body")),
-                        column(width = 1, box(id="SERM_eff_adh", tags$p("--", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
-                        # bsTooltip("SERM_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
-                        #           "left", options = list(container = "body")),
-                        column(width = 1, box(id="SERM_effoth_adh", tags$p("0.75", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4))),
-                      # bsTooltip("SERM_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
-                      #           "left", options = list(container = "body")),
-                      fluidRow(
-                        column(width = 4, h5("Bone Builders / PTH")),
-                        column(width = 2, box(id="PTH_MS", tags$p("1.1%", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
-                        # bsTooltip("PTH_MS", "Market share inputs are based on utilization trends as of 2018, DOF.",
-                        #           "right", options = list(container = "body")),
-                        column(width = 2, box(id="PTH_cost", tags$p("$2,989.02", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
-                        # bsTooltip("PTH_cost", "Monthly costs are based on a weighted averge of costs - weighted by market share - from Medicare Part D files as of 2018",
-                        #           "right", options = list(container = "body")),
-                        column(width = 1, box(id="PTH_eff", tags$p("0.25", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
-                        # bsTooltip("PTH_eff", "Class efficacy is based on a weighted average, weighted by estimated market share, with individual therapy efficacies based on Freemantle et al. 2013.",
-                        #           "left", options = list(container = "body")),
-                        column(width = 1, box(id="PTH_effoth", tags$p("0.37", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
-                        # bsTooltip("PTH_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
-                        #           "left", options = list(container = "body")),
-                        column(width = 1, box(id="PTH_eff_adh", tags$p("0.32", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
-                        # bsTooltip("PTH_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
-                        #         "left", options = list(container = "body")),
-                        column(width = 1, box(id="PTH_effoth_adh", tags$p("0.47", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4))
-                        # bsTooltip("PTH_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
-                        #     "left", options = list(container = "body"))
-                      ))
-                  ),
+                  boxPlus(id = "clin_inp", title = "Treatment Inputs", width = 12, closable = FALSE, collapsible = TRUE, collapsed = TRUE,
+                          enable_dropdown = TRUE, dropdown_icon = "question-circle",
+                          dropdown_menu = dropdownItemList(
+                            dropdownItem(name = HTML("A pre-set market basket of treatments is analyzed with the market mix, monthly cost, and efficacy shown here. The treatment mix comes from an Amgen internal market analysis as of January 2019.<br/>
+                                                     <br/>
+                                                     Monthly cost represent a weighted average using wholesale acquisition cost with available National Drug Code adjusted to reflect a 30-day supply. Note that WAC reflects the price offered to wholesalers and does not take into account discounts, <br/>
+                                                     rebates, or other price concessions that may ultimately affect the net price. In addition, WAC is subject to change at any time. <br/>
+                                                     <br/>
+                                                     The source efficacy data for hip and other fractures came from a secondary analysis of the literature with the aim of estimating the relative efficacy of osteoporosis treatment among postmenopausal women (Freemantle et al 2013). The relative <br/>
+                                                      fracture rate compared to placebo for each agent was classified into the therapeutic classes and then weighted according to internal market share data to calculate the efficacy rate for the therapeutic class by fracture type. For the other <br/>
+                                                     fracture types, a simple average of all non-hip related efficacy was used to estimate an average for all other fracture types excluding hip. Other types of fractures included new vertebral, clinical vertebral,  non-vertebral, and wrist. Efficacy <br/>
+                                                     rates may vary from rates included in the FDA approved product information. Hip rates were not included for SERMS as efficacy has not been established.")),
+                                                     dropdownDivider(),
+                            dropdownItem(name = HTML("Medication costs and efficacy are adjusted using evidence from Durden et al. 2017 on 12-month adherence. Assuming an overall adherence rate of 41.8% at 12 months, the weighted monthly treatment cost is adjusted assuming that only half of the year is <br/>
+                                                     impacted by non-adherence. For example, if the weighted treatment costs monthly is $5,000, the adherence estimate of 41% is applied to 6 of the 12 months (6*$5000+(6*0.41*$5,000)) = Total annual weighted cost. Efficacy rates by therapeutic class are further <br/>
+                                                     adjusted for non-adherence. Assuming 58.2% non-adherence, the risk of fracture was increased by 46% based on evidence by Imaz et al. 2010. For example, if the weighted treatment efficacy for a therapeutic class is 0.50, then 41.8% is applied to the 0.5 and <br/>
+                                                     58.2% is applied to the 0.5 adjusted for reduced efficacy (0.5*1.46). The resulting equation is (0.5 * 0.418 + 0.5 *1.46 * 0.582) = Total adherence adjusted efficacy."))
+                            
+                            ),
+                          bsPopover("clin_inp", title='<font size="2">Source:', content='<font size="3">DOF, Amgen, Bend the Curve PMO Microsimulation, 2019', placement="left", options = list(container = "body")),
+                          
+                          fluidRow(
+                            column(width = 6, h5(" ")),
+                            column(width = 2, h5(" ")),
+                            column(width = 2, h5(strong("Efficacy")), align = "center"),
+                            column(width = 2, h5(strong("Adherence-Adjusted Efficacy")), align = "center")),
+                          fluidRow(
+                            column(width = 4, h5(strong("Medication")), align = "left"),
+                            column(width = 2, h5(strong("Treatment Mix (%)")), align = "center"), 
+                            column(width = 2, h5(strong("Monthly Cost ($)")), align = "center"),
+                            column(width = 1, h5(strong("Hip")), align = "center"),
+                            column(width = 1, h5(strong("Other")), align = "center"),
+                            column(width = 1, h5(strong("Hip")), align = "center"),
+                            column(width = 1, h5(strong("Other")), align = "center")),
+                          
+                          fluidRow(
+                            column(width = 4, h5("Anti-Resorptive Agents")),
+                            column(width = 2, box(id="AR_MS", tags$p("91.4%", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            # bsTooltip("AR_MS", "Market share inputs are based on utilization trends as of 2018, DOF.",
+                            #           "right", options = list(container = "body")),
+                            column(width = 2, box(id="AR_cost", tags$p("$82.15", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            # bsTooltip("AR_cost", "Monthly costs are based on a weighted averge of costs - weighted by market share - from Medicare Part D files as of 2018.",
+                            #           "right", options = list(container = "body")),
+                            column(width = 1, box(id="AR_eff", tags$p("0.63", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            # bsTooltip("AR_eff", "Class efficacy is based on a weighted average, weighted by estimated market share, with individual therapy efficacies based on Freemantle et al. 2013.",
+                            #           "left", options = list(container = "body")),
+                            column(width = 1, box(id="AR_effoth", tags$p("0.62", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            # bsTooltip("AR_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
+                            #         "left", options = list(container = "body")),
+                            column(width = 1, box(id="AR_eff_adh", tags$p("0.80", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            # bsTooltip("AR_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
+                            #       "left", options = list(container = "body")),
+                            column(width = 1, box(id="AR_effoth_adh", tags$p("0.78", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4))),
+                          # bsTooltip("AR_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
+                          #           "left", options = list(container = "body")),
+                          fluidRow(
+                            column(width = 4, h5("Selective Estrogen Receptor Modulators (SERMs)")),
+                            column(width = 2, box(id="SERM_MS", tags$p("7.5%", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            # bsTooltip("SERM_MS", "Market share inputs are based on utilization trends as of 2018, DOF.",
+                            #           "right", options = list(container = "body")),
+                            column(width = 2, box(id="SERM_cost", tags$p("$69.30", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            # bsTooltip("SERM_cost", "Monthly costs are based on a weighted averge of costs - weighted by market share - from Medicare Part D files as of 2018.",
+                            #           "right", options = list(container = "body")),
+                            column(width = 1, box(id="SERM_eff", tags$p("--", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            #bsTooltip("SERM_eff", "Research on efficacy of SERMs in reducing risk of hip fracture is limited.",
+                            #          "left", options = list(container = "body")),
+                            column(width = 1, box(id="SERM_effoth", tags$p("0.59", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            # bsTooltip("SERM_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
+                            #           "left", options = list(container = "body")),
+                            column(width = 1, box(id="SERM_eff_adh", tags$p("--", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            # bsTooltip("SERM_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
+                            #           "left", options = list(container = "body")),
+                            column(width = 1, box(id="SERM_effoth_adh", tags$p("0.75", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4))),
+                          # bsTooltip("SERM_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
+                          #           "left", options = list(container = "body")),
+                          fluidRow(
+                            column(width = 4, h5("Anabolics")),
+                            column(width = 2, box(id="PTH_MS", tags$p("1.1%", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            # bsTooltip("PTH_MS", "Market share inputs are based on utilization trends as of 2018, DOF.",
+                            #           "right", options = list(container = "body")),
+                            column(width = 2, box(id="PTH_cost", tags$p("$2,989.02", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            # bsTooltip("PTH_cost", "Monthly costs are based on a weighted averge of costs - weighted by market share - from Medicare Part D files as of 2018",
+                            #           "right", options = list(container = "body")),
+                            column(width = 1, box(id="PTH_eff", tags$p("0.25", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            # bsTooltip("PTH_eff", "Class efficacy is based on a weighted average, weighted by estimated market share, with individual therapy efficacies based on Freemantle et al. 2013.",
+                            #           "left", options = list(container = "body")),
+                            column(width = 1, box(id="PTH_effoth", tags$p("0.37", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            # bsTooltip("PTH_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
+                            #           "left", options = list(container = "body")),
+                            column(width = 1, box(id="PTH_eff_adh", tags$p("0.32", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            # bsTooltip("PTH_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
+                            #         "left", options = list(container = "body")),
+                            column(width = 1, box(id="PTH_effoth_adh", tags$p("0.47", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4))
+                            # bsTooltip("PTH_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
+                            #     "left", options = list(container = "body"))
+                          ))
+                            ),
                 # fluidRow(boxPlus(width=12,
                 #                  plotlyOutput("costp"),
                 #                  #tableOutput("coststbl"),
                 #                  fill=FALSE)),
                 
                 tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
-                  ),
+                            ),
         tabItem(tabName = "Scenarios",
                 fluidRow(
                   width = NULL, background = "black"),
-                h3("Bending the Curve: The Estimated Long-Term Value of Improving Patient Identification and Treatment in Post-Menopausal Osteoporosis", align = "center"),
+                h3(tags$div("Bending the Curve:",
+                            tags$br(),
+                            "The Estimated Long-Term Value of Improving Patient Identification and Treatment Rates in Post-Menopausal Osteoporosis"), align = "center"),
                 fluidRow(
-                  boxPlus(title = "Treatment, Identification Rates & Time Horizon", width = 12, closable = FALSE, collapsible = TRUE,
+                  boxPlus(id = "scenarios_box", title = "Treatment, Identification Rates & Time Horizon", width = 12, closable = FALSE, collapsible = TRUE,
                           enable_dropdown = TRUE, dropdown_icon = "question-circle",
                           dropdown_menu = dropdownItemList(
-                            dropdownItem(name = HTML("Define the base case and scenarios to evaluate over the time horizon. You may adjust the <br/>
-                                                     scenarios by entering in a new identification and treatment rate to the left.")),
+                            dropdownItem(name = HTML("Identification Rate in the Base Case scenario was based on Lewiecki et al. 2016. This analysis identified the proportion of Medicare patients with <br/>
+                                                     ≥ 1 DXA scan each year from 2002-2014 (11.3% in 2014), based on health care claims and enrollment data from the 5% sample of Medicare fee-for-service  <br/>
+                                                     beneficiaries. Current treatment rates and trends were based on unpublished market share data, which indicated 9% of those ages 65+ years were treated  <br/>
+                                                     (i.e., filled at least one osteoporosis medication) in 2017, with the rate steadily declining since 2011. Thus, it was assumed that the overall treatment  <br/>
+                                                     rate was 9% in 2018 and declined year over year through 2040.  In the Improved PMO Management scenario, the selected treatment rate remains constant  <br/>
+                                                     over the specified time period. ")),
                             dropdownDivider(),
-                            dropdownItem(name = HTML("The microsimulation is estimating the effects of identification and treatment across <br/>
-                                                     a cohort of the size entered in the inputs sheet. Please allow time for the simulation to run."))),
+                            dropdownItem(name = HTML("The microsimulation is estimating the effects of identification and treatment across a cohort of the size entered in the <br/>
+                                                     inputs sheet. Please allow time for the simulation to run."))),
+                          bsPopover("scenarios_box", title='<font size="2">Source:', content='<font size="3">DOF, Amgen, Bend the Curve PMO Microsimulation, 2019', placement="left", options = list(container = "body")),
+                          
                           fluidRow(
-                            column(width = 4, h5(" ")),
-                            column(width = 4, h5(strong("Identification (%)")), align = "center"),
-                            column(width = 4, h5(strong("Treatment (%)")), align = "center")),
+                            column(width = 4, tags$img(src="grey_boxes.PNG", width = "150px", height = "50px", style="display: block; margin-left: 0px; margin-right: auto; ")),
+                            column(width = 4, h5(strong("Identification Rate (%)")), align = "center", style="padding-top:25px;"),
+                            column(width = 4, h5(strong("Treatment Rate (%)")), align = "center", style="padding-top:25px;")),
                           fluidRow(
-                            column(width = 4, align="center", h5("Base Case")),
-                            column(width = 4, numericInput(inputId = "basecaseID", label = NULL, value = "11.3")),
-                            column(width = 4, numericInput(inputId = "basecaseTx", label = NULL, value = "9.0"))),
-                          bsTooltip("basecaseTx", "Current treatment rates and trends were based on unpublished market share data, which indicated 9% of those ages 65+ years were treated (i.e., filled at least one osteoporosis medication) in 2017, with the rate steadily declining since 2011.",
-                                    "left", options = list(container = "body")),
+                            column(width = 4, align="center", blockQuote("    Base Case")),
+                            column(width = 4, tags$style("#basecaseID {background-color:#dfdfdf;}"), numericInput(inputId = "basecaseID", label = NULL, value = "11.3", step = 0.1)),
+                            column(width = 4, tags$style("#basecaseTx {background-color:#dfdfdf;}"), numericInput(inputId = "basecaseTx", label = NULL, value = "9.0", step = 0.1))),
                           fluidRow(
-                            column(width = 4, align="center", h5("New Scenario")),
-                            column(width = 4, numericInput(inputId = "scenario1ID", label = NULL, value = "31.3")),
-                            column(width = 4, numericInput(inputId = "scenario1Tx", label = NULL, value = "17.8"))),
+                            column(width = 4, align="center", blockQuote("    Improved PMO Management")),
+                            column(width = 4, tags$style("#scenario1ID {background-color:#dfdfdf;}"), numericInput(inputId = "scenario1ID", label = NULL, value = "31.3", step = 0.1)),
+                            bsTooltip("scenario1ID", "The model only allows scenarios to be evlauted that increase rates of identification and treatment. Please enter a value above the value entered for base case.", "left", options = list(container = "body")),
+                            column(width = 4, tags$style("#scenario1Tx {background-color:#dfdfdf;}"), numericInput(inputId = "scenario1Tx", label = NULL, value = "17.8", step = 0.1)),
+                            bsTooltip("scenario1Tx", "The model only allows scenarios to be evlauted that increase rates of identification and treatment. Please enter a value above the value entered for base case.", "left", options = list(container = "body"))),
                           fluidRow(
-                            column(width = 4, align="center", h5("Time Horizon")),
+                            column(width = 4, align="center", blockQuote("    Time Horizon")),
                             column(width = 6,
                                    sliderInput(inputId = "endYear", 
                                                label = NULL,
@@ -425,7 +515,7 @@ fluidPage(
                                               label = 'Run Simulation',
                                               color="success",
                                               style="material-flat",
-                                              size = "xs"),
+                                              size = "sm"),
                                    align = 'center')
                           ))),
                 boxPlus(width = 12, closable = FALSE, collapsible = TRUE,
@@ -438,28 +528,30 @@ fluidPage(
                 
                 
                 tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
-                            ),
+                                                     ),
         tabItem(tabName = "Results",
                 fluidRow(
                   width = NULL, background = "black"),
                 h3("Bending the Curve: The Estimated Long-Term Value of Improving Patient Identification and Treatment in Post-Menopausal Osteoporosis", align = "center"),
                 fluidRow(
                   boxPlus(title = "Total Estimated Fractures", 
-                          closable = FALSE, status = "warning", solidHeader = FALSE, collapsible = TRUE, width = 8,
+                          closable = FALSE, status = "info", solidHeader = FALSE, collapsible = TRUE, width = 7,
                           p(textOutput('totalfxr_content'))
                   ),
-                  infoBoxOutput("FraxBox")), 
+                  column(width=5,infoBoxOutput("FraxBox"), tags$style("#FraxBox {width:100%; word-break: keep-all; overflow-wrap: anywhere;}"))
+                         ), 
                 fluidRow(
                   boxPlus(title = "Total Estimated Costs", 
-                          closable = FALSE, status = "warning", solidHeader = FALSE, collapsible = TRUE, width = 8,
+                          closable = FALSE, status = "info", solidHeader = FALSE, collapsible = TRUE, width = 7,
                           p(textOutput('totalcost_content'))
                   ),
-                  infoBoxOutput("CostBox"))
+                  column(width=5,infoBoxOutput("CostBox"),tags$style("#CostBox {width:100%; word-break: keep-all; overflow-wrap: anywhere;}"))
+                  )
                 ,
                 fluidRow(
                   boxPlus(title = "Thank you for visiting.", 
                           closable = FALSE, status = "info", solidHeader = FALSE, collapsible = TRUE, width = 12,
-                          p("Thank you for visiting the Bend the Curve Microsimulation Site. The results of the model based on the current inputs suggest.... Using the validated FRAX tables and insights from NHANES to estimate the future burden among Medicare-eligible women, we found that total fractures and fracture-related costs will increase substantially under the status quo of under-diagnosis and under-treatment of osteoporosis")
+                          p("Thank you for visiting the Bending the Curve Microsimulation Site.")
                   )),
                 
                 tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
@@ -471,27 +563,39 @@ fluidPage(
                 h3("Bending the Curve: The Estimated Long-Term Value of Improving Patient Identification and Treatment in Post-Menopausal Osteoporosis", align = "center"),
                 fluidRow(
                   boxPlus(
-                    width = 6,
+                    width = 12,
                     title = "Assumptions", 
                     closable = FALSE, 
                     status = "warning", 
                     solidHeader = TRUE, 
                     collapsible = TRUE,
-                    p("We assumed costs would remain constant in the future, which has not been the case historically. To the extent that healthcare costs continue rising, the growth in projected spending would be an underestimate. Our assumption that those at highest risk would be treated first might not reflect reality, although it should be the goal in clinical practice. In estimating the treatment effectiveness, we assumed that all fractures could be prevented at rates shown in meta-analyses; however, treatment might not prevent fractures to all potential sites at the same rate as measured in clinical trials. The risk of fractures was estimated using the simplified charts from FRAX, and although they have been well validated, they are not perfect predictors.")
-                  ),
+                    p(HTML("<ul>
+                            <li>When determining whether an individual was designated DXA and treatment, it assumed that those of highest risk as defined by FRAX would be prioritized. While in practice it is likely the case that some individuals treated are at lower risk than other individuals who are untreated, the assumption of treating those at highest risk  is aligned with clinical practice objectives to reduce fracture risk, versus assuming treatment is randomly distributed.</li>
+                           <li>It was assumed that treated patients would receive a “market basket” of branded and generic agents based on market share data as of January 2019. The market basket is used to weight treatment efficacy and medication costs. The model reflects approved therapies generic/branded as of the end of 2018. Therefore, this model may not reflect generic or brand therapies that have been recently approved.</li>
+                           <li>It was assumed that DXA scanning rates would remain constant over each year of model while treatment rates declined linearly year over year. It was assumed costs would remain constant in the future and this conservative assumption may underestimate the total fracture costs in later years. </li>
+                           <li>It was assumed in estimating the treatment effectiveness that all fractures could be reduced at rates shown in meta-analyses by Freemantle et al. 2013; however, treatment might not reduce fractures to all potential sites at the same rate as measured in clinical trials.</li>
+                            </ul>
+                           "))
+                    )),
+                fluidRow(  
                   boxPlus(
-                    width = 6,
+                    width = 12,
                     title = "Limitations", 
                     closable = FALSE, 
                     status = "warning", 
                     solidHeader = TRUE, 
                     collapsible = TRUE,
-                    p("In any model-based analysis, especially when making projections as far out as 2040, uncertainty exists and simplifying assumptions must be made. However, we erred on the conservative side, underestimating the results to provide a lower bound on the potential benefits of increased case finding and treatment. We did not attempt to quantify the clinical benefits in terms of quality-adjusted life years, and this could be an area of future research. Additionally, we only considered currently available treatments. To the extent that new treatment alternatives are introduced that are more efficacious, the fracture reduction and cost savings in scenarios with increased utilization would be an underestimate of the true benefit.")
-                  )
-                ),
+                    p(HTML(" <ul>
+                            <li>Treatments included in the analysis are based on those approved at the time of market share analysis, and do not reflect therapies that became commercially available after January 1, 2019. If new treatment alternatives are introduced that are cost effective, the fracture reduction and cost savings may be an underestimate of the true benefit as later years are estimated.</li>
+                           <li>Treatment efficacy on fracture risk reduction for non-hip related outcomes was based on a non-weighted average of the point estimates of the non-hip sites from Freemantle et al. 2013. This rate was applied to all other sites (including toes and body parts that might not have the same fracture risk reduction from therapy).</li>
+                           <li>An increase in fracture findings was only incorporated by increasing the rate of DXA, but other methods have been shown to increase identification. To the extent fracture findings can occur without the need for DXA, the cost savings could be an underestimated.</li>
+                           <li>The risk of fractures was estimated using the simplified charts from FRAX, and although they have been well validated, they are not perfect predictors.</li>
+                            </ul>
+                           "))
+                    )),
                 
                 tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
-        ),
+                    ),
         
         tabItem(tabName = "Disclosures",
                 fluidRow(
@@ -499,113 +603,196 @@ fluidPage(
                 h3("Bending the Curve: The Estimated Long-Term Value of Improving Patient Identification and Treatment in Post-Menopausal Osteoporosis", align = "center"),
                 fluidRow(
                   boxPlus(
+                    id = "financial_disc",
                     width = 12,
                     title = "Financial Disclosures", 
                     closable = FALSE, 
                     status = "warning", 
                     solidHeader = TRUE, 
                     collapsible = TRUE,
-                    p(HTML("The following studies used in the economic model involved an Amgen employee or were sponsored by Amgen. These disclosures are specific  
-                           to those listed within the publication or source document used in the development of the economic model. <br/>
-                           •	Data on file, Amgen; [US Bend the Curve PMO Microsimulation; 2019] <br/>
-                           &nbsp;&nbsp;&nbsp;&nbsp; o	This analysis was funded by Amgen, Inc. <br/>
-                           •	Freemantle N, Cooper C, Diez-Perez A, Gitlin M, Radcliffe H, Shepherd S, et al. Results of indirect and mixed treatment comparison of fracture efficacy for osteoporosis treatments: a meta-analysis. Osteoporos Int. 2013;24(1):209–17. <br/>
-                           &nbsp;&nbsp;&nbsp;&nbsp; o	This study was funded by Amgen Inc. <br/>
-                           &nbsp;&nbsp;&nbsp;&nbsp; o	Freemantle N has received research grants from Amgen, Inc. and has served as a consultant for Amgen, Inc. Cooper C has received consulting and lecture fees from Amgen, Inc.,  Diez-Perez A has received honoraria or consulted for Amgen, Inc., and received research grants from Amgen, Inc.  Roux C has received research grants, and/or honoraria from Amgen, <br/>
-                           &nbsp;&nbsp;&nbsp;&nbsp; o	Gitlin M, Radcliffe H, Shepherd S were employees and shareholders in Amgen, Inc. at the time of the study. <br/>
-                           •	Durden E, Pinto L, Lopez-Gonzalez L, Juneau P, Barron R. Two-year persistence and compliance with osteoporosis therapies among postmenopausal women in a commercially insured population in the United States. Arch Osteoporos. 2017; 12:22.
-                           o	This study was funded by Amgen Inc.<br/>
-                           &nbsp;&nbsp;&nbsp;&nbsp; o	Durden E, Lopez-Gonzalez L, Juneau P are employees of Truven Health Analytics, who were paid by Amgen Inc. for conducting this study.<br/>
-                           &nbsp;&nbsp;&nbsp;&nbsp; o	Pinto L and Barron R were employees and shareholders in Amgen, Inc. at the time of the study. Jessica Ma, PhD (Amgen Inc.) provided medical writing support."
-                           
-                    ))
-                  )),
+                    p(HTML("The following studies used in the economic model involved an Amgen employee or were sponsored by Amgen. These disclosures are specific to what is listed within the publication or source document used to development the economic model.<br/>
+                           <ul>
+                            <li>Data on file, Amgen; [US Bend the Curve PMO Microsimulation; 2019] <br/>
+                             <ul>
+                            <li>This analysis was funded by Amgen, Inc. <br/>
+                           </ul>
+                             </ul> 
+                           <ul>
+                            <li>Freemantle N, Cooper C, Diez-Perez A, Gitlin M, Radcliffe H, Shepherd S, et al. Results of indirect and mixed treatment comparison of fracture efficacy for osteoporosis treatments: a meta-analysis. Osteoporos Int. 2013;24(1):209–17. <br/>
+                           <ul>
+                            <li>This study was funded by Amgen Inc.</li>
+                           <li>Freemantle N has received research grants from Amgen, Inc. and has served as a consultant for Amgen, Inc. Cooper C has received consulting and lecture fees from Amgen, Inc.,  Diez-Perez A has received honoraria or consulted for Amgen, Inc., and received research grants from Amgen, Inc.  Roux C has received research grants, and/or honoraria from Amgen</li>
+                           <li>Gitlin M, Radcliffe H, Shepherd S were employees and shareholders in Amgen, Inc. at the time of the study.</li>
+                           </ul>
+                             </ul> 
+                           <ul>
+                            <li>Durden E, Pinto L, Lopez-Gonzalez L, Juneau P, Barron R. Two-year persistence and compliance with osteoporosis therapies among postmenopausal women in a commercially insured population in the United States. Arch Osteoporos. 2017; 12:22.</li>
+                           <ul>
+                            <li>This study was funded by Amgen Inc.</li>
+                            <li>Durden E, Lopez-Gonzalez L, Juneau P are employees of Truven Health Analytics, who were paid by Amgen Inc. for conducting this study.</li>
+                            <li>Pinto L and Barron R were employees and shareholders in Amgen, Inc. at the time of the study. Jessica Ma, PhD (Amgen Inc.) provided medical writing support.</li>
+                           "))
+                    )),
+                tags$style(HTML("
+                                     #financial_disc {
+                                     padding-left: 1%;
+                                     font-size:   12pt;
+                                     line-height: 12pt;
+          }
+  ")),
                 fluidRow(
                   boxPlus(
+                    id = "study_desc",
                     width = 12,
                     title = "Study Descriptions", 
                     closable = FALSE, 
                     status = "warning", 
                     solidHeader = TRUE, 
                     collapsible = TRUE,
-                    p(HTML("The following studies were used in the economic model as model inputs or as source evidence used to inform model inputs. Other evidence was used to support model assumptions and such evidence are included as references but have not been summarized below.<br/>
-                           •	Data on file, Amgen; [US Bend the Curve PMO Microsimulation; 2019] <br/>
-                           &nbsp;&nbsp;o	This analysis used an economic simulation model developed to assess the clinical and economic burden of osteoporotic fractures in the US with and without policy changes. The model takes a population perspective focused on women ≥ 65 years old. Multiple sources were utilized to develop the simulation and analysis including epidemiology, fracture risk factors, rate of fracture based on risk factors, DXA scanning and treatment rates, as well as direct and indirect fracture costs. <br/>
-                           •	Centre for Metabolic Bone Diseases, University of Sheffield, UK. FRAX® Fracture Risk Assessment Tool. Available from: https://www.sheffield.ac.uk/FRAX/ <br/>
-                           o	The University of Sheffield launched the FRAX tool in 2008. The FRAX® algorithms give the 10-year probability of fracture. The output is a 10-year probability of hip fracture and the 10-year probability of a major osteoporotic fracture (clinical spine, forearm, hip or shoulder fracture).The FRAX® model was developed from studying population-based cohorts from Europe, North America, Asia and Australia. The simplified tables that are publicly accessible are structured by geography and race. The US specific tables include Caucasian, Asian, black and Hispanic. All data tables are structured by fracture output and provided in 5-year age increments. <br/>
-                           
-                           •	Centers for Disease Control and Prevention. NHANES - National Health and Nutrition Examination Survey. Available from: https://www.cdc.gov/nchs/nhanes/<br/>
-                           o	The National Health and Nutrition Examination Survey (NHANES) is a program designed to assess the health and nutritional status of adults and children in the United States. The NHANES data is based on interviews and physical examinations and includes demographic, socioeconomic, dietary, and health-related questions. The examination component consists of medical, dental, and physiological measurements, as well as laboratory tests administered by highly trained medical personnel. NHANES data were structured into datasets of 2 year with the 2013-2014 providing the most recent dataset available with all needed variables. In 2013-2014, 14,332 persons were selected from 30 different survey locations and 10,175 completed the interview and 9,813 were examined.<br/>
-                           
-                           •	Weaver J, Sajjan S, Lewiecki EM, Harris ST, Marvos P. Prevalence and Cost of Subsequent Fractures Among U.S. Patients with an Incident Fracture. J Manag Care Spec Pharm. 2017;23(4):461–71. <br/>
-                           o	A retrospective analysis of two large US administrative claims databases was conducted between 2007 and 2014. The analysis is based on the Humana Medicare Advantage and the Optum commercially insured populations. Medicare patients were included if they were ≥ 65 years old and commercial patients were included if they were ≥ 50 years old. Patients were included if they experienced a fracture with at least 1 year of insurance eligibility before and after the fracture date. Patients were stratified into two cohorts, including those who incurred 1 fracture and those who experience > 1 fracture (after a 3 month gap from index fracture) during the 12-month follow-up post the initial index fracture. Analysis of fracture costs was specific to direct medical (inpatient, outpatient, emergency department, long-term care, other services) and pharmacy costs. A total of 45,603 patients were included in the Medicare group. All costs were presented after 1:1 patient-level propensity score match of the two cohorts (n= 4,549 per cohort) based on facture site, year of fracture, gender. Region, employment status, race and Charlson comorbidity index.  All costs were reported in 2014 US dollars and all costs are reported as incremental costs.  <br/>
-                           
-                           •	Colby, SL., Ortman, JM. Projections of the Size and Composition of the U.S. Population: 2014 to 2060. US Census Bur Wash DC. 2014 Mar; Current Population Reports, P25-1143:13. <br/>
-                           o	The census projections are for the US including all 50 states and the District of Columbia.  The projection estimates were produced using cohort-component methods ((births, deaths, and net international migration) based on the 2010 Census. These methods are based on methods similar to time series analysis.  Historical trends in mortality, fertility rates and net international migration were to is advance the population projection each year by using. <br/>
-                           o	The 2014 National Projections, including summary tables, downloadable files, and methodology and assumptions, can be found at <www.census.gov /population/projections/data/national/2014.html>. <br/>
-                           
-                           •	Pike, CT, Birnbaum HG, Schiller M, Swallow E, Burge RT, Edgell ET. Prevalence and costs of osteoporotic patients with subsequent non-vertebral fractures in the US.  Osteoporos Int. 2011;22:2611–2621.<br/>
-                           o	A retrospective analysis of administrative claims from 1999 through 2006 of  privately-insured (ages 18–64 years) and Medicare (ages 65+ years) patients with ≥1 subsequent osteoporosis-related non-vertebral fracture within a year the initial non-vertebral fractures were included. Patients were matched to controls who experiences an initial non-vertebral fracture but no subsequent fractures. Subsequent fractures were included if occurring >3 months after the incident fracture or >6 months were required for fractures occurring at the site as the initial fracture. The analysis focused on the prevalence of subsequent fractures and the costs between the two cohorts. A total 48,742 Medicare patients were included in the analysis with at least one non-vertebral fracture.<br/>
-                           
-                           •	Freemantle N, Cooper C, Diez-Perez A, Gitlin M, Radcliffe H, Shepherd S, et al. Results of indirect and mixed treatment comparison of fracture efficacy for osteoporosis treatments: a meta-analysis. Osteoporos Int. 2013;24(1):209–17. <br/>
-                           o	A secondary analysis of the literature with the aim of estimating the relative efficacy of osteoporosis treatment among postmenopausal women. The analysis used multiple techniques including meta-analysis, adjusted indirect comparison, and mixed treatment comparison [MTC]) to provide comparisons of the relative efficacy of postmenopausal osteoporosis therapies in the absence of comprehensive head-to-head trials. Evidence was identified from MEDLINE; EMBASE; Cochrane Central Register of Controlled Trials (CENTRAL) via Wiley Interscience; and Cumulative Index to Nursing and Allied Health Literature (CINAHL) between April 28, 2009 and November 4, 2009. The analyses included data from trials with fracture endpoints, including morphometric vertebral, clinical vertebral, non-vertebral, hip and wrist. A total of 33 studies were included in the final analysis and includes denosumab, strontium, raloxifene, teriparatide, zoledronic acid, alendronate, risedronate, etidronate, and ibandronate. <br/>
-                           
-                           •	United States Department of Labor, Bureau of Labor Statistics. Medicare Care CPI (Consumer Price Index) Data Tables. 2019. Available from: https://data.bls.gov/pdq/SurveyOutputServlet<br/> 
-                           o	A public database of CPI over time. The database provides national averages for medical care in the US for all urban consumers. These estimates are not seasonally adjusted. The medical care index is one of the eight major groups in the Consumer Price Index (CPI) and is divided into two main components: medical care services and medical care commodities, each containing several item categories. Medical care services, the larger component in terms of weight in the CPI, is organized into three categories: professional services, hospital and related services, and health insurance. Medical care commodities, the other major component, includes medicinal drugs and medical equipment and supplies.<br/>
-                           
-                           •	Durden E, Pinto L, Lopez-Gonzalez L, Juneau P, Barron R. Two-year persistence and compliance with osteoporosis therapies among postmenopausal women in a commercially insured population in the United States. Arch Osteoporos. 2017;12:22.<br/>
-                           o	A retrospective claims-based analysis was conducted in the Medicare and Commercial MarketScan databases to examine the 12 and 24-month persistence and compliance to osteoporosis therapies.  Patients enrolled were women ≥ 50 years old newly initiating osteoporosis therapy between January 1, 2012 to and December 31, 2012 and had continuous insurance eligibility for 14 months before and 24 months after their initial prescription. Persistence was defined as the absence of a > 60 day gap in continuous therapy. Therapies included in the analysis were injectable (denosumab, ibandronate,  teriparatide, zoledronic acid annual IV) and oral (alendronate, alendronate, ibandronate, raloxifene, risedronate) of varying dose frequencies. A total of 43,543 patients across Medicare and Commercial population were included and evaluated for persistence at 12 and 24 months of follow-up. <br/>
-                           
-                           •	Leader Jr. D, Williams SA, Curtis JR, Gut R. Osteoporosis-Related Fracture Events in the U.S (M19). AMCP Nexus; 2017 Oct 16; Dallas, TX, USA. S78.<br/>
-                           o	A retrospective analysis of 2015 Medicare claims data using the Medicare Standard Analytical File (SAF). In addition, commercial insurance estimates were built using the following sources of data: Medicare SAF Inpatient Claims, Health Care Cost Utilization Project, CMS Hospital, U.S. Census Bureau demographics by ZIP code, and commercial claims from several states. Fractures were estimated for  hip, clinical vertebral, wrist, and other skeletal sites associated with fractures that commonly occur in patients with osteoporosis. More than 2 million fractured in 2015, with women accounting for 70% of the fractures. <br/>
-                           
-                           •	King AB, Saag KG, Burge RT, Pisu M, Goel N. Fracture Reduction Affects Medicare Economics (FRAME): Impact of increased osteoporosis diagnosis and treatment. Osteoporos Int. 2005;16(12):1545–57.<br/>
-                           o	An economic model used to estimate the impact of increased diagnosis and treatment. The model was a Markov structure and was used to predict fracture incidence and costs among postmenopausal women ≥ 65 years old over a 3 year period (2001-2003). The primary outputs of the model were focused on estimating the budget impact of testing an additional 1 million women.  As part of the model, secondary evidence was used as inputs with a key input focused on the percentage of patients treated following a bone mineral density test. The rate of treatment was based on data from Medicare supplemental and retiree plans, specifically the MarketScan claims database. <br/>
-                           
-                           •	IBM Micromedex RED BOOK 2019.<br/>
-                           o	A subscription-based database summarizing various drug acquisition list prices by National Drug Code (NDC). The database is updated regularly providing different types of list prices including commonly cited prices such as wholesale acquisition cost (WAC) and average wholesale price (AWP). <br/>
-                           
-                           •	Center for Medicare and Medicaid Services (CMS) Physician Fee Schedule Current Procedural Terminology (CPT) payment rates. Access on March 29, 2019. https://www.cms.gov/apps/physician-fee-schedule/license-agreement.aspx <br/>
-                           o	A public database providing payment rate information from a Medicare perspective for physician services by CPT code. Payment rates are provided by state and nationally as well as breakdowns by facility and non-facility rates, including modifiers.<br/>
-                           
-                           •	Pike C, Birnbaum HG, Schiller M, Sharma H, Burge R, Edgell ET. Direct and indirect costs of non-vertebral fracture patients with osteoporosis in the US. PharmacoEconomics. 2010;28(5):395–409.<br/>
-                           o	A retrospective analysis of administrative claims from 1999 through 2006 of  privately-insured (ages 18–64 years) and Medicare (ages 65+ years) patients with ≥1 osteoporosis-related non-vertebral fracture were matched to osteoporosis controls without a fracture based on age, sex, employment status, and geographic location. The analysis focused on the healthcare resource use and cost stratified by perspective. For primary-insured patients only, indirect costs were estimated based on work loss. All costs were reported in 2006 US dollars and all costs are reported as incremental costs.  A total 48,742 Medicare patients and 4,764 privately-insured patients were included in the analysis with at least one non-vertebral fracture. Indirect costs were estimated among a subset of the population (n = 1,148) using disability data including employer payments for short- and long-term disability and days related to absenteeism separate from the disability days using employee’s daily wages. <br/>
-                           
-                           •	Vanness DJ, Tosteson ANA. Estimating the Opportunity Costs of Osteoporosis in the United States: Top Geriatr Rehabil. 2005;21(1):4–16. <br/>
-                           o	An observational study to estimate the economic consequences of osteoporosis, specifically opportunity cost in the United States. Opportunity costs count not only medical costs of treating osteoporotic fractures but also costs of screening and prevention, informal caregiving and osteoporosis-related research and development. Using evidence from other literature, specifically a study in Canada found that on average ~3 hours of additional informal caregiving time per week per patient were incurred. Using a human capital approach for estimating resource use, the average wage in 2002 was $9.16 per hour of caregiving time. All costs estimates are presented in 2004 US Dollars.  <br/>
-                           "))
-                    )
+                    p(HTML("The following studies were used in the economic model as model inputs or as source evidence used to inform model inputs. Other evidence was used to support model assumptions and such evidence are included as references but have not been summarized below.
+                           <ul>
+                            <li>Data on file, Amgen; [US Bend the Curve PMO Microsimulation; 2019] </li>
+                           <ul> 
+                            <li>This analysis uses an economic simulation model developed to assess the clinical and economic burden of osteoporotic fractures in the US with and without policy changes. The model takes a population perspective focused on women ≥ 65 years old. Multiple sources were utilized to develop the simulation and analysis including epidemiology, fracture risk factors, rate of fracture based on risk factors, DXA scanning and treatment rates, as well as direct and indirect fracture costs.</li>
+                            </ul>
+                             </ul>  
+                           <ul>
+                            <li>Centre for Metabolic Bone Diseases, University of Sheffield, UK. FRAX® Fracture Risk Assessment Tool. Available from: https://www.sheffield.ac.uk/FRAX/  </li>
+                           <ul>
+                            <li>The University of Sheffield launched the FRAX® tool in 2008. The FRAX® algorithms give the 10-year probability of fracture. The output is a 10-year probability of hip fracture and the 10-year probability of a major osteoporotic fracture (clinical spine, forearm, hip or shoulder fracture).The FRAX® model was developed from studying population-based cohorts from Europe, North America, Asia and Australia. The simplified tables that are publicly accessible are structured by geography and race. The US specific tables include Caucasian, Asian, black and Hispanic. All data tables are structured by fracture output and provided in 5-year age increments.</li>
+                           </ul>
+                              </ul>
+                           <ul>
+                            <li>Centers for Disease Control and Prevention. NHANES - National Health and Nutrition Examination Survey. Available from: https://www.cdc.gov/nchs/nhanes/ </li>
+                           <ul>
+                            <li>The National Health and Nutrition Examination Survey (NHANES) is a program designed to assess the health and nutritional status of adults and children in the United States. The NHANES data is based on interviews and physical examinations and includes demographic, socioeconomic, dietary, and health-related questions. The examination component consists of medical, dental, and physiological measurements, as well as laboratory tests administered by highly trained medical personnel. NHANES data were structured into datasets of 2 year with the 2013-2014 providing the most recent dataset available with all needed variables. In 2013-2014, 14,332 persons were selected from 30 different survey locations and 10,175 completed the interview and 9,813 were examined. </li>
+                            </ul>
+                              </ul>
+                           <ul>
+                            <li>Weaver J, Sajjan S, Lewiecki EM, Harris ST, Marvos P. Prevalence and Cost of Subsequent Fractures Among U.S. Patients with an Incident Fracture. J Manag Care Spec Pharm. 2017;23(4):461–71.</li>
+                           <ul>
+                            <li>A retrospective analysis of two large US administrative claims databases was conducted between 2007 and 2014. The analysis is based on the Humana Medicare Advantage and the Optum commercially insured populations. Medicare patients were included if they were ≥ 65 years old and commercial patients were included if they were ≥ 50 years old. Patients were included if they experienced a fracture with at least 1 year of insurance eligibility before and after the fracture date. Patients were stratified into two cohorts, including those who incurred 1 fracture and those who experience > 1 fracture (after a 3 month gap from index fracture) during the 12-month follow-up post the initial index fracture. Analysis of fracture costs was specific to direct medical (inpatient, outpatient, emergency department, long-term care, other services) and pharmacy costs. A total of 45,603 patients were included in the Medicare group. All costs were presented after 1:1 patient-level propensity score match of the two cohorts (n= 4,549 per cohort) based on facture site, year of fracture, gender. Region, employment status, race and Charlson comorbidity index.  All costs were reported in 2014 US dollars and all costs are reported as incremental costs. </li>
+                             </ul>
+                                </ul>
+                           <ul>
+                            <li>Colby, SL., Ortman, JM. Projections of the Size and Composition of the U.S. Population: 2014 to 2060. US Census Bur Wash DC. 2014 Mar; Current Population Reports, P25-1143:13. </li>
+                           <ul>
+                            <li>The census projections are for the US including all 50 states and the District of Columbia.  The projection estimates were produced using cohort-component methods ((births, deaths, and net international migration) based on the 2010 Census. These methods are based on methods similar to time series analysis.  Historical trends in mortality, fertility rates and net international migration were to is advance the population projection each year by using.  The 2014 National Projections, including summary tables, downloadable files, and methodology and assumptions, can be found at <www.census.gov /population/projections/data/national/2014.html>. </li>
+                             </ul>
+                              </ul>
+                           <ul>
+                            <li>Pike, CT, Birnbaum HG, Schiller M, Swallow E, Burge RT, Edgell ET. Prevalence and costs of osteoporotic patients with subsequent non-vertebral fractures in the US.  Osteoporos Int. 2011;22:2611–2621. </li>
+                           <ul>
+                            <li>A retrospective analysis of administrative claims from 1999 through 2006 of  privately-insured (ages 18–64 years) and Medicare (ages 65+ years) patients with ≥1 subsequent osteoporosis-related non-vertebral fracture within a year the initial non-vertebral fractures were included. Patients were matched to controls who experiences an initial non-vertebral fracture but no subsequent fractures. Subsequent fractures were included if occurring >3 months after the incident fracture or >6 months were required for fractures occurring at the site as the initial fracture. The analysis focused on the prevalence of subsequent fractures and the costs between the two cohorts. A total 48,742 Medicare patients were included in the analysis with at least one non-vertebral fracture.</li>
+                           </ul>
+                              </ul>
+                           <ul>
+                            <li>Freemantle N, Cooper C, Diez-Perez A, Gitlin M, Radcliffe H, Shepherd S, et al. Results of indirect and mixed treatment comparison of fracture efficacy for osteoporosis treatments: a meta-analysis. Osteoporos Int. 2013;24(1):209–17.</li>
+                           <ul>
+                            <li>A secondary analysis of the literature with the aim of estimating the relative efficacy of osteoporosis treatment among postmenopausal women. The analysis used multiple techniques including meta-analysis, adjusted indirect comparison, and mixed treatment comparison [MTC]) to provide comparisons of the relative efficacy of postmenopausal osteoporosis therapies in the absence of comprehensive head-to-head trials. Evidence was identified from MEDLINE; EMBASE; Cochrane Central Register of Controlled Trials (CENTRAL) via Wiley Interscience; and Cumulative Index to Nursing and Allied Health Literature (CINAHL) between April 28, 2009 and November 4, 2009. The analyses included data from trials with fracture endpoints, including morphometric vertebral, clinical vertebral, non-vertebral, hip and wrist. A total of 33 studies were included in the final analysis and included postmenopausal osteoporosis treatments used in model currently approved in US as of November 4, 2009. </li>
+                            </ul>
+                              </ul>
+                           <ul>
+                            <li>United States Department of Labor, Bureau of Labor Statistics. Medicare Care CPI (Consumer Price Index) Data Tables. 2019. Available from: https://data.bls.gov/pdq/SurveyOutputServlet</li>
+                           <ul>
+                            <li>A public database of CPI over time. The database provides national averages for medical care in the US for all urban consumers. These estimates are not seasonally adjusted. The medical care index is one of the eight major groups in the Consumer Price Index (CPI) and is divided into two main components: medical care services and medical care commodities, each containing several item categories. Medical care services, the larger component in terms of weight in the CPI, is organized into three categories: professional services, hospital and related services, and health insurance. Medical care commodities, the other major component, includes medicinal drugs and medical equipment and supplies.</li>
+                            </ul>
+                              </ul>
+                           <ul>
+                            <li>Durden E, Pinto L, Lopez-Gonzalez L, Juneau P, Barron R. Two-year persistence and compliance with osteoporosis therapies among postmenopausal women in a commercially insured population in the United States. Arch Osteoporos. 2017;12:22.</li>
+                           <ul>
+                            <li>A retrospective claims-based analysis was conducted in the Medicare and Commercial MarketScan databases to examine the 12 and 24-month persistence and compliance to osteoporosis therapies. Patients enrolled were women ≥ 50 years old newly initiating osteoporosis therapy between January 1, 2012 to and December 31, 2012 and had continuous insurance eligibility for 14 months before and 24 months after their initial prescription. Persistence was defined as the absence of a > 60 day gap in continuous therapy. Therapies included in the analysis were injectable and oral prescription drug therapies approved for postmenopausal osteoporosis as of December 31, 2012 of varying dose frequencies. A total of 43,543 patients across Medicare and Commercial population were included and evaluated for persistence at 12 and 24 months of follow-up. Adherence rates were applied to therapies as a group. Individual drug adherence rates may vary depending on therapy.</li>
+                            </ul>
+                              </ul>
+                           <ul>
+                            <li>Leader Jr. D, Williams SA, Curtis JR, Gut R. Osteoporosis-Related Fracture Events in the U.S (M19). AMCP Nexus; 2017 Oct 16; Dallas, TX, USA. S78.</li>
+                           <ul>
+                            <li>A retrospective analysis of 2015 Medicare claims data using the Medicare Standard Analytical File (SAF). In addition, commercial insurance estimates were built using the following sources of data: Medicare SAF Inpatient Claims, Health Care Cost Utilization Project, CMS Hospital, U.S. Census Bureau demographics by ZIP code, and commercial claims from several states. Fractures were estimated for  hip, clinical vertebral, wrist, and other skeletal sites associated with fractures that commonly occur in patients with osteoporosis. More than 2 million fractured in 2015, with women accounting for 70% of the fractures.</li>
+                            </ul>
+                              </ul>
+                           <ul>
+                            <li>King AB, Saag KG, Burge RT, Pisu M, Goel N. Fracture Reduction Affects Medicare Economics (FRAME): Impact of increased osteoporosis diagnosis and treatment. Osteoporos Int. 2005;16(12):1545–57.</li>
+                           <ul>
+                            <li>An economic model used to estimate the impact of increased diagnosis and treatment. The model was a Markov structure and was used to predict fracture incidence and costs among postmenopausal women ≥ 65 years old over a 3 year period (2001-2003). The primary outputs of the model were focused on estimating the budget impact of testing an additional 1 million women.  As part of the model, secondary evidence was used as inputs with a key input focused on the percentage of patients treated following a bone mineral density test. The rate of treatment was based on data from Medicare supplemental and retiree plans, specifically the MarketScan claims database.</li>
+                            </ul>
+                              </ul>
+                           <ul>
+                            <li>IBM Micromedex RED BOOK 2019.</li>
+                           <ul>
+                            <li>A subscription-based database summarizing various drug acquisition list prices by National Drug Code (NDC). The database is updated regularly providing different types of list prices including commonly cited prices such as wholesale acquisition cost (WAC) and average wholesale price (AWP).  This economic model evaluates treatment costs based on listed WAC price as of March 2019. Note that WAC price reflects the price offered to wholesalers and does not take into account discounts, rebates, or other price concessions that may ultimately affect the net price. In addition, WAC price is subject to change at any time.</li>
+                            </ul>
+                              </ul>
+                           <ul>
+                            <li>Center for Medicare and Medicaid Services (CMS) Physician Fee Schedule Current Procedural Terminology (CPT) payment rates. Access on March 29, 2019. https://www.cms.gov/apps/physician-fee-schedule/license-agreement.aspx</li>
+                           <ul>
+                            <li>A public database providing payment rate information from a Medicare perspective for physician services by CPT code. Payment rates are provided by state and nationally as well as breakdowns by facility and non-facility rates, including modifiers.</li>
+                            </ul>
+                              </ul>
+                           <ul>
+                            <li>Pike C, Birnbaum HG, Schiller M, Sharma H, Burge R, Edgell ET. Direct and indirect costs of non-vertebral fracture patients with osteoporosis in the US. PharmacoEconomics. 2010;28(5):395–409.</li>
+                           <ul>
+                            <li>A retrospective analysis of administrative claims from 1999 through 2006 of  privately-insured (ages 18–64 years) and Medicare (ages 65+ years) patients with ≥1 osteoporosis-related non-vertebral fracture were matched to osteoporosis controls without a fracture based on age, sex, employment status, and geographic location. The analysis focused on the healthcare resource use and cost stratified by perspective. For primary-insured patients only, indirect costs were estimated based on work loss. All costs were reported in 2006 US dollars and all costs are reported as incremental costs.  A total 48,742 Medicare patients and 4,764 privately-insured patients were included in the analysis with at least one non-vertebral fracture. Indirect costs were estimated among a subset of the population (n = 1,148) using disability data including employer payments for short- and long-term disability and days related to absenteeism separate from the disability days using employee’s daily wages.</li>
+                            </ul>
+                              </ul>
+                           <ul>
+                            <li>Vanness DJ, Tosteson ANA. Estimating the Opportunity Costs of Osteoporosis in the United States: Top Geriatr Rehabil. 2005;21(1):4–16.</li>
+                           <ul>
+                            <li>An observational study to estimate the economic consequences of osteoporosis, specifically opportunity cost in the United States. Opportunity costs count not only medical costs of treating osteoporotic fractures but also costs of screening and prevention, informal caregiving and osteoporosis-related research and development. Using evidence from other literature, specifically a study in Canada found that on average ~3 hours of additional informal caregiving time per week per patient were incurred. Using a human capital approach for estimating resource use, the average wage in 2002 was $9.16 per hour of caregiving time. All costs estimates are presented in 2004 US Dollars.</li>
+                            </ul>
+                              </ul>
+                           <ul>
+                            <li>Imaz I, Zegarra P, González-Enríquez J, Rubio B, Alcazar R, Amate JM. Poor bisphosphonate adherence for treatment of osteoporosis increases fracture risk: systematic review and meta-analysis. Osteoporos Int. 2010 Nov;21(11):1943–51.</li>
+                           <ul>
+                            <li>A secondary analysis of the literature with the aim of estimating the persistence and compliance with bisphosphonates for the treatment of osteoporotic patients, and to estimate the influence of compliance on fracture risk. A systematic and  meta-analysis of was conducted on a total of 15 articles for 704,134 patients.</li>
+                            </ul>
+                              </ul>
+                           <ul>
+                            <li>Lewiecki EM, Adler R, Curtis J, Gagel R, Saag K, Singer A, et al. Hip Fractures and Declining DXA Testing: At a Breaking Point? J Bone Miner Res. 2016 Sep;31(S1):S1–411.</li>
+                           <ul>
+                            <li>A retrospective analysis by Leader et al 2017 of 2015 Medicare claims data using the Medicare Standard Analytical File (SAF). In addition, commercial insurance estimates were built using the following sources of data: Medicare SAF Inpatient Claims, Health Care Cost Utilization Project, CMS Hospital, U.S. Census Bureau demographics by ZIP code, and commercial claims from several states. Fractures were estimated for  hip, clinical vertebral, wrist, and other skeletal sites associated with fractures that commonly occur in patients with osteoporosis. More than 2 million fractured in 2015, with women accounting for 70% of the fractures.</li>
+                            </ul>
+                              </ul>
+                           ")) 
+                    ),
+                  tags$style(HTML("
+                                     #study_desc {
+                                     padding-left: 1%;
+                                     font-size:   12pt;
+                                     line-height: 12pt;
+          }
+    "))
                     ),
                 
                 tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
                 
                     ),
-        tabItem(tabName = "Terms",
-                fluidRow(
-                  width = NULL, background = "black"),
-                h3("Bending the Curve: The Estimated Long-Term Value of Improving Patient Identification and Treatment in Post-Menopausal Osteoporosis", align = "center"),
-                fluidRow(
-                  boxPlus(
-                    width = 12,
-                    title = "Abbreviations",
-                    closable = FALSE, status = "warning", solidHeader = TRUE, collapsible = TRUE,
-                    fluidRow(
-                      column(width = 4, tags$b("ABBREVIATED FORM")),
-                      column(width = 8, tags$b("FULL FORM"))),
-                    fluidRow(column(width = 4, tags$ul(
-                      lapply(1:nrow(abbreviations), function(x) {
-                        return(tags$li(abbreviations$abbrev[x]))
-                      })
-                    )),
-                    column(width = 8, tags$ul(
-                      lapply(1:nrow(abbreviations), function(x) {
-                        return(tags$li(abbreviations$full[x]))
-                      })
-                    )))
-                  )
-                ),
-                
-                tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")            ),
+        # tabItem(tabName = "Terms",
+        #         fluidRow(
+        #           width = NULL, background = "black"),
+        #         h3("Bending the Curve: The Estimated Long-Term Value of Improving Patient Identification and Treatment in Post-Menopausal Osteoporosis", align = "center"),
+        #         fluidRow(
+        #           boxPlus(
+        #             width = 12,
+        #             title = "Abbreviations",
+        #             closable = FALSE, status = "warning", solidHeader = TRUE, collapsible = TRUE,
+        #             fluidRow(
+        #               column(width = 4, tags$b("ABBREVIATED FORM")),
+        #               column(width = 8, tags$b("FULL FORM"))),
+        #             fluidRow(column(width = 4, tags$ul(
+        #               lapply(1:nrow(abbreviations), function(x) {
+        #                 return(tags$li(abbreviations$abbrev[x]))
+        #               })
+        #             )),
+        #             column(width = 8, tags$ul(
+        #               lapply(1:nrow(abbreviations), function(x) {
+        #                 return(tags$li(abbreviations$full[x]))
+        #               })
+        #             )))
+        #           )
+        #         ),
+        #         
+        #         tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")            ),
+        
         tabItem(tabName = "References",
                 fluidRow(
                   width = NULL, background = "black"),
@@ -614,7 +801,7 @@ fluidPage(
                   boxPlus(
                     width = 12,
                     title = "References",
-                    closable = FALSE, status = "warning", solidHeader = TRUE, collapsible = TRUE, collapsed = FALSE,
+                    closable = FALSE, status = "warning", solidHeader = TRUE, collapsible = TRUE, collapsed = TRUE,
                     fluidRow(column(width = 12, tags$ul(
                       lapply(1:nrow(references), function(x) {
                         return(tags$li(references$refs[x]))
