@@ -614,7 +614,7 @@ fluidPage(
                   boxPlus(
                     width = 12,
                     title = "References",
-                    closable = FALSE, status = "warning", solidHeader = TRUE, collapsible = TRUE, collapsed = TRUE,
+                    closable = FALSE, status = "warning", solidHeader = TRUE, collapsible = TRUE, collapsed = FALSE,
                     fluidRow(column(width = 12, tags$ul(
                       lapply(1:nrow(references), function(x) {
                         return(tags$li(references$refs[x]))
