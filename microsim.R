@@ -31,6 +31,7 @@ index <- which(age_probabilities$Year == year)
 age_prob <- c(age_probabilities[index,2:37])
 
 # Population Size - THIS VALUE IS CURRENTLY FIXED, IT WILL NOT CHANGE WITH UI INPUTS
+population_size <- POP
 if(POP < 100000){
   population_size <- POP
   EXTRAPOLATION_FACTOR <- 1.0
