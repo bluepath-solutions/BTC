@@ -927,10 +927,10 @@ output$totalfxr_content <- renderText({
   duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
   for(i in 1:duration) {
     total_frax <- total_frax + (base_case[[i]]$total_fractures_s1 - base_case[[i]]$total_fractures)}
-  formatted_fxrs <- formatC(round(total_frax), format = 'd', big.mark=',')
+  formatted_fxrs <- formatC(abs(round(total_frax)), format = 'd', big.mark=',')
   paste("The total number of fractures is estimated to ", 
                                             ifelse(total_frax > 0, "increase by ", "decrease by "), 
-                                             abs(formatted_fxrs), 
+                                             formatted_fxrs, 
                                              " during the years 2018-", inp_year, sep = "", collapse = NULL)
                                             })
 output$totalcost_content <- renderText({
