@@ -29,6 +29,13 @@ function(input, output, session) {
   )
   
   observeEvent(
+    input[['Id_enter']],
+    {
+      updateTabItems(session, 'tabs', 'Overview')
+    }
+  )
+  
+  observeEvent(
     input[["Previous"]],
     {
       tab_id_position <- match(Current$Tab, tab_id) - 1
@@ -952,7 +959,7 @@ output$FraxBox_R <- renderInfoBox({
   for(i in 1:duration) {
     total_frax <- total_frax + (base_case[[i]]$total_fractures_s1 - base_case[[i]]$total_fractures)
   }
-  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Results in Fracture Incidence Increasing", "Efforts to Improve PMO Management Results in Fracture Incidence Decreasing")
+  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Fracture Incidence Increasing", "Efforts to Improve PMO Management Result in Fracture Incidence Decreasing")
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
   title_text <- paste("Change in Fracture Occurrence, 2018-", inp_year, sep = "", collapse = NULL)
@@ -970,9 +977,9 @@ output$CostBox_R <- renderInfoBox({
   total_frax_cost <- (0)
   duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
   for(i in 1:duration) {
-    total_frax_cost <- (total_frax_cost) + ((base_case[[i]]$grand_total_s1/1000000) - (base_case[[i]]$grand_total/1000000))
+    total_frax_cost <- (total_frax_cost) + (base_case[[i]]$grand_total_s1 - base_case[[i]]$grand_total)
   }
-  subtitle_text <- ifelse(total_frax_cost > 0, "Efforts to Improve PMO Management Results in Cost Increases ($MM)", "Efforts to Improve PMO Management Results in Cost Decreases ($MM)")
+  subtitle_text <- ifelse(total_frax_cost > 0, "Efforts to Improve PMO Management Result in Cost Increases", "Efforts to Improve PMO Management Result in Cost Decreases")
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
   title_text <- paste("Change in Total Costs, 2018-", inp_year, sep = "", collapse = NULL)
@@ -992,7 +999,7 @@ output$FraxBox <- renderInfoBox({
   for(i in 1:duration) {
     total_frax <- total_frax + (base_case[[i]]$total_fractures_s1 - base_case[[i]]$total_fractures)
   }
-  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Results in Fracture Incidence Increasing", "Efforts to Improve PMO Management Results in Fracture Incidence Decreasing")
+  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Fracture Incidence Increasing", "Efforts to Improve PMO Management Results in Fracture Incidence Decreasing")
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
   title_text <- paste("Change in Fracture Occurrence, 2018-", inp_year, sep = "", collapse = NULL)
@@ -1010,10 +1017,10 @@ output$CostBox <- renderInfoBox({
   total_frax_cost <- (0)
   duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
   for(i in 1:duration) {
-    total_frax_cost <- (total_frax_cost) + ((base_case[[i]]$grand_total_s1/1000000) - (base_case[[i]]$grand_total/1000000))
+    total_frax_cost <- (total_frax_cost) + (base_case[[i]]$grand_total_s1 - base_case[[i]]$grand_total)
   }
   print(total_frax_cost)
-  subtitle_text <- ifelse(total_frax_cost > 0, "Efforts to Improve PMO Management Results in Cost Increases ($MM)", "Efforts to Improve PMO Management Results in Cost Decreases ($MM)")
+  subtitle_text <- ifelse(total_frax_cost > 0, "Efforts to Improve PMO Management Result in Cost Increases", "Efforts to Improve PMO Management Result in Cost Decreases")
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
   title_text <- paste("Change in Total Costs, 2018-", inp_year, sep = "", collapse = NULL)
@@ -1166,4 +1173,4 @@ outputOptions(output, 'CostBox_R', priority = 0)
 }
 
 
-# left in width = NULL#3, sophie's version has width = 6#3. Not sure yet what this is doing.
+
