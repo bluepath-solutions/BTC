@@ -999,7 +999,7 @@ output$FraxBox <- renderInfoBox({
   for(i in 1:duration) {
     total_frax <- total_frax + (base_case[[i]]$total_fractures_s1 - base_case[[i]]$total_fractures)
   }
-  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Fracture Incidence Increasing", "Efforts to Improve PMO Management Results in Fracture Incidence Decreasing")
+  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Fracture Incidence Increasing", "Efforts to Improve PMO Management Result in Fracture Incidence Decreasing")
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
   title_text <- paste("Change in Fracture Occurrence, 2018-", inp_year, sep = "", collapse = NULL)
