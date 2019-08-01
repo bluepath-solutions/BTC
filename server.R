@@ -837,7 +837,7 @@ sim_data <- reactive({
   progressB <- function() progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/(end_year - start_year), detail = "Preparing Plot")
   opts <- list(progress = progressB)
   # Utilize parallelization to increase speed
-  return(foreach(i=start_year:end_year,
+  return(foreach(i=start_year:2040,
                               .packages = c('readxl',
                                             'hashmap',
                                             'data.table'),
