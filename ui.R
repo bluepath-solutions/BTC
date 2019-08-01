@@ -545,9 +545,27 @@ fluidPage(
                           closable = FALSE, status = "info", solidHeader = FALSE, collapsible = TRUE, width = 7,
                           p(textOutput('totalcost_content'))
                   ),
-                  column(width=5,infoBoxOutput("CostBox"),tags$style("#CostBox {width:100%; word-break: keep-all; overflow-wrap: anywhere;}"))
-                  )
-                ,
+
+                  infoBoxOutput("CostBox")),
+                fluidRow(
+                  boxPlus(title = "Base Case Fracture Reccurence", 
+                          closable = FALSE, status = "warning", solidHeader = FALSE, collapsible = TRUE, width = 8,
+                          p(textOutput('reocc_text_1'))
+                  ),
+                  infoBoxOutput("FractureReoccurence")),
+                fluidRow(
+                  boxPlus(title = "Base Case Fracture Risk Ratio", 
+                          closable = FALSE, status = "warning", solidHeader = FALSE, collapsible = TRUE, width = 8,
+                          p(textOutput('fracture_risk_text'))
+                  ),
+                  infoBoxOutput("FractureRatio")),
+                fluidRow(
+                  boxPlus(title = "New Scenario Fracture Risk Ratio", 
+                          closable = FALSE, status = "warning", solidHeader = FALSE, collapsible = TRUE, width = 8,
+                          p(textOutput('fracture_risk_text_s1'))
+                  ),
+                  infoBoxOutput("FractureRatioS1")),
+
                 fluidRow(
                   boxPlus(title = "Thank you for visiting.", 
                           closable = FALSE, status = "info", solidHeader = FALSE, collapsible = TRUE, width = 12,
