@@ -1,4 +1,3 @@
-#setwd("C:/Users/Sophie Snyder/Documents/R/BTC4") #Set up a working directory
 
 library(aws.signature)
 library(digest)
@@ -7,6 +6,7 @@ library(dplyr)
 library(lubridate)
 library(ggplot2)
 library(ggvis)
+library(gganimate)
 library(hashmap)
 library(htmlwidgets)
 library(magrittr)
@@ -41,7 +41,7 @@ cl <- makeCluster(detectCores() - 1)
 registerDoSNOW(cl)
 
 
-tab_id <- c("Overview", "Pop_Inputs", "ClinEcon_Inputs", "Scenarios", "Results", "Assumptions", "Break", "Disclosures", "Terms", "References")
+tab_id <- c("Overview", "Mechanics", "Pop_Inputs", "ClinEcon_Inputs", "Scenarios", "Results", "Assumptions", "Break", "Disclosures", "Terms", "References")
 
 NUM_PAGES <- length(tab_id) + 1
 
