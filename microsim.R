@@ -18,6 +18,7 @@ microsim <- function(POP, CAUC, HISP, ASIAN, BLACK, BMD_MEAN, BMD_SD, RA_INP,
                      COSTLTC1, COSTLTC2, COSTED1, COSTED2, COSTOTHER1, COSTOTHER2,
                      COSTPHARM1, COSTPHARM2, COSTPROD1, COSTPROD2, COSTCARE1,
                      COSTCARE2, YEAR, CASE) {
+
 # Setup Hashmap for lookups    
 id_to_frax_hash <- hashmap(ID_lookup$ID, ID_lookup$`FRAX- HIP`)
 MAX_HIP_FRACTURE_RATE <- max(ID_lookup$`FRAX- HIP`)
@@ -212,7 +213,7 @@ risk_factor_index <- getRiskFactorIndex(population_size,
                                        risk_factor_prob)
 
 
-index <- as.integer(age_index + race_index + bmd_index + risk_factor_index$risk_factor_index)
+index <- as.integer(age_index + race_index + bmd_index + risk_factor_index)
 
 # This is where index scores are assigned
 # THIS IS THE MOST TIME CONSUMING STEP
@@ -283,26 +284,6 @@ other_fracture <- ifelse(!any_fracture,
 other_fracture_s1 <- ifelse(!any_fracture_s1,
                             F,
                             !hip_fracture_s1)
-
-fracture_given_previous_fractures <- risk_factor_index$prev_fracture_incidence & 
-                                            ( hip_fracture | other_fracture )
-
-fracture_given_previous_fractures_s1 <- risk_factor_index$prev_fracture_incidence & 
-                                            ( hip_fracture_s1 | other_fracture_s1 )
-
-fracture_given_no_previous_fractures <- (!risk_factor_index$prev_fracture_incidence) & 
-                                            ( hip_fracture | other_fracture )
-
-fracture_given_no_previous_fractures_s1 <- (!risk_factor_index$prev_fracture_incidence) & 
-                                            ( hip_fracture_s1 | other_fracture_s1 )
-
-
-
-prob_fracture_given_previous_fractures <- sum(fracture_given_previous_fractures)/sum(risk_factor_index$prev_fracture_incidence)
-prob_fracture_given_previous_fractures_s1 <- sum(fracture_given_previous_fractures_s1)/sum(risk_factor_index$prev_fracture_incidence)
-
-prob_fracture_given_no_previous_fractures <- sum(fracture_given_no_previous_fractures)/sum(!risk_factor_index$prev_fracture_incidence)
-prob_fracture_given_no_previous_fractures_s1 <- sum(fracture_given_no_previous_fractures_s1)/sum(!risk_factor_index$prev_fracture_incidence)
 
 # Use hip and other fracture data to extrapolate to other types of fractures
 # There is excessive extrapolation here, but it follows the model.
@@ -459,16 +440,23 @@ financial_data_s1 <- data.frame(total_dxa_cost_s1, total_med_cost_s1, total_inpa
                              total_caregiver_losses_s1, total_direct_cost_s1, total_indirect_cost_s1, 
                              grand_total_s1)
 
+noisy_sbsqnt_rate <- rnorm(1, mean = .1843393, sd = .003325)
+prevFracData <- data.frame(total_frac = total_hip*(1 + HIP_FRACTURE_RATIO),
+                           # do total_frac*rnorm(.226) and do calculation with total_frac_from_hip 
+                           n_sbsqnt = total_fractures*noisy_sbsqnt_rate,
+                           total_frac_s1 = total_hip_s1*(1 + HIP_FRACTURE_RATIO),
+                           n_sbsqnt_s1 = total_fractures_s1*noisy_sbsqnt_rate)
+prevFracData$first_fracs <- prevFracData$total_frac - prevFracData$n_sbsqnt
+prevFracData$first_fracs_s1 <- prevFracData$total_frac_s1 - prevFracData$n_sbsqnt_s1
 
-prob_data <- data.frame(prob_fracture_given_previous_fractures, prob_fracture_given_no_previous_fractures)
-prob_data_s1 <- data.frame(prob_fracture_given_previous_fractures_s1, prob_fracture_given_no_previous_fractures_s1)
+packaged_data <- data.frame(clinical_data, prevFracData, financial_data, clinical_data_s1, financial_data_s1)
 
+## look at number of current fractures that had a previous fracture
+#n_frac_w_prevFrac <- sum(prevFractures + any_fracture == 2)
+#paste0('number of fractures in', year, 'that had previous fractures:', n_frac_w_prevFrac)
 
-packaged_data <- data.frame(clinical_data, financial_data, clinical_data_s1, financial_data_s1, prob_data, prob_data_s1)*EXTRAPOLATION_FACTOR
-packaged_data$prob_fracture_given_previous_fractures <- packaged_data$prob_fracture_given_previous_fractures*(1/EXTRAPOLATION_FACTOR)
-packaged_data$prob_fracture_given_previous_fractures_s1 <- packaged_data$prob_fracture_given_previous_fractures_s1*(1/EXTRAPOLATION_FACTOR)
-packaged_data$prob_fracture_given_no_previous_fractures <- packaged_data$prob_fracture_given_no_previous_fractures*(1/EXTRAPOLATION_FACTOR)
-packaged_data$prob_fracture_given_no_previous_fractures_s1 <- packaged_data$prob_fracture_given_no_previous_fractures_s1*(1/EXTRAPOLATION_FACTOR)
-return(packaged_data)
+return_data <- packaged_data*EXTRAPOLATION_FACTOR
+return_data$percent_subsequent <- return_data$n_sbsqnt/return_data$first_fracs
+
+return(return_data)
 }
-
