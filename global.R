@@ -1,7 +1,6 @@
 
 library(aws.signature)
 library(digest)
-library(poibin)
 library(doParallel)
 library(dplyr)
 library(lubridate)
