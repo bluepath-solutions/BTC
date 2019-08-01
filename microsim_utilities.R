@@ -135,13 +135,17 @@ getRiskFactorIndex <- function(POPULATION_SIZE,
                                   replace=TRUE,
                                   prob=c(1-FACTOR_PROBABILITIES[i], FACTOR_PROBABILITIES[i]))
     } else {
-      risk_factor_index = risk_factor_index + sample(0:1, 
-                                                     size=POPULATION_SIZE,
-                                                     replace=TRUE,
-                                                     prob=c(1-FACTOR_PROBABILITIES[i], FACTOR_PROBABILITIES[i]))   
+      new_factor = sample(0:1, 
+                          size=POPULATION_SIZE,
+                          replace=TRUE,
+                          prob=c(1-FACTOR_PROBABILITIES[i], FACTOR_PROBABILITIES[i])) 
+      risk_factor_index = risk_factor_index + new_factor
+      if (i == 2) {
+        prev_fracture_incidence = new_factor
+      }
     }
   }
-  return(risk_factor_index)
+  return(list("risk_factor_index" = risk_factor_index, "prev_fracture_incidence" = prev_fracture_incidence))
 }
 
 # getRiskFactors
