@@ -30,6 +30,7 @@ index <- which(age_probabilities$Year == year)
 age_prob <- c(age_probabilities[index,2:37])
 
 # Population Size - THIS VALUE IS CURRENTLY FIXED, IT WILL NOT CHANGE WITH UI INPUTS
+population_size <- POP
 if(POP < 100000){
   population_size <- POP
   EXTRAPOLATION_FACTOR <- 1.0
@@ -77,9 +78,9 @@ dxa_prob_s1 <- S1ID
 med_base_prob_s1 <- S1TX
 # Treatment Mix - THIS IS NOT DYNAMIC
 treatment_mix <-c(0.439, # Alendronate  PRIMARY (BISPHOSPHONATES?)
-                  0.061,  # Ibandronate 150 MG
+                  0.031,  # Ibandronate 150 MG
                   0.03,  # Risedronate
-                  0.0,  # Ibandronate IV
+                  0.03,  # Ibandronate IV
                   0.093,  # Zoledronic   PRIMARY
                   0.292, # Denosumab    PRIMARY
                   0.0,  # Conjugated Estrogens/Bazedoxifene
@@ -90,15 +91,15 @@ treatment_mix <-c(0.439, # Alendronate  PRIMARY (BISPHOSPHONATES?)
 
 # Monthly Costs
 treatment_monthly_cost <-c(10.00,  # Alendronate PRIMARY 10.00
-                           14.17,  # Ibandronate 150 MG
-                           118.50, # Risedronate
+                           28.33,  # Ibandronate 150 MG
+                           212.54, # Risedronate
                            80.00,  # Ibandronate IV
                            18.75,  # Zoledronic  PRIMARY
-                           195.62, # Denosumab   PRIMARY
-                           158.84, # Conjugated Estrogens/Bazedoxifene
+                           203.18, # Denosumab   PRIMARY
+                           176.79, # Conjugated Estrogens/Bazedoxifene
                            69.30,  # Raloxifene
-                           2997.90,# Forteo 
-                           1625.00)# Tymlos
+                           3426.50,# Forteo 
+                           1822.41)# Tymlos
 
 treatment_efficacy_hip <- c(0.65, # Alendronate Primary
                             0.73, # Ibandronate 150 MG
@@ -111,21 +112,22 @@ treatment_efficacy_hip <- c(0.65, # Alendronate Primary
                             0.25, # Forteo
                             0.41) # Tymlos
 
-treatment_efficacy_other <- c(0.66, # Aledronate Primary
-                              0.72, # Ibandronate 150 MG
-                              0.71, # Risedronate
-                              0.55, # Ibandronate IV
-                              0.47, # Zoledronic
+treatment_efficacy_other <- c(0.67, # Aledronate Primary
+                              0.68, # Ibandronate 150 MG
+                              0.70, # Risedronate
+                              0.54, # Ibandronate IV
+                              0.43, # Zoledronic
                               0.58, # Denosumab
                               0.59, # Conjugated Estrogens/Bazedoxifene
                               0.59, # Raloxifene
-                              0.34, # Forteo
-                              0.34) # Tymlos
+                              0.37, # Forteo
+                              0.37) # Tymlos
 
 # CONSTANTS
 
 risk_factor_prob <- c(rheu_arth_prob, prev_fracture_prob, hist_fracture_prob,
                       smoker_prob, alcohol_prob, gluco_prob)
+risk_names <- c('arthritis', 'prevFrac', 'parentFrac', 'smoker', 'alcohol', 'gluco')
 
 MEDICATION_COST <- treatment_mix %*% treatment_monthly_cost
 HIP_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_hip * MEDICATION_ADHERENCE +
@@ -196,8 +198,18 @@ bmd_index <- getBMDIndex(population_size,
                          bmd_cutoffs,
                          bmd_index_scores
 )
+
+## detailed risk assignment ####
+# riskTable <- getRiskFactors(population_size, risk_factor_prob, risk_names)
+# # n_prev_frac <- riskTable[, sum(prevFrac)] # can be used to count number of patients assigned prevFrac = 1
+# 
+# prevFractures <- riskTable[, prevFrac]
+# risk_factor_index <- countPatientRiskFactorIndex(riskTable)
+# rm(riskTable)
+#####
+
 risk_factor_index <- getRiskFactorIndex(population_size,
-                                        risk_factor_prob)
+                                       risk_factor_prob)
 
 
 index <- as.integer(age_index + race_index + bmd_index + risk_factor_index$risk_factor_index)
@@ -224,12 +236,12 @@ dxa_scans_s1 <- getDXAScans(population_size,
                             dxa_prob_s1) 
 
 
-med_patients <- getMedPatients(population_size,
+med_patients <- getMedPatients(#population_size,
                                frax_major,
                                med_base_prob,
                                year)
 
-med_patients_s1 <- getMedPatients(population_size,
+med_patients_s1 <- getMedPatients(#population_size,
                                frax_major,
                                med_base_prob_s1,
                                year)
@@ -244,7 +256,7 @@ any_fracture <- getFracture(med_patients,
                             samples)
 
 any_fracture_s1 <- getFracture(med_patients_s1,
-                            ANY_FRACTURE_AVERAGE,
+                            ANY_FRACTURE_AVERAGE, 
                             frax_major,
                             samples)
 
@@ -263,6 +275,10 @@ hip_fracture_s1 <- getFracture(med_patients_s1,
 other_fracture <- ifelse(!any_fracture,
                          F,
                          !hip_fracture)
+## this is saying if you had any_fracture and it was a hip, no other_fracture.
+## if you had any_fracture, and it was not a hip, other_fracture.
+## if you did not have any_fracture, then you did not have other_fracture.
+
 
 other_fracture_s1 <- ifelse(!any_fracture_s1,
                             F,
@@ -308,12 +324,16 @@ total_forearm_s1 <- fracture_breakdown[3] * total_other_fracture_s1* MULTI_FRACT
 
 total_other <- HIP_FRACTURE_RATIO * total_hip - total_shoulder - total_vertebral - total_forearm
 total_fractures <- total_hip + total_shoulder + total_vertebral + total_forearm + total_other
+# total_fractures is equivalent to (1 + HIP_FRACTURE_RATIO)*total_hip
 
 total_other_s1 <- HIP_FRACTURE_RATIO * total_hip_s1 - total_shoulder_s1 - total_vertebral_s1 - total_forearm_s1
 total_fractures_s1 <- total_hip_s1 + total_shoulder_s1 + total_vertebral_s1 + total_forearm_s1 + total_other_s1
 
 # End of Clinical Data, Beginning of Financial Data
 # Calculate Costs
+
+
+# the 6 + 6*med_adhere is from the excel model
 
 total_dxa_cost <- sum(dxa_scans) * dxa_cost* weird_coefficient[year-2013]
 total_med_cost <- sum(med_patients) * MEDICATION_COST * (6 + 6*MEDICATION_ADHERENCE) * weird_coefficient[year-2013]
@@ -420,7 +440,7 @@ total_indirect_cost_s1 <- total_productivity_losses_s1 + total_caregiver_losses_
 grand_total <- total_direct_cost + total_indirect_cost
 grand_total_s1 <- total_direct_cost_s1 + total_indirect_cost_s1
 
-
+## put data frames together
 clinical_data <- data.frame(total_hip, total_shoulder, total_vertebral, 
                             total_forearm, total_other, total_fractures)
 
@@ -439,6 +459,7 @@ financial_data_s1 <- data.frame(total_dxa_cost_s1, total_med_cost_s1, total_inpa
                              total_caregiver_losses_s1, total_direct_cost_s1, total_indirect_cost_s1, 
                              grand_total_s1)
 
+
 prob_data <- data.frame(prob_fracture_given_previous_fractures, prob_fracture_given_no_previous_fractures)
 prob_data_s1 <- data.frame(prob_fracture_given_previous_fractures_s1, prob_fracture_given_no_previous_fractures_s1)
 
@@ -450,3 +471,4 @@ packaged_data$prob_fracture_given_no_previous_fractures <- packaged_data$prob_fr
 packaged_data$prob_fracture_given_no_previous_fractures_s1 <- packaged_data$prob_fracture_given_no_previous_fractures_s1*(1/EXTRAPOLATION_FACTOR)
 return(packaged_data)
 }
+

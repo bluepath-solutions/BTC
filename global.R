@@ -1,4 +1,3 @@
-#setwd("C:/Users/Sophie Snyder/Documents/R/BTC4") #Set up a working directory
 
 library(aws.signature)
 library(digest)
@@ -8,6 +7,7 @@ library(dplyr)
 library(lubridate)
 library(ggplot2)
 library(ggvis)
+library(gganimate)
 library(hashmap)
 library(htmlwidgets)
 library(magrittr)
@@ -32,18 +32,17 @@ library(snow)
 library(doSNOW)
 library(stringr)
 library(tidyverse)
+library(data.table)
 
 
 source("microsim_utilities.R")
 source("microsim.R")
 
-# cl <- makeCluster(detectCores() - 1)
-# registerDoParallel(cl)
 cl <- makeCluster(detectCores() - 1)
 registerDoSNOW(cl)
 
 
-tab_id <- c("Overview", "Pop_Inputs", "ClinEcon_Inputs", "Scenarios", "Results", "Assumptions", "Break", "Disclosures", "Terms", "References")
+tab_id <- c("Overview", "Mechanics", "Pop_Inputs", "ClinEcon_Inputs", "Scenarios", "Results", "Assumptions", "Break", "Disclosures", "Terms", "References")
 
 NUM_PAGES <- length(tab_id) + 1
 
@@ -54,7 +53,7 @@ maximum_age <- 100
 age_cutoffs = c(65, 70.5, 75.5, 80.5, 85.5, 100)
 age_index_scores <- c(0, 200, 400, 600, 800, 1000)
 
-race_categories = c(1, #Caucasian
+race_categories = c(1, # Caucasian
                     2, # Hispanic
                     3, # Asian
                     4  ) # Black
@@ -64,7 +63,7 @@ race_index_scores = c(20000,
                       40000)
 
 fracture_breakdown = c(0.28, # Shoulder,
-                       0.5, #vertebral
+                       0.5, # vertebral
                        0.22 # forearm
 )
 
@@ -79,15 +78,14 @@ bmd_cutoffs = c(1.00, -3.51, -3.01, -2.51, -2.01, -1.51, -1.01, -0.51, 0.01,
 
 ID_lookup <- (read_excel("id_lookup.xlsx"))
 
-#id_to_frax_hash <- hashmap(ID_lookup$ID, ID_lookup$`FRAX- HIP`)
-#MAX_HIP_FRACTURE_RATE <- max(ID_lookup$`FRAX- HIP`)
-#id_to_frax_major_hash <- hashmap(ID_lookup$ID,ID_lookup$`FRAX- MAJOR`)
-#MAX_MAJOR_FRACTURE_RATE <- max(ID_lookup$`FRAX- MAJOR`)
-
 
 MEDICATION_ADHERENCE <- 0.418
 NON_ADHERENT_INCREASED_FRACTURE_RISK <- 1.46
-HIP_FRACTURE_RATIO <- (45603/5024)
+# HIP FRACTURE RATIO is a hard-coded value from the old excel model
+# It extrapolates from the amount of hip fractures the total amount of other fractures
+# (including shoulder, vertebral, and forearm which is why we need to subtract them from
+# the total_fractures in microsim.R)
+HIP_FRACTURE_RATIO <- (45603/5024) # ~9.077
 MULTI_FRACTURE_FACTOR <- 1.226
 
 accumulate_by <- function(dat, var) {
