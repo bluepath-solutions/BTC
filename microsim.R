@@ -77,16 +77,16 @@ med_base_prob <-  BASECASETX
 dxa_prob_s1 <- S1ID
 med_base_prob_s1 <- S1TX
 # Treatment Mix - THIS IS NOT DYNAMIC
-treatment_mix <-c(0.439, # Alendronate  PRIMARY (BISPHOSPHONATES?)
-                  0.031,  # Ibandronate 150 MG
-                  0.03,  # Risedronate
-                  0.03,  # Ibandronate IV
-                  0.093,  # Zoledronic   PRIMARY
-                  0.292, # Denosumab    PRIMARY
-                  0.0,  # Conjugated Estrogens/Bazedoxifene
-                  0.074,  # Raloxifene
-                  0.008,  # Forteo
-                  0.003)  # Tymlos
+treatment_mix <-c(0.170, # Alendronate  PRIMARY (BISPHOSPHONATES?)
+                  0.101,  # Ibandronate 150 MG
+                  0.2935,  # Risedronate
+                  0.252,  # Ibandronate IV
+                  0.0635,  # Zoledronic   PRIMARY
+                  0.0485, # Denosumab    PRIMARY
+                  0.0365,  # Conjugated Estrogens/Bazedoxifene
+                  0.101,  # Raloxifene
+                  0.0125,  # Forteo
+                  0.0)  # Tymlos
 
 
 # Monthly Costs
@@ -110,18 +110,18 @@ treatment_efficacy_hip <- c(0.65, # Alendronate Primary
                             0.59, # Conjugated Estrogens/Bazedoxifene
                             0.59, # Raloxifene
                             0.25, # Forteo
-                            0.41) # Tymlos
+                            0.25) # Tymlos
 
-treatment_efficacy_other <- c(0.67, # Aledronate Primary
-                              0.68, # Ibandronate 150 MG
-                              0.70, # Risedronate
-                              0.54, # Ibandronate IV
-                              0.43, # Zoledronic
-                              0.58, # Denosumab
+treatment_efficacy_other <- c(0.65, # Alendronate Primary
+                              0.73, # Ibandronate 150 MG
+                              0.74, # Risedronate
+                              0.59, # Ibandronate IV
+                              0.59, # Zoledronic
+                              0.61, # Denosumab
                               0.59, # Conjugated Estrogens/Bazedoxifene
                               0.59, # Raloxifene
-                              0.37, # Forteo
-                              0.37) # Tymlos
+                              0.25, # Forteo
+                              0.25) # Tymlos
 
 # CONSTANTS
 
@@ -301,6 +301,22 @@ prob_fracture_given_previous_fractures_s1 <- sum(fracture_given_previous_fractur
 prob_fracture_given_no_previous_fractures <- sum(fracture_given_no_previous_fractures)/sum(!risk_factor_index$prev_fracture_incidence)
 prob_fracture_given_no_previous_fractures_s1 <- sum(fracture_given_no_previous_fractures_s1)/sum(!risk_factor_index$prev_fracture_incidence)
 
+prev_fracs_per_yr <- sum(risk_factor_index$prev_fracture_incidence)*weird_coefficient[year - 2013]
+prev_no_fracs_per_yr <- sum(!risk_factor_index$prev_fracture_incidence)*weird_coefficient[year - 2013]
+
+# total_fractures_with_previous_fracture <- as.integer(prev_fracs_per_yr*MULTI_FRACTURE_FACTOR*prob_fracture_given_previous_fractures)
+# total_fractures_with_previous_fracture_s1 <- as.integer(prev_fracs_per_yr*MULTI_FRACTURE_FACTOR*prob_fracture_given_previous_fractures_s1)
+# total_fractures_wo_previous_fracture <- as.integer(prev_no_fracs_per_yr*MULTI_FRACTURE_FACTOR*prob_fracture_given_no_previous_fractures)
+# total_fractures_wo_previous_fracture_s1 <- as.integer(prev_no_fracs_per_yr*MULTI_FRACTURE_FACTOR*prob_fracture_given_no_previous_fractures_s1)
+
+## trying to use bayes to get counts of populations 
+# prob_history <- sum(any_fracture)/population_size
+# prob_history_s1 <- sum(any_fracture_s1)/population_size
+prob_history_given_fracture <- prob_fracture_given_previous_fractures/(prob_fracture_given_no_previous_fractures + prob_fracture_given_previous_fractures)
+prob_no_history_given_fracture <- prob_fracture_given_no_previous_fractures/(prob_fracture_given_no_previous_fractures + prob_fracture_given_previous_fractures)
+prob_history_given_fracture_s1 <- prob_fracture_given_previous_fractures_s1/(prob_fracture_given_no_previous_fractures_s1 + prob_fracture_given_previous_fractures_s1)
+prob_no_history_given_fracture_s1 <- prob_fracture_given_no_previous_fractures_s1/(prob_fracture_given_no_previous_fractures_s1 + prob_fracture_given_previous_fractures_s1)
+
 
 # Use hip and other fracture data to extrapolate to other types of fractures
 # There is excessive extrapolation here, but it follows the model.
@@ -328,8 +344,10 @@ total_other_s1 <- HIP_FRACTURE_RATIO * total_hip_s1 - total_shoulder_s1 - total_
 total_fractures_s1 <- total_hip_s1 + total_shoulder_s1 + total_vertebral_s1 + total_forearm_s1 + total_other_s1
 
 
-total_fractures_with_previous_fracture <- as.integer(total_fractures * prob_fracture_given_previous_fractures)
-total_fractures_with_previous_fracture_s1 <- as.integer(total_fractures_s1 * prob_fracture_given_previous_fractures_s1)
+total_fractures_with_previous_fracture <- total_fractures*prob_history_given_fracture
+total_fractures_with_previous_fracture_s1 <- total_fractures_s1*prob_history_given_fracture_s1
+total_fractures_wo_previous_fracture <- total_fractures*prob_no_history_given_fracture
+total_fractures_wo_previous_fracture_s1 <- total_fractures*prob_no_history_given_fracture_s1
 
 # End of Clinical Data, Beginning of Financial Data
 # Calculate Costs
@@ -354,12 +372,21 @@ total_inpatient_cost_s1 <- getMultiFraxCost(total_fractures_s1,
 
 total_inpatient_with_prev_frac_cost <- getMultiFraxCost(total_fractures_with_previous_fracture,
                                                         MULTI_FRACTURE_FACTOR,
-                                                        inpatient_wo_subsequent_fracture,
+                                                        inpatient_w_subsequent_fracture,
                                                         inpatient_w_subsequent_fracture)
 total_inpatient_with_prev_frac_cost_s1 <- getMultiFraxCost(total_fractures_with_previous_fracture_s1,
                                                         MULTI_FRACTURE_FACTOR,
-                                                        inpatient_wo_subsequent_fracture,
+                                                        inpatient_w_subsequent_fracture,
                                                         inpatient_w_subsequent_fracture)
+
+total_inpatient_wo_prev_frac_cost <- getMultiFraxCost(total_fractures_wo_previous_fracture,
+                                                        MULTI_FRACTURE_FACTOR,
+                                                        inpatient_wo_subsequent_fracture,
+                                                        inpatient_wo_subsequent_fracture)
+total_inpatient_wo_prev_frac_cost_s1 <- getMultiFraxCost(total_fractures_wo_previous_fracture_s1,
+                                                           MULTI_FRACTURE_FACTOR,
+                                                           inpatient_wo_subsequent_fracture,
+                                                           inpatient_wo_subsequent_fracture)
 
 total_outpatient_cost <- getMultiFraxCost(total_fractures,
                                          MULTI_FRACTURE_FACTOR,
@@ -372,12 +399,21 @@ total_outpatient_cost_s1 <- getMultiFraxCost(total_fractures_s1,
 
 total_outpatient_with_prev_frac_cost <- getMultiFraxCost(total_fractures_with_previous_fracture,
                                           MULTI_FRACTURE_FACTOR,
-                                          outpatient_wo_subsequent_fracture,
+                                          outpatient_w_subsequent_fracture,
                                           outpatient_w_subsequent_fracture)
 total_outpatient_with_prev_frac_cost_s1 <- getMultiFraxCost(total_fractures_with_previous_fracture_s1,
                                                          MULTI_FRACTURE_FACTOR,
-                                                         outpatient_wo_subsequent_fracture,
+                                                         outpatient_w_subsequent_fracture,
                                                          outpatient_w_subsequent_fracture)
+
+total_outpatient_wo_prev_frac_cost <- getMultiFraxCost(total_fractures_wo_previous_fracture,
+                                                         MULTI_FRACTURE_FACTOR,
+                                                         outpatient_wo_subsequent_fracture,
+                                                         outpatient_wo_subsequent_fracture)
+total_outpatient_wo_prev_frac_cost_s1 <- getMultiFraxCost(total_fractures_wo_previous_fracture_s1,
+                                                            MULTI_FRACTURE_FACTOR,
+                                                            outpatient_wo_subsequent_fracture,
+                                                            outpatient_wo_subsequent_fracture)
 
 total_ltc_cost <- getMultiFraxCost(total_fractures,
                                    MULTI_FRACTURE_FACTOR,
@@ -390,12 +426,21 @@ total_ltc_cost_s1 <- getMultiFraxCost(total_fractures_s1,
 
 total_ltc_with_prev_frac_cost <- getMultiFraxCost(total_fractures_with_previous_fracture,
                                    MULTI_FRACTURE_FACTOR,
-                                   ltc_wo_subsequent_fracture,
+                                   ltc_w_subsequent_fracture,
                                    ltc_w_subsequent_fracture)
 total_ltc_with_prev_frac_cost_s1 <- getMultiFraxCost(total_fractures_with_previous_fracture_s1,
                                                   MULTI_FRACTURE_FACTOR,
-                                                  ltc_wo_subsequent_fracture,
+                                                  ltc_w_subsequent_fracture,
                                                   ltc_w_subsequent_fracture)
+
+total_ltc_wo_prev_frac_cost <- getMultiFraxCost(total_fractures_wo_previous_fracture,
+                                                  MULTI_FRACTURE_FACTOR,
+                                                  ltc_wo_subsequent_fracture,
+                                                  ltc_wo_subsequent_fracture)
+total_ltc_wo_prev_frac_cost_s1 <- getMultiFraxCost(total_fractures_wo_previous_fracture_s1,
+                                                     MULTI_FRACTURE_FACTOR,
+                                                     ltc_wo_subsequent_fracture,
+                                                     ltc_wo_subsequent_fracture)
 
 total_ed_cost <- getMultiFraxCost(total_fractures,
                                   MULTI_FRACTURE_FACTOR,
@@ -408,13 +453,23 @@ total_ed_cost_s1 <- getMultiFraxCost(total_fractures_s1,
 
 total_ed_with_prev_frac_cost <- getMultiFraxCost(total_fractures_with_previous_fracture,
                                   MULTI_FRACTURE_FACTOR,
-                                  ed_wo_subsequent_fracture,
+                                  ed_w_subsequent_fracture,
                                   ed_w_subsequent_fracture)
 
 total_ed_with_prev_frac_cost_s1 <- getMultiFraxCost(total_fractures_with_previous_fracture_s1,
                                                  MULTI_FRACTURE_FACTOR,
-                                                 ed_wo_subsequent_fracture,
+                                                 ed_w_subsequent_fracture,
                                                  ed_w_subsequent_fracture)
+
+total_ed_wo_prev_frac_cost <- getMultiFraxCost(total_fractures_wo_previous_fracture,
+                                                 MULTI_FRACTURE_FACTOR,
+                                                 ed_wo_subsequent_fracture,
+                                                 ed_wo_subsequent_fracture)
+
+total_ed_wo_prev_frac_cost_s1 <- getMultiFraxCost(total_fractures_wo_previous_fracture_s1,
+                                                    MULTI_FRACTURE_FACTOR,
+                                                    ed_wo_subsequent_fracture,
+                                                    ed_wo_subsequent_fracture)
 
 total_other_cost <- getMultiFraxCost(total_fractures,
                                  MULTI_FRACTURE_FACTOR,
@@ -427,13 +482,23 @@ total_other_cost_s1 <- getMultiFraxCost(total_fractures_s1,
 
 total_other_with_prev_frac_cost <- getMultiFraxCost(total_fractures_with_previous_fracture,
                                      MULTI_FRACTURE_FACTOR,
-                                     other_wo_subsequent_fracture,
+                                     other_w_subsequent_fracture,
                                      other_w_subsequent_fracture)
 
 total_other_with_prev_frac_cost_s1 <- getMultiFraxCost(total_fractures_with_previous_fracture_s1,
                                                     MULTI_FRACTURE_FACTOR,
-                                                    other_wo_subsequent_fracture,
+                                                    other_w_subsequent_fracture,
                                                     other_w_subsequent_fracture)
+
+total_other_wo_prev_frac_cost <- getMultiFraxCost(total_fractures_wo_previous_fracture,
+                                                    MULTI_FRACTURE_FACTOR,
+                                                    other_wo_subsequent_fracture,
+                                                    other_wo_subsequent_fracture)
+
+total_other_wo_prev_frac_cost_s1 <- getMultiFraxCost(total_fractures_wo_previous_fracture_s1,
+                                                       MULTI_FRACTURE_FACTOR,
+                                                       other_wo_subsequent_fracture,
+                                                       other_wo_subsequent_fracture)
 
 total_pharmacy_cost <- getMultiFraxCost(total_fractures,
                                      MULTI_FRACTURE_FACTOR,
@@ -446,12 +511,21 @@ total_pharmacy_cost_s1 <- getMultiFraxCost(total_fractures_s1,
 
 total_pharmacy_with_prev_frac_cost <- getMultiFraxCost(total_fractures_with_previous_fracture,
                                         MULTI_FRACTURE_FACTOR,
-                                        pharmacy_wo_subsequent_fracture,
+                                        pharmacy_w_subsequent_fracture,
                                         pharmacy_w_subsequent_fracture)
 total_pharmacy_with_prev_frac_cost_s1 <- getMultiFraxCost(total_fractures_with_previous_fracture_s1,
                                                        MULTI_FRACTURE_FACTOR,
-                                                       pharmacy_wo_subsequent_fracture,
+                                                       pharmacy_w_subsequent_fracture,
                                                        pharmacy_w_subsequent_fracture)
+
+total_pharmacy_wo_prev_frac_cost <- getMultiFraxCost(total_fractures_wo_previous_fracture,
+                                                       MULTI_FRACTURE_FACTOR,
+                                                       pharmacy_wo_subsequent_fracture,
+                                                       pharmacy_wo_subsequent_fracture)
+total_pharmacy_wo_prev_frac_cost_s1 <- getMultiFraxCost(total_fractures_wo_previous_fracture_s1,
+                                                          MULTI_FRACTURE_FACTOR,
+                                                          pharmacy_wo_subsequent_fracture,
+                                                          pharmacy_wo_subsequent_fracture)
 
 # Indirect Costs can be turned off
 if(CASE) {
@@ -477,23 +551,43 @@ if(CASE) {
   ########################
   total_productivity_with_prev_frac_losses <- getMultiFraxCost(total_fractures_with_previous_fracture,
                                                 MULTI_FRACTURE_FACTOR,
-                                                productivity_wo_subsequent_fracture,
+                                                productivity_w_subsequent_fracture,
                                                 productivity_w_subsequent_fracture)
-  
+
   total_productivity_with_prev_frac_losses_s1 <- getMultiFraxCost(total_fractures_with_previous_fracture_s1,
                                                    MULTI_FRACTURE_FACTOR,
-                                                   productivity_wo_subsequent_fracture,
+                                                   productivity_w_subsequent_fracture,
                                                    productivity_w_subsequent_fracture)
-  
+
   total_caregiver_with_prev_frac_losses <- getMultiFraxCost(total_fractures_with_previous_fracture,
                                              MULTI_FRACTURE_FACTOR,
-                                             caregiver_wo_subsequent_fracture,
+                                             caregiver_w_subsequent_fracture,
                                              caregiver_w_subsequent_fracture)
-  
+
   total_caregiver_with_prev_frac_losses_s1 <- getMultiFraxCost(total_fractures_with_previous_fracture_s1,
                                                 MULTI_FRACTURE_FACTOR,
-                                                caregiver_wo_subsequent_fracture,
+                                                caregiver_w_subsequent_fracture,
                                                 caregiver_w_subsequent_fracture)
+  #######################
+  total_productivity_wo_prev_frac_losses <- getMultiFraxCost(total_fractures_wo_previous_fracture,
+                                                               MULTI_FRACTURE_FACTOR,
+                                                               productivity_wo_subsequent_fracture,
+                                                               productivity_wo_subsequent_fracture)
+
+  total_productivity_wo_prev_frac_losses_s1 <- getMultiFraxCost(total_fractures_wo_previous_fracture_s1,
+                                                                  MULTI_FRACTURE_FACTOR,
+                                                                  productivity_wo_subsequent_fracture,
+                                                                  productivity_wo_subsequent_fracture)
+
+  total_caregiver_wo_prev_frac_losses <- getMultiFraxCost(total_fractures_wo_previous_fracture,
+                                                            MULTI_FRACTURE_FACTOR,
+                                                            caregiver_wo_subsequent_fracture,
+                                                            caregiver_wo_subsequent_fracture)
+
+  total_caregiver_wo_prev_frac_losses_s1 <- getMultiFraxCost(total_fractures_wo_previous_fracture_s1,
+                                                               MULTI_FRACTURE_FACTOR,
+                                                               caregiver_wo_subsequent_fracture,
+                                                               caregiver_wo_subsequent_fracture)
 } else {
   total_productivity_losses <- 0
   
@@ -505,12 +599,21 @@ if(CASE) {
   
   ################################
   total_productivity_with_prev_frac_losses <- 0
-  
+
   total_productivity_with_prev_frac_losses_s1 <- 0
-  
+
   total_caregiver_with_prev_frac_losses <- 0
-  
+
   total_caregiver_with_prev_frac_losses_s1 <- 0
+
+  ###############################
+  total_productivity_wo_prev_frac_losses <- 0
+
+  total_productivity_wo_prev_frac_losses_s1 <- 0
+
+  total_caregiver_wo_prev_frac_losses <- 0
+
+  total_caregiver_wo_prev_frac_losses_s1 <- 0
 }
 
 total_direct_cost <- total_dxa_cost + total_med_cost + total_inpatient_cost +
@@ -528,17 +631,30 @@ total_direct_with_prev_frac_cost_s1 <- total_dxa_cost_s1 + total_med_cost_s1 + t
                         total_outpatient_with_prev_frac_cost_s1 + total_ltc_with_prev_frac_cost_s1 + total_ed_with_prev_frac_cost_s1 +
                         total_other_with_prev_frac_cost_s1 + total_pharmacy_with_prev_frac_cost_s1
 
+total_direct_wo_prev_frac_cost <- total_dxa_cost + total_med_cost + total_inpatient_wo_prev_frac_cost +
+                                    total_outpatient_wo_prev_frac_cost + total_ltc_wo_prev_frac_cost + total_ed_wo_prev_frac_cost +
+                                    total_other_wo_prev_frac_cost + total_pharmacy_wo_prev_frac_cost
+total_direct_wo_prev_frac_cost_s1 <- total_dxa_cost_s1 + total_med_cost_s1 + total_inpatient_wo_prev_frac_cost_s1 +
+                                        total_outpatient_wo_prev_frac_cost_s1 + total_ltc_wo_prev_frac_cost_s1 + total_ed_wo_prev_frac_cost_s1 +
+                                        total_other_wo_prev_frac_cost_s1 + total_pharmacy_wo_prev_frac_cost_s1
+
 total_indirect_cost <-    total_productivity_losses + total_caregiver_losses
 total_indirect_cost_s1 <- total_productivity_losses_s1 + total_caregiver_losses_s1
 
 total_indirect_with_prev_frac_cost <-    total_productivity_with_prev_frac_losses + total_caregiver_with_prev_frac_losses
 total_indirect_with_prev_frac_cost_s1 <- total_productivity_with_prev_frac_losses_s1 + total_caregiver_with_prev_frac_losses_s1
 
+total_indirect_wo_prev_frac_cost <-    total_productivity_wo_prev_frac_losses + total_caregiver_wo_prev_frac_losses
+total_indirect_wo_prev_frac_cost_s1 <- total_productivity_wo_prev_frac_losses_s1 + total_caregiver_wo_prev_frac_losses_s1
+
 grand_total <- total_direct_cost + total_indirect_cost
 grand_total_s1 <- total_direct_cost_s1 + total_indirect_cost_s1
 
 grand_total_with_prev_frac <- total_direct_with_prev_frac_cost + total_indirect_with_prev_frac_cost
 grand_total_with_prev_frac_s1 <- total_direct_with_prev_frac_cost_s1 + total_indirect_with_prev_frac_cost_s1
+
+grand_total_wo_prev_frac <- total_direct_wo_prev_frac_cost + total_indirect_wo_prev_frac_cost
+grand_total_wo_prev_frac_s1 <- total_direct_wo_prev_frac_cost_s1 + total_indirect_wo_prev_frac_cost_s1
 
 ## put data frames together
 clinical_data <- data.frame(total_hip, total_shoulder, total_vertebral, 
@@ -563,7 +679,9 @@ financial_data_s1 <- data.frame(total_dxa_cost_s1, total_med_cost_s1, total_inpa
 prob_data <- data.frame(prob_fracture_given_previous_fractures, prob_fracture_given_no_previous_fractures)
 prob_data_s1 <- data.frame(prob_fracture_given_previous_fractures_s1, prob_fracture_given_no_previous_fractures_s1)
 
-prev_frac_data <- data.frame(total_fractures_with_previous_fracture,
+
+prev_frac_data <- data.frame(prev_fracs_per_yr,
+                             total_fractures_with_previous_fracture,
                              total_inpatient_with_prev_frac_cost, total_outpatient_with_prev_frac_cost, total_ltc_with_prev_frac_cost,
                              total_ed_with_prev_frac_cost, total_other_with_prev_frac_cost, total_pharmacy_with_prev_frac_cost,
                              total_productivity_with_prev_frac_losses, total_caregiver_with_prev_frac_losses, total_direct_with_prev_frac_cost,
@@ -575,8 +693,20 @@ prev_frac_data <- data.frame(total_fractures_with_previous_fracture,
                              total_productivity_with_prev_frac_losses_s1, total_caregiver_with_prev_frac_losses_s1, total_direct_with_prev_frac_cost_s1,
                              total_indirect_with_prev_frac_cost_s1, grand_total_with_prev_frac_s1)
 
+no_prev_frac_data <- data.frame(total_fractures_wo_previous_fracture,
+                             total_inpatient_wo_prev_frac_cost, total_outpatient_wo_prev_frac_cost, total_ltc_wo_prev_frac_cost,
+                             total_ed_wo_prev_frac_cost, total_other_wo_prev_frac_cost, total_pharmacy_wo_prev_frac_cost,
+                             total_productivity_wo_prev_frac_losses, total_caregiver_wo_prev_frac_losses, total_direct_wo_prev_frac_cost,
+                             total_indirect_wo_prev_frac_cost, grand_total_wo_prev_frac,
+                             #
+                             total_fractures_wo_previous_fracture_s1,
+                             total_inpatient_wo_prev_frac_cost_s1, total_outpatient_wo_prev_frac_cost_s1, total_ltc_wo_prev_frac_cost_s1,
+                             total_ed_wo_prev_frac_cost_s1, total_other_wo_prev_frac_cost_s1, total_pharmacy_wo_prev_frac_cost_s1,
+                             total_productivity_wo_prev_frac_losses_s1, total_caregiver_wo_prev_frac_losses_s1, total_direct_wo_prev_frac_cost_s1,
+                             total_indirect_wo_prev_frac_cost_s1, grand_total_wo_prev_frac_s1)
 
-packaged_data <- data.frame(clinical_data, financial_data, clinical_data_s1, financial_data_s1, prev_frac_data)*EXTRAPOLATION_FACTOR
+
+packaged_data <- data.frame(clinical_data, financial_data, clinical_data_s1, financial_data_s1, prev_frac_data, no_prev_frac_data)*EXTRAPOLATION_FACTOR 
 packaged_data <- data.frame(packaged_data, prob_data, prob_data_s1)
 
 return(packaged_data)

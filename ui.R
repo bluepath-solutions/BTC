@@ -228,13 +228,13 @@ fluidPage(
                                      , tags$tr(
                                        tags$td(style = "width: 11.8%; text-align: left", p("Race/Ethnicity", br(), "Distribution (%)")),
                                        tags$td(style = "width: 11.8%; text-align: left",
-                                               tags$style("#RE_cauc {background-color:#dfdfdf;}"), numericInput(inputId = "RE_cauc", label = "Caucasian", value = 80.1, min = 0, max = 100, step = 0.1)),
+                                               tags$style("#RE_cauc {background-color:#dfdfdf;}"), numericInput(inputId = "RE_cauc", label = "Caucasian", value = 0, min = 0, max = 100, step = 0.1)),
                                        tags$td(style = "width: 11.8%; text-align: left",
-                                               tags$style("#RE_hisp {background-color:#dfdfdf;}"), numericInput(inputId = "RE_hisp", label = "Hispanic", value = 9.1, min = 0, max = 100, step = 0.1)),
+                                               tags$style("#RE_hisp {background-color:#dfdfdf;}"), numericInput(inputId = "RE_hisp", label = "Hispanic", value = 0, min = 0, max = 100, step = 0.1)),
                                        tags$td(style = "width: 11.8%; text-align: left",
-                                               tags$style("#RE_asian {background-color:#dfdfdf;}"), numericInput(inputId = "RE_asian", label = "Asian", value = 0.5, min = 0, max = 100, step = 0.1)),
+                                               tags$style("#RE_asian {background-color:#dfdfdf;}"), numericInput(inputId = "RE_asian", label = "Asian", value = 100, min = 0, max = 100, step = 0.1)),
                                        tags$td(style = "width: 11.8%; text-align: left",
-                                               tags$style("#RE_black {background-color:#dfdfdf;}"), numericInput(inputId = "RE_black", label = "Black", value = 10.3, min = 0, max = 100, step = 0.1)),
+                                               tags$style("#RE_black {background-color:#dfdfdf;}"), numericInput(inputId = "RE_black", label = "Black", value = 0, min = 0, max = 100, step = 0.1)),
                                        tags$td(style = "width: 11.8%; text-align: left",
                                                h5(textOutput("sum_RE"), align="center",style="margin-right: 0px; padding-bottom:15px"))
                                      ))),
@@ -255,24 +255,24 @@ fluidPage(
                                      , style = "width: 100%"
                                      , tags$tr(
                                        tags$td(style = "width: 25%; text-align: left",
-                                               tags$style("#BMD_mean {background-color:#dfdfdf}"), numericInput(inputId = "BMD_mean", label = "Mean Bone Mineral Density", value = 0.67, min = 0, max = 1, step = 0.01)),
+                                               tags$style("#BMD_mean {background-color:#dfdfdf}"), numericInput(inputId = "BMD_mean", label = "Mean Bone Mineral Density", value = 0.578, min = 0, max = 1, step = 0.01)),
                                        tags$td(style = "width: 25%; text-align: left", 
-                                               tags$style("#BMD_SD {background-color:#dfdfdf}"), numericInput(inputId = "BMD_SD", label = "Bone Mineral Density Standard Deviation", value = 0.12, min = 0, max = 1, step = 0.01)),
+                                               tags$style("#BMD_SD {background-color:#dfdfdf}"), numericInput(inputId = "BMD_SD", label = "Bone Mineral Density Standard Deviation", value = 0.097, min = 0, max = 1, step = 0.01)),
                                        tags$td(style = "width: 25%; text-align: left",
-                                               tags$style("#RA_inp {background-color:#dfdfdf}"), numericInput(inputId = "RA_inp", label = "Rheumatoid Arthritis (%)", value = 8.6, min = 0, max = 100, step = 0.01)),
+                                               tags$style("#RA_inp {background-color:#dfdfdf}"), numericInput(inputId = "RA_inp", label = "Rheumatoid Arthritis (%)", value = 3.28, min = 0, max = 100, step = 0.01)),
                                        tags$td(style = "width: 25%; text-align: left",
-                                               tags$style("#fxr_inp {background-color:#dfdfdf}"), numericInput(inputId = "fxr_inp", label = "Previous Fracture (%)", value = 14.2, min = 0, max = 100, step = 0.01)))),                      
+                                               tags$style("#fxr_inp {background-color:#dfdfdf}"), numericInput(inputId = "fxr_inp", label = "Previous Fracture (%)", value = 1.62, min = 0, max = 100, step = 0.01)))),                      
                           tags$table(id = "inputs-table"
                                      , style = "width: 100%"
                                      , tags$tr(
                                        tags$td(style = "width: 25%; text-align: left",
-                                               tags$style("#parfxr_inp {background-color:#dfdfdf;}"), numericInput(inputId = "parfxr_inp", label = "Parent History of Hip Fracture (%)", value = 12.0, min = 0, max = 100, step = 0.01)),
+                                               tags$style("#parfxr_inp {background-color:#dfdfdf;}"), numericInput(inputId = "parfxr_inp", label = "Parent History of Hip Fracture (%)", value = 5.43, min = 0, max = 100, step = 0.01)),
                                        tags$td(style = "width: 25%; text-align: left",
-                                               tags$style("#smoker {background-color:#dfdfdf;}"), numericInput(inputId = "smoker", label = "Smoker (%)", value = 8.1, min = 0, max = 100, step = 0.01)),
+                                               tags$style("#smoker {background-color:#dfdfdf;}"), numericInput(inputId = "smoker", label = "Smoker (%)", value = 2.81, min = 0, max = 100, step = 0.01)),
                                        tags$td(style = "width: 25%; text-align: left",
-                                               tags$style("#alco {background-color:#dfdfdf;}"), numericInput(inputId = "alco", label = "Excessive Alcohol Use (%)", value = 2.9, min = 0, max = 100, step = 0.01)),
+                                               tags$style("#alco {background-color:#dfdfdf;}"), numericInput(inputId = "alco", label = "Excessive Alcohol Use (%)", value = 1.66, min = 0, max = 100, step = 0.01)),
                                        tags$td(style = "width: 25%; text-align: left",
-                                               tags$style("#gluco_tx {background-color:#dfdfdf;}"), numericInput(inputId = "gluco_tx", label = "Long-Term Glucocorticoid Therapy (%)", value = 8.7, min = 0, max = 100, step = 0.01))))      
+                                               tags$style("#gluco_tx {background-color:#dfdfdf;}"), numericInput(inputId = "gluco_tx", label = "Long-Term Glucocorticoid Therapy (%)", value = 1.02, min = 0, max = 100, step = 0.01))))      
                             ),
                   
                   tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
@@ -324,40 +324,40 @@ fluidPage(
                             column(width = 4, h5(strong("> One Fracture Per Year")), align = "center")),
                           fluidRow(
                             column(width = 4, h5("Inpatient Stay", align = "left")),
-                            column(width = 4, tags$style("#costinpt1 {background-color:#dfdfdf;}"), numericInput(inputId = "costinpt1", label = NULL, value = "10314", step = 1)),
-                            column(width = 4, tags$style("#costinpt2 {background-color:#dfdfdf;}"), numericInput(inputId = "costinpt2", label = NULL, value = "17746"))),
+                            column(width = 4, tags$style("#costinpt1 {background-color:#dfdfdf;}"), numericInput(inputId = "costinpt1", label = NULL, value = "2400", step = 1)),
+                            column(width = 4, tags$style("#costinpt2 {background-color:#dfdfdf;}"), numericInput(inputId = "costinpt2", label = NULL, value = "2400"))),
                           fluidRow(
                             column(width = 4, h5("Outpatient Visit", align = "left")),
-                            column(width = 4, tags$style("#costoutpt1 {background-color:#dfdfdf;}"), numericInput(inputId = "costoutpt1", label = NULL, value = "3062")),
-                            column(width = 4, tags$style("#costoutpt2 {background-color:#dfdfdf;}"), numericInput(inputId = "costoutpt2", label = NULL, value = "4689"))),
+                            column(width = 4, tags$style("#costoutpt1 {background-color:#dfdfdf;}"), numericInput(inputId = "costoutpt1", label = NULL, value = "337")),
+                            column(width = 4, tags$style("#costoutpt2 {background-color:#dfdfdf;}"), numericInput(inputId = "costoutpt2", label = NULL, value = "337"))),
                           fluidRow(
                             column(width = 4, h5("Long-Term Care", align = "left")),
-                            column(width = 4, tags$style("#costLTC1 {background-color:#dfdfdf;}"), numericInput(inputId = "costLTC1", label = NULL, value = "4378")),
-                            column(width = 4, tags$style("#costLTC2 {background-color:#dfdfdf;}"), numericInput(inputId = "costLTC2", label = NULL, value = "9393"))),
+                            column(width = 4, tags$style("#costLTC1 {background-color:#dfdfdf;}"), numericInput(inputId = "costLTC1", label = NULL, value = "200")),
+                            column(width = 4, tags$style("#costLTC2 {background-color:#dfdfdf;}"), numericInput(inputId = "costLTC2", label = NULL, value = "200"))),
                           fluidRow(
                             column(width = 4, h5("Emergency Department Visit", align = "left")),
-                            column(width = 4, tags$style("#costED1 {background-color:#dfdfdf;}"), numericInput(inputId = "costED1", label = NULL, value = "938")),
-                            column(width = 4, tags$style("#costED2 {background-color:#dfdfdf;}"), numericInput(inputId = "costED2", label = NULL, value = "1311"))),
+                            column(width = 4, tags$style("#costED1 {background-color:#dfdfdf;}"), numericInput(inputId = "costED1", label = NULL, value = "400")),
+                            column(width = 4, tags$style("#costED2 {background-color:#dfdfdf;}"), numericInput(inputId = "costED2", label = NULL, value = "400"))),
                           fluidRow(
                             column(width = 4, h5("Other", align = "left")),
-                            column(width = 4, tags$style("#costother1 {background-color:#dfdfdf;}"), numericInput(inputId = "costother1", label = NULL, value = "2694")),
-                            column(width = 4, tags$style("#costother2 {background-color:#dfdfdf;}"), numericInput(inputId = "costother2", label = NULL, value = "4626"))),
+                            column(width = 4, tags$style("#costother1 {background-color:#dfdfdf;}"), numericInput(inputId = "costother1", label = NULL, value = "200")),
+                            column(width = 4, tags$style("#costother2 {background-color:#dfdfdf;}"), numericInput(inputId = "costother2", label = NULL, value = "200"))),
                           fluidRow(
                             column(width = 4, h5("Pharmacy", align = "left")),
-                            column(width = 4, tags$style("#costpharm1 {background-color:#dfdfdf;}"), numericInput(inputId = "costpharm1", label = NULL, value = "2341")),
-                            column(width = 4, tags$style("#costpharm2 {background-color:#dfdfdf;}"), numericInput(inputId = "costpharm2", label = NULL, value = "2679"))),
+                            column(width = 4, tags$style("#costpharm1 {background-color:#dfdfdf;}"), numericInput(inputId = "costpharm1", label = NULL, value = "161")),
+                            column(width = 4, tags$style("#costpharm2 {background-color:#dfdfdf;}"), numericInput(inputId = "costpharm2", label = NULL, value = "161"))),
                           fluidRow(
                             box(id="IndirectCosts", "", color = "blue", width = 12, height = 4),
                             bsPopover("IndirectCosts", title='<font size="2">Source:', content='<font size="3">DOF, Amgen, Bend the Curve PMO Microsimulation, 2019', placement="left", options = list(container = "body")),
                             column(width = 4, prettyCheckbox(inputId = "IndirectCosts", strong("Include Indirect Costs"), value = TRUE, shape = "square"))),
                           fluidRow(
                             column(width = 4, h5("Productivity Losses", align = "left")),
-                            column(width = 4, tags$style("#costprod1 {background-color:#dfdfdf;}"), numericInput(inputId = "costprod1", label = NULL, value = "2820")),
-                            column(width = 4, tags$style("#costprod2 {background-color:#dfdfdf;}"), numericInput(inputId = "costprod2", label = NULL, value = "2820"))),
+                            column(width = 4, tags$style("#costprod1 {background-color:#dfdfdf;}"), numericInput(inputId = "costprod1", label = NULL, value = "198")),
+                            column(width = 4, tags$style("#costprod2 {background-color:#dfdfdf;}"), numericInput(inputId = "costprod2", label = NULL, value = "198"))),
                           fluidRow(
                             column(width = 4, h5("Informal Caregiver", align = "left")),
-                            column(width = 4, tags$style("#costcare1 {background-color:#dfdfdf;}"), numericInput(inputId = "costcare1", label = NULL, value = "2173")),
-                            column(width = 4, tags$style("#costcare2 {background-color:#dfdfdf;}"), numericInput(inputId = "costcare2", label = NULL, value = "2173")))
+                            column(width = 4, tags$style("#costcare1 {background-color:#dfdfdf;}"), numericInput(inputId = "costcare1", label = NULL, value = "351")),
+                            column(width = 4, tags$style("#costcare2 {background-color:#dfdfdf;}"), numericInput(inputId = "costcare2", label = NULL, value = "351")))
                             )
                             ),
                 fluidRow(
@@ -522,13 +522,25 @@ fluidPage(
                         fluidRow(
                           column(width = 6, infoBoxOutput("FraxBox_R"), tags$style("#FraxBox_R {width:100%}")),
                           column(width = 6, infoBoxOutput("CostBox_R"), tags$style("#CostBox_R {width:100%}") ))),
+                # fluidRow(
+                #   boxPlus(withSpinner(plotlyOutput("fxrplot")), width = 6),
+                #   boxPlus(withSpinner(plotlyOutput("costplot")), width = 6)),
+                
+                ## testing
                 fluidRow(
-                  boxPlus(withSpinner(plotlyOutput("fxrplot")), width = 6),
-                  boxPlus(withSpinner(plotlyOutput("costplot")), width = 6)),
+                  boxPlus(withSpinner(plotlyOutput("prevFracPlot")), width = 6),
+                  boxPlus(withSpinner(plotlyOutput("prevFracCost")), width = 6)),
                 
+                # fluidRow(
+                #   boxPlus(withSpinner(plotlyOutput("primaryFracPlot")), width = 6),
+                #   boxPlus(withSpinner(plotlyOutput("primaryFracCost")), width = 6)),
                 
+                # fluidRow(
+                #   infoBoxOutput("PrevFracPerYear")
+                # ),
+                ## 
                 tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
-                                                     ),
+                ),
         tabItem(tabName = "Results",
                 fluidRow(
                   width = NULL, background = "black"),
@@ -545,8 +557,8 @@ fluidPage(
                           closable = FALSE, status = "info", solidHeader = FALSE, collapsible = TRUE, width = 7,
                           p(textOutput('totalcost_content'))
                   ),
-
-                  infoBoxOutput("CostBox")),
+                  column(width=5,infoBoxOutput("CostBox"), tags$style("#CostBox {width:100%; word-break: keep-all; overflow-wrap: anywhere;}"))
+                        ),
                 fluidRow(
                   boxPlus(title = "Base Case Fracture Reccurence", 
                           closable = FALSE, status = "warning", solidHeader = FALSE, collapsible = TRUE, width = 8,
