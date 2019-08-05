@@ -518,26 +518,44 @@ fluidPage(
                                               size = "sm"),
                                    align = 'center')
                           ))),
+                
                 boxPlus(width = 12, closable = FALSE, collapsible = TRUE,
+                        # fluidRow(
+                        #   column(width = 6, infoBoxOutput("FraxBox_R"), tags$style("#FraxBox_R {width:100%}")),
+                        #   column(width = 6, infoBoxOutput("CostBox_R"), tags$style("#CostBox_R {width:100%}") )),
+                        # fluidRow(
+                        #   column(width = 6, infoBoxOutput("nPrimaryBox"), tags$style("#nPrimaryBox {width:100%}")),
+                        #   column(width = 6, infoBoxOutput("nPrevBox"), tags$style("#nPrevBox {width:100%}") )),
                         fluidRow(
-                          column(width = 6, infoBoxOutput("FraxBox_R"), tags$style("#FraxBox_R {width:100%}")),
-                          column(width = 6, infoBoxOutput("CostBox_R"), tags$style("#CostBox_R {width:100%}") ))),
+                          column(width = 6, infoBoxOutput("nNoPriorsBox"), tags$style("#nNoPriorsBox {width:100%}")),
+                          column(width = 6, infoBoxOutput("nPriorsBox"), tags$style("#nPriorsBox {width:100%}") )),
+                        fluidRow(
+                          column(width = 6, infoBoxOutput("primaryFracBox"), tags$style("#primaryFracBox {width:100%}")),
+                          column(width = 6, infoBoxOutput("prevFracBox"), tags$style("#prevFracBox {width:100%}") )),
+                        fluidRow(
+                          column(width = 6, infoBoxOutput("primaryFracCostBox"), tags$style("#primaryFracCostBox {width:100%}")),
+                          column(width = 6, infoBoxOutput("prevFracCostBox"), tags$style("#prevFracCostBox {width:100%}") ))
+                        ),
                 # fluidRow(
                 #   boxPlus(withSpinner(plotlyOutput("fxrplot")), width = 6),
                 #   boxPlus(withSpinner(plotlyOutput("costplot")), width = 6)),
                 
                 ## testing
+                # fluidRow(
+                #   boxPlus(withSpinner(plotlyOutput('nPrimaryPlot')), width = 6),
+                #   boxPlus(withSpinner(plotlyOutput('nPrevPlot')), width = 6)),
                 fluidRow(
-                  boxPlus(withSpinner(plotlyOutput("prevFracPlot")), width = 6),
+                  boxPlus(withSpinner(plotlyOutput('nNoPriorsPlot')), width = 6),
+                  boxPlus(withSpinner(plotlyOutput('nPriorsPlot')), width = 6)),
+                
+                fluidRow(
+                  boxPlus(withSpinner(plotlyOutput("primaryFracPlot")), width = 6),
+                  boxPlus(withSpinner(plotlyOutput("prevFracPlot")), width = 6)),
+                
+                fluidRow(
+                  boxPlus(withSpinner(plotlyOutput("primaryFracCost")), width = 6),
                   boxPlus(withSpinner(plotlyOutput("prevFracCost")), width = 6)),
                 
-                # fluidRow(
-                #   boxPlus(withSpinner(plotlyOutput("primaryFracPlot")), width = 6),
-                #   boxPlus(withSpinner(plotlyOutput("primaryFracCost")), width = 6)),
-                
-                # fluidRow(
-                #   infoBoxOutput("PrevFracPerYear")
-                # ),
                 ## 
                 tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
                 ),

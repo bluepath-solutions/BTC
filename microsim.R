@@ -77,15 +77,15 @@ med_base_prob <-  BASECASETX
 dxa_prob_s1 <- S1ID
 med_base_prob_s1 <- S1TX
 # Treatment Mix - THIS IS NOT DYNAMIC
-treatment_mix <-c(0.170, # Alendronate  PRIMARY (BISPHOSPHONATES?)
-                  0.101,  # Ibandronate 150 MG
-                  0.2935,  # Risedronate
-                  0.252,  # Ibandronate IV
-                  0.0635,  # Zoledronic   PRIMARY
-                  0.0485, # Denosumab    PRIMARY
-                  0.0365,  # Conjugated Estrogens/Bazedoxifene
-                  0.101,  # Raloxifene
-                  0.0125,  # Forteo
+treatment_mix <-c(0.161, # Alendronate  PRIMARY (BISPHOSPHONATES?)
+                  0.092,  # Ibandronate 150 MG
+                  0.285,  # Risedronate
+                  0.243,  # Ibandronate IV
+                  0.055,  # Zoledronic   PRIMARY
+                  0.040, # Denosumab    PRIMARY
+                  0.028,  # Conjugated Estrogens/Bazedoxifene
+                  0.092,  # Raloxifene
+                  0.004,  # Forteo
                   0.0)  # Tymlos
 
 
@@ -134,7 +134,7 @@ HIP_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_hip * MEDICATION_AD
                         treatment_mix %*% treatment_efficacy_hip * (1 - MEDICATION_ADHERENCE) * NON_ADHERENT_INCREASED_FRACTURE_RISK
 ANY_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_other * MEDICATION_ADHERENCE +
                         treatment_mix %*% treatment_efficacy_other * (1 - MEDICATION_ADHERENCE) * NON_ADHERENT_INCREASED_FRACTURE_RISK   
-
+## this is equal to almost .9 (~.8932)
 
 # Weird Coefficent - This extrapolates the simulated population to the projected 
 #                    US population of women 65+ in the US.  2040 is the last possible
@@ -151,7 +151,7 @@ weird_coefficient <- c(25.892946, 26.700267, 27.525255, 28.376817, 29.276951,
                        45.124642, 45.392507)
 
 #weird_coefficient <- weird_coefficient*1000000/population_size # Coefficient here extrapolates to census data
-weird_coefficient <- weird_coefficient/min(weird_coefficient)
+weird_coefficient <- weird_coefficient/weird_coefficient[1]
 
 inpatient_wo_subsequent_fracture <- COSTINPT1 #9576
 inpatient_w_subsequent_fracture <-  COSTINPT2 #16477
@@ -293,6 +293,8 @@ fracture_given_no_previous_fractures <- (!risk_factor_index$prev_fracture_incide
 
 fracture_given_no_previous_fractures_s1 <- (!risk_factor_index$prev_fracture_incidence) & any_fracture_s1
 
+## getting at total people with fractures
+
 
 
 prob_fracture_given_previous_fractures <- sum(fracture_given_previous_fractures)/sum(risk_factor_index$prev_fracture_incidence)
@@ -347,7 +349,12 @@ total_fractures_s1 <- total_hip_s1 + total_shoulder_s1 + total_vertebral_s1 + to
 total_fractures_with_previous_fracture <- total_fractures*prob_history_given_fracture
 total_fractures_with_previous_fracture_s1 <- total_fractures_s1*prob_history_given_fracture_s1
 total_fractures_wo_previous_fracture <- total_fractures*prob_no_history_given_fracture
-total_fractures_wo_previous_fracture_s1 <- total_fractures*prob_no_history_given_fracture_s1
+total_fractures_wo_previous_fracture_s1 <- total_fractures_s1*prob_no_history_given_fracture_s1
+
+n_patients_with_previous_fracture <- total_fractures_with_previous_fracture/MULTI_FRACTURE_FACTOR
+n_patients_with_previous_fracture_s1 <- total_fractures_with_previous_fracture_s1/MULTI_FRACTURE_FACTOR
+n_patients_wo_previous_fracture <- total_fractures_wo_previous_fracture/MULTI_FRACTURE_FACTOR
+n_patients_wo_previous_fracture_s1 <- total_fractures_wo_previous_fracture_s1/MULTI_FRACTURE_FACTOR
 
 # End of Clinical Data, Beginning of Financial Data
 # Calculate Costs
@@ -681,25 +688,30 @@ prob_data_s1 <- data.frame(prob_fracture_given_previous_fractures_s1, prob_fract
 
 
 prev_frac_data <- data.frame(prev_fracs_per_yr,
-                             total_fractures_with_previous_fracture,
+                              total_fractures_with_previous_fracture,
+                             n_patients_with_previous_fracture,
                              total_inpatient_with_prev_frac_cost, total_outpatient_with_prev_frac_cost, total_ltc_with_prev_frac_cost,
                              total_ed_with_prev_frac_cost, total_other_with_prev_frac_cost, total_pharmacy_with_prev_frac_cost,
                              total_productivity_with_prev_frac_losses, total_caregiver_with_prev_frac_losses, total_direct_with_prev_frac_cost,
                              total_indirect_with_prev_frac_cost, grand_total_with_prev_frac,
                              #
-                             total_fractures_with_previous_fracture_s1,
+                             total_fractures_with_previous_fracture_s1, 
+                             n_patients_with_previous_fracture_s1,
                              total_inpatient_with_prev_frac_cost_s1, total_outpatient_with_prev_frac_cost_s1, total_ltc_with_prev_frac_cost_s1,
                              total_ed_with_prev_frac_cost_s1, total_other_with_prev_frac_cost_s1, total_pharmacy_with_prev_frac_cost_s1,
                              total_productivity_with_prev_frac_losses_s1, total_caregiver_with_prev_frac_losses_s1, total_direct_with_prev_frac_cost_s1,
                              total_indirect_with_prev_frac_cost_s1, grand_total_with_prev_frac_s1)
 
-no_prev_frac_data <- data.frame(total_fractures_wo_previous_fracture,
+no_prev_frac_data <- data.frame(prev_no_fracs_per_yr,
+                                total_fractures_wo_previous_fracture,
+                                n_patients_wo_previous_fracture,
                              total_inpatient_wo_prev_frac_cost, total_outpatient_wo_prev_frac_cost, total_ltc_wo_prev_frac_cost,
                              total_ed_wo_prev_frac_cost, total_other_wo_prev_frac_cost, total_pharmacy_wo_prev_frac_cost,
                              total_productivity_wo_prev_frac_losses, total_caregiver_wo_prev_frac_losses, total_direct_wo_prev_frac_cost,
                              total_indirect_wo_prev_frac_cost, grand_total_wo_prev_frac,
                              #
                              total_fractures_wo_previous_fracture_s1,
+                             n_patients_wo_previous_fracture_s1,
                              total_inpatient_wo_prev_frac_cost_s1, total_outpatient_wo_prev_frac_cost_s1, total_ltc_wo_prev_frac_cost_s1,
                              total_ed_wo_prev_frac_cost_s1, total_other_wo_prev_frac_cost_s1, total_pharmacy_wo_prev_frac_cost_s1,
                              total_productivity_wo_prev_frac_losses_s1, total_caregiver_wo_prev_frac_losses_s1, total_direct_wo_prev_frac_cost_s1,

@@ -1034,6 +1034,168 @@ output$FraxBox_R <- renderInfoBox({
   )
 })
 
+## Primary Frac Info
+output$nPrimaryBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  for(i in 1:duration) {
+    total_frax <- total_frax + (base_case[[i]]$n_patients_wo_previous_fracture_s1 - base_case[[i]]$n_patients_wo_previous_fracture)
+  }
+  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Primary Fracture Patients Increasing", "Efforts to Improve PMO Management Result in Primary Fracture Patients Decreasing")
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("Difference in Primary Fracture Patients, 2018-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    subtitle = subtitle_text, 
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "blue", fill = T, width = NULL#3
+  )
+})
+
+
+output$nNoPriorsBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  for(i in 1:duration) {
+    total_frax <- total_frax + base_case[[i]]$prev_no_fracs_per_yr
+  }
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("Cumulative amount of the population with no prior history of fractures, 2018-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "blue", fill = T, width = NULL#3
+  )
+})
+
+output$primaryFracBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  for(i in 1:duration) {
+    total_frax <- total_frax + (base_case[[i]]$total_fractures_wo_previous_fracture_s1 - base_case[[i]]$total_fractures_wo_previous_fracture)
+  }
+  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Primary Fractures Increasing", "Efforts to Improve PMO Management Result in Primary Fractures Decreasing")
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("Difference in Primary Fractures, 2018-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    subtitle = subtitle_text, 
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "green", fill = T, width = NULL#3
+  )
+})
+
+output$primaryFracCostBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  for(i in 1:duration) {
+    total_frax <- total_frax + (base_case[[i]]$grand_total_wo_prev_frac_s1 - base_case[[i]]$grand_total_wo_prev_frac)
+  }
+  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Costs of Primary Fractures Increasing", "Efforts to Improve PMO Management Result in Costs of Primary Fractures Decreasing")
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("Difference in Primary Fracture Costs, 2018-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    subtitle = subtitle_text, 
+    value = dollar_format(negative_parens = TRUE)((total_frax)),
+    icon = icon("list"),
+    color = "orange", fill = T, width = NULL#3
+  )
+})
+
+
+## Secondary Frac boxes
+output$nPrevBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  for(i in 1:duration) {
+    total_frax <- total_frax + (base_case[[i]]$n_patients_with_previous_fracture_s1 - base_case[[i]]$n_patients_with_previous_fracture)
+  }
+  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Secondary Fracture Patients Increasing", "Efforts to Improve PMO Management Result in Secondary Fracture Patients Decreasing")
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("Difference in Secondary Fracture Patients, 2018-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    subtitle = subtitle_text, 
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "blue", fill = T, width = NULL#3
+  )
+})
+
+
+output$nPriorsBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  for(i in 1:duration) {
+    total_frax <- total_frax + base_case[[i]]$prev_fracs_per_yr
+  }
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("Cumulative amount of the population with prior history of fractures, 2018-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "blue", fill = T, width = NULL#3
+  )
+})
+
+
+output$prevFracBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  for(i in 1:duration) {
+    total_frax <- total_frax + (base_case[[i]]$total_fractures_with_previous_fracture_s1 - base_case[[i]]$total_fractures_with_previous_fracture)
+  }
+  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Secondary Fractures Increasing", "Efforts to Improve PMO Management Result in Secondary Fractures Decreasing")
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("Difference in Secondary Fractures, 2018-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    subtitle = subtitle_text, 
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "green", fill = T, width = NULL#3
+  )
+})
+
+output$prevFracCostBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  for(i in 1:duration) {
+    total_frax <- total_frax + (base_case[[i]]$grand_total_with_prev_frac_s1 - base_case[[i]]$grand_total_with_prev_frac)
+  }
+  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Costs of Secondary Fractures Increasing", "Efforts to Improve PMO Management Result in Costs of Secondary Fractures Decreasing")
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("Difference in Secondary Fracture Costs, 2018-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    subtitle = subtitle_text, 
+    value = dollar_format(negative_parens = TRUE)((total_frax)),
+    icon = icon("list"),
+    color = "orange", fill = T, width = NULL#3
+  )
+})
+
 output$CostBox_R <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax_cost <- (0)
@@ -1275,6 +1437,191 @@ output$CostBox <- renderInfoBox({
     return(p)
   })
   
+  # Number of Primary Fracture patient plots
+  output$nPrimaryPlot <- renderPlotly({
+    
+    
+    sim <- simulation_data$sim
+    
+    start_year <- 2018
+    end_year   <- as.integer(substring(input$endYear, 1, 4))
+    
+    xbc <- c(start_year:end_year)
+    ybc <- c()
+    ys1 <- c()
+    
+    
+    print(sim)
+    for(i in 1:length(xbc)) {
+      if(i > 1) {
+        ybc <- cbind(ybc, sim[[i]]$n_patients_wo_previous_fracture + ybc[i-1])
+        ys1 <- cbind(ys1, sim[[i]]$n_patients_wo_previous_fracture_s1 + ys1[i-1])
+      } else {
+        ybc <- cbind(ybc, sim[[i]]$n_patients_wo_previous_fracture)
+        ys1 <- cbind(ys1, sim[[i]]$n_patients_wo_previous_fracture_s1)
+      }
+    }
+    dummybc <- data.frame(xbc, ybc, ys1)
+    color_pal <- brewer.pal(3, "Paired")
+    p <- plot_ly(dummybc, x = ~xbc) %>% 
+      add_trace(y = ~as.integer(ybc), name = "Base Case", mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
+      add_trace(y = ~as.integer(ys1), name = "Improved PMO Management", mode = 'lines', line = list(color = color_pal[2]),text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
+      config(displayModeBar = F) %>%
+      layout(
+        title = "Cumulative Primary Fracture Patients vs. Time",
+        xaxis = list(showgrid = FALSE,
+                     title = "Year",
+                     zeroline = TRUE
+        ),
+        yaxis = list(
+          title = "Total Number of Primary Fracture Patients",
+          zeroline = TRUE
+        ),
+        xaxis = list(
+          title = "Year",
+          zeroline = TRUE
+        )
+      )
+    return(p)
+  })
+  
+  # number of people each year with no prior fractures
+  output$nNoPriorsPlot <- renderPlotly({
+    
+    
+    sim <- simulation_data$sim
+    
+    start_year <- 2018
+    end_year   <- as.integer(substring(input$endYear, 1, 4))
+    
+    xbc <- c(start_year:end_year)
+    ybc <- c()
+    ys1 <- c()
+    
+    
+    print(sim)
+    for(i in 1:length(xbc)) {
+      if(i > 1) {
+        ybc <- cbind(ybc, sim[[i]]$prev_no_fracs_per_yr + ybc[i-1])
+      } else {
+        ybc <- cbind(ybc, sim[[i]]$prev_no_fracs_per_yr)
+      }
+    }
+    dummybc <- data.frame(xbc, ybc)
+    color_pal <- brewer.pal(2, "Paired")
+    p <- plot_ly(dummybc, x = ~xbc) %>% 
+      add_trace(y = ~as.integer(ybc), name = "Base Case", mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
+      config(displayModeBar = F) %>%
+      layout(
+        title = "Cumulative Population without Previous Fracture vs. Time",
+        xaxis = list(showgrid = FALSE,
+                     title = "Year",
+                     zeroline = TRUE
+        ),
+        yaxis = list(
+          title = "Total Population without Previous Fracture",
+          zeroline = TRUE
+        ),
+        xaxis = list(
+          title = "Year",
+          zeroline = TRUE
+        )
+      )
+    return(p)
+  })
+  
+  # Number of Secondary Fracture patient plots
+  output$nPrevPlot <- renderPlotly({
+    
+    
+    sim <- simulation_data$sim
+    
+    start_year <- 2018
+    end_year   <- as.integer(substring(input$endYear, 1, 4))
+    
+    xbc <- c(start_year:end_year)
+    ybc <- c()
+    ys1 <- c()
+    
+    
+    print(sim)
+    for(i in 1:length(xbc)) {
+      if(i > 1) {
+        ybc <- cbind(ybc, sim[[i]]$n_patients_with_previous_fracture + ybc[i-1])
+        ys1 <- cbind(ys1, sim[[i]]$n_patients_with_previous_fracture_s1 + ys1[i-1])
+      } else {
+        ybc <- cbind(ybc, sim[[i]]$n_patients_with_previous_fracture)
+        ys1 <- cbind(ys1, sim[[i]]$n_patients_with_previous_fracture_s1)
+      }
+    }
+    dummybc <- data.frame(xbc, ybc, ys1)
+    color_pal <- brewer.pal(3, "Paired")
+    p <- plot_ly(dummybc, x = ~xbc) %>% 
+      add_trace(y = ~as.integer(ybc), name = "Base Case", mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
+      add_trace(y = ~as.integer(ys1), name = "Improved PMO Management", mode = 'lines', line = list(color = color_pal[2]),text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
+      config(displayModeBar = F) %>%
+      layout(
+        title = "Cumulative Secondary Fracture Patients vs. Time",
+        xaxis = list(showgrid = FALSE,
+                     title = "Year",
+                     zeroline = TRUE
+        ),
+        yaxis = list(
+          title = "Total Number of Secondary Fracture Patients",
+          zeroline = TRUE
+        ),
+        xaxis = list(
+          title = "Year",
+          zeroline = TRUE
+        )
+      )
+    return(p)
+  })
+  
+  # number of population each year that had previous fractures
+  output$nPriorsPlot <- renderPlotly({
+    
+    
+    sim <- simulation_data$sim
+    
+    start_year <- 2018
+    end_year   <- as.integer(substring(input$endYear, 1, 4))
+    
+    xbc <- c(start_year:end_year)
+    ybc <- c()
+    ys1 <- c()
+    
+    
+    print(sim)
+    for(i in 1:length(xbc)) {
+      if(i > 1) {
+        ybc <- cbind(ybc, sim[[i]]$prev_fracs_per_yr + ybc[i-1])
+      } else {
+        ybc <- cbind(ybc, sim[[i]]$prev_fracs_per_yr)
+      }
+    }
+    dummybc <- data.frame(xbc, ybc)
+    color_pal <- brewer.pal(2, "Paired")
+    p <- plot_ly(dummybc, x = ~xbc) %>% 
+      add_trace(y = ~as.integer(ybc), name = "Base Case", mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
+      config(displayModeBar = F) %>%
+      layout(
+        title = "Cumulative Population with Previous Fracture vs. Time",
+        xaxis = list(showgrid = FALSE,
+                     title = "Year",
+                     zeroline = TRUE
+        ),
+        yaxis = list(
+          title = "Total Population with Previous Fracture",
+          zeroline = TRUE
+        ),
+        xaxis = list(
+          title = "Year",
+          zeroline = TRUE
+        )
+      )
+    return(p)
+  })
   
   # Cumulative Cost Plot
   output$costplot <- renderPlotly({
