@@ -285,13 +285,13 @@ other_fracture_s1 <- ifelse(!any_fracture_s1,
                             !hip_fracture_s1)
 
 
-fracture_given_previous_fractures <- risk_factor_index$prev_fracture_incidence & any_fracture
+fracture_given_previous_fractures <- risk_factor_index$prev_fracture_incidence & (any_fracture | hip_fracture)
 
-fracture_given_previous_fractures_s1 <- risk_factor_index$prev_fracture_incidence & any_fracture_s1
+fracture_given_previous_fractures_s1 <- risk_factor_index$prev_fracture_incidence & (any_fracture_s1 | hip_fracture_s1)
 
-fracture_given_no_previous_fractures <- (!risk_factor_index$prev_fracture_incidence) & any_fracture
+fracture_given_no_previous_fractures <- (!risk_factor_index$prev_fracture_incidence) & (any_fracture | hip_fracture)
 
-fracture_given_no_previous_fractures_s1 <- (!risk_factor_index$prev_fracture_incidence) & any_fracture_s1
+fracture_given_no_previous_fractures_s1 <- (!risk_factor_index$prev_fracture_incidence) & (any_fracture_s1 | hip_fracture_s1)
 
 ## getting at total people with fractures
 
@@ -314,10 +314,10 @@ prev_no_fracs_per_yr <- sum(!risk_factor_index$prev_fracture_incidence)*weird_co
 ## trying to use bayes to get counts of populations 
 # prob_history <- sum(any_fracture)/population_size
 # prob_history_s1 <- sum(any_fracture_s1)/population_size
-prob_history_given_fracture <- prob_fracture_given_previous_fractures/(prob_fracture_given_no_previous_fractures + prob_fracture_given_previous_fractures)
-prob_no_history_given_fracture <- prob_fracture_given_no_previous_fractures/(prob_fracture_given_no_previous_fractures + prob_fracture_given_previous_fractures)
-prob_history_given_fracture_s1 <- prob_fracture_given_previous_fractures_s1/(prob_fracture_given_no_previous_fractures_s1 + prob_fracture_given_previous_fractures_s1)
-prob_no_history_given_fracture_s1 <- prob_fracture_given_no_previous_fractures_s1/(prob_fracture_given_no_previous_fractures_s1 + prob_fracture_given_previous_fractures_s1)
+prob_history_given_fracture <- (prob_fracture_given_previous_fractures*prev_fracture_prob)/(prob_fracture_given_no_previous_fractures*(1-prev_fracture_prob) + prob_fracture_given_previous_fractures*prev_fracture_prob)
+prob_no_history_given_fracture <- (prob_fracture_given_no_previous_fractures*(1-prev_fracture_prob))/(prob_fracture_given_no_previous_fractures*(1-prev_fracture_prob) + prob_fracture_given_previous_fractures*prev_fracture_prob)
+prob_history_given_fracture_s1 <- (prob_fracture_given_previous_fractures_s1*prev_fracture_prob)/(prob_fracture_given_no_previous_fractures_s1*(1-prev_fracture_prob) + prob_fracture_given_previous_fractures_s1*prev_fracture_prob)
+prob_no_history_given_fracture_s1 <- (prob_fracture_given_no_previous_fractures_s1*(1-prev_fracture_prob))/(prob_fracture_given_no_previous_fractures_s1*(1-prev_fracture_prob) + prob_fracture_given_previous_fractures_s1*prev_fracture_prob)
 
 
 # Use hip and other fracture data to extrapolate to other types of fractures
@@ -352,10 +352,10 @@ total_fractures_wo_previous_fracture <- total_fractures*prob_no_history_given_fr
 total_fractures_wo_previous_fracture_s1 <- total_fractures_s1*prob_no_history_given_fracture_s1
 
 ## note 8.5.19 this is not actually getting you the number of patients
-# n_patients_with_previous_fracture <- total_fractures_with_previous_fracture/MULTI_FRACTURE_FACTOR
-# n_patients_with_previous_fracture_s1 <- total_fractures_with_previous_fracture_s1/MULTI_FRACTURE_FACTOR
-# n_patients_wo_previous_fracture <- total_fractures_wo_previous_fracture/MULTI_FRACTURE_FACTOR
-# n_patients_wo_previous_fracture_s1 <- total_fractures_wo_previous_fracture_s1/MULTI_FRACTURE_FACTOR
+n_patients_with_previous_fracture <- total_fractures_with_previous_fracture
+n_patients_with_previous_fracture_s1 <- total_fractures_with_previous_fracture_s1
+n_patients_wo_previous_fracture <- total_fractures_wo_previous_fracture
+n_patients_wo_previous_fracture_s1 <- total_fractures_wo_previous_fracture_s1
 
 # End of Clinical Data, Beginning of Financial Data
 # Calculate Costs
