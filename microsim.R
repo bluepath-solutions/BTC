@@ -351,10 +351,11 @@ total_fractures_with_previous_fracture_s1 <- total_fractures_s1*prob_history_giv
 total_fractures_wo_previous_fracture <- total_fractures*prob_no_history_given_fracture
 total_fractures_wo_previous_fracture_s1 <- total_fractures_s1*prob_no_history_given_fracture_s1
 
-n_patients_with_previous_fracture <- total_fractures_with_previous_fracture/MULTI_FRACTURE_FACTOR
-n_patients_with_previous_fracture_s1 <- total_fractures_with_previous_fracture_s1/MULTI_FRACTURE_FACTOR
-n_patients_wo_previous_fracture <- total_fractures_wo_previous_fracture/MULTI_FRACTURE_FACTOR
-n_patients_wo_previous_fracture_s1 <- total_fractures_wo_previous_fracture_s1/MULTI_FRACTURE_FACTOR
+## note 8.5.19 this is not actually getting you the number of patients
+# n_patients_with_previous_fracture <- total_fractures_with_previous_fracture/MULTI_FRACTURE_FACTOR
+# n_patients_with_previous_fracture_s1 <- total_fractures_with_previous_fracture_s1/MULTI_FRACTURE_FACTOR
+# n_patients_wo_previous_fracture <- total_fractures_wo_previous_fracture/MULTI_FRACTURE_FACTOR
+# n_patients_wo_previous_fracture_s1 <- total_fractures_wo_previous_fracture_s1/MULTI_FRACTURE_FACTOR
 
 # End of Clinical Data, Beginning of Financial Data
 # Calculate Costs
@@ -719,7 +720,9 @@ no_prev_frac_data <- data.frame(prev_no_fracs_per_yr,
 
 
 packaged_data <- data.frame(clinical_data, financial_data, clinical_data_s1, financial_data_s1, prev_frac_data, no_prev_frac_data)*EXTRAPOLATION_FACTOR 
-packaged_data <- data.frame(packaged_data, prob_data, prob_data_s1)
+packaged_data <- data.frame(packaged_data, prob_data, prob_data_s1,
+                            prob_history_given_fracture, prob_no_history_given_fracture,
+                            prob_history_given_fracture_s1, prob_no_history_given_fracture_s1)
 
 return(packaged_data)
 }
