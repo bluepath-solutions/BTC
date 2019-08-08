@@ -1243,7 +1243,6 @@ output$CostBox <- renderInfoBox({
   for(i in 1:duration) {
     total_frax_cost <- (total_frax_cost) + (base_case[[i]]$grand_total_with_prev_frac_s1 - base_case[[i]]$grand_total_with_prev_frac)
   }
-  print(total_frax_cost)
   subtitle_text <- ifelse(total_frax_cost > 0, "Efforts to Improve PMO Management Result in Cost Increases", "Efforts to Improve PMO Management Result in Cost Decreases")
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
@@ -1305,8 +1304,7 @@ output$CostBox <- renderInfoBox({
     ybc <- c()
     ys1 <- c()
 
-    
-    print(sim)
+
     for(i in 1:length(xbc)) {
       if(i > 1) {
         ybc <- cbind(ybc, sim[[i]]$total_fractures + ybc[i-1])
@@ -1354,12 +1352,87 @@ output$CostBox <- renderInfoBox({
     ybc <- c()
     ys1 <- c()
     
-    
     print(sim)
     for(i in 1:length(xbc)) {
       if(i > 1) {
         ybc <- cbind(ybc, sim[[i]]$total_fractures_with_previous_fracture + ybc[i-1])
-        ys1 <- cbind(ys1, sim[[i]]$total_fractures_with_previous_fracture_s1 + ys1[i-1])  
+        ys1 <- cbind(ys1, sim[[i]]$total_fractures_with_previous_fracture_s1 + ys1[i-1])
+        print("Previous with Fracture")
+        print(sim[[i]]$total_fractures_with_previous_fracture)
+        print(sim[[i]]$total_fractures_with_previous_fracture_s1)
+        print("Inpatient")
+        print(sim[[i]]$total_inpatient_with_prev_frac_cost)
+        print(sim[[i]]$total_inpatient_with_prev_frac_cost_s1)
+        print("Outpatient")
+        print(sim[[i]]$total_outpatient_with_prev_frac_cost)
+        print(sim[[i]]$total_outpatient_with_prev_frac_cost_s1)
+        print("LTC")
+        print(sim[[i]]$total_ltc_with_prev_frac_cost)
+        print(sim[[i]]$total_ltc_with_prev_frac_cost_s1)
+        print("ED")
+        print(sim[[i]]$total_ed_with_prev_frac_cost)
+        print(sim[[i]]$total_ed_with_prev_frac_cost_s1)
+        print("Other")
+        print(sim[[i]]$total_other_with_prev_frac_cost)
+        print(sim[[i]]$total_other_with_prev_frac_cost_s1)
+        print("Pharmacy")
+        print(sim[[i]]$total_pharmacy_with_prev_frac_cost)
+        print(sim[[i]]$total_pharmacy_with_prev_frac_cost_s1)
+        
+        print("Productivity")
+        print(sim[[i]]$total_productivity_with_prev_frac_losses)
+        print(sim[[i]]$total_productivity_with_prev_frac_losses_s1)
+        print("Caregiver")
+        print(sim[[i]]$total_caregiver_with_prev_frac_losses)
+        print(sim[[i]]$total_caregiver_with_prev_frac_losses_s1)
+        
+        print("Direct")
+        print(sim[[i]]$total_direct_with_prev_frac_cost)
+        print(sim[[i]]$total_direct_with_prev_frac_cost_s1)
+        
+        print("DXA")
+        print(sim[[i]]$total_dxa_cost)
+        print(sim[[i]]$total_dxa_cost_s1)
+        
+        print("MED")
+        print(sim[[i]]$total_med_cost)
+        print(sim[[i]]$total_med_cost_s1)
+        
+        print("MED_PATIENTS")
+        
+        print(sum(sim[[i]]$num_med_patients))
+        print(sum(sim[[i]]$num_med_patients_s1))
+        
+        
+        print("DXA and Med Costs Partitioned")
+        print((sim[[i]]$total_dxa_cost + sim[[i]]$total_med_cost)*
+                (sim[[i]]$total_fractures_with_previous_fracture/
+                   (sim[[i]]$total_fractures_with_previous_fracture+sim[[i]]$total_fractures_wo_previous_fracture)))
+        print((sim[[i]]$total_dxa_cost_s1 + sim[[i]]$total_med_cost_s1)*
+                (sim[[i]]$total_fractures_with_previous_fracture_s1/
+                   (sim[[i]]$total_fractures_with_previous_fracture_s1+sim[[i]]$total_fractures_wo_previous_fracture_s1)))
+        
+        print("Direct Calculation")
+        print(
+          (sim[[i]]$total_dxa_cost + sim[[i]]$total_med_cost)*
+            (sim[[i]]$total_fractures_with_previous_fracture/
+               (sim[[i]]$total_fractures_with_previous_fracture+sim[[i]]$total_fractures_wo_previous_fracture)) + 
+          sim[[i]]$total_inpatient_with_prev_frac_cost + 
+                sim[[i]]$total_outpatient_with_prev_frac_cost +
+                sim[[i]]$total_ltc_with_prev_frac_cost + 
+                sim[[i]]$total_ed_with_prev_frac_cost + 
+                sim[[i]]$total_other_with_prev_frac_cost + 
+                sim[[i]]$total_pharmacy_with_prev_frac_cost)
+        print(
+          (sim[[i]]$total_dxa_cost_s1 + sim[[i]]$total_med_cost_s1)*
+            (sim[[i]]$total_fractures_with_previous_fracture_s1/
+               (sim[[i]]$total_fractures_with_previous_fracture_s1+sim[[i]]$total_fractures_wo_previous_fracture_s1)) +
+          sim[[i]]$total_inpatient_with_prev_frac_cost_s1 + 
+                sim[[i]]$total_outpatient_with_prev_frac_cost_s1 +
+                sim[[i]]$total_ltc_with_prev_frac_cost_s1 + 
+                sim[[i]]$total_ed_with_prev_frac_cost_s1 + 
+                sim[[i]]$total_other_with_prev_frac_cost_s1 + 
+                sim[[i]]$total_pharmacy_with_prev_frac_cost_s1)
       } else {
         ybc <- cbind(ybc, sim[[i]]$total_fractures_with_previous_fracture)
         ys1 <- cbind(ys1, sim[[i]]$total_fractures_with_previous_fracture_s1)
@@ -1402,8 +1475,6 @@ output$CostBox <- renderInfoBox({
     ybc <- c()
     ys1 <- c()
     
-    
-    print(sim)
     for(i in 1:length(xbc)) {
       if(i > 1) {
         ybc <- cbind(ybc, sim[[i]]$total_fractures_wo_previous_fracture + ybc[i-1])
@@ -1450,8 +1521,6 @@ output$CostBox <- renderInfoBox({
     ybc <- c()
     ys1 <- c()
     
-    
-    print(sim)
     for(i in 1:length(xbc)) {
       if(i > 1) {
         ybc <- cbind(ybc, sim[[i]]$n_patients_wo_previous_fracture + ybc[i-1])
@@ -1498,8 +1567,6 @@ output$CostBox <- renderInfoBox({
     ybc <- c()
     ys1 <- c()
     
-    
-    print(sim)
     for(i in 1:length(xbc)) {
       if(i > 1) {
         ybc <- cbind(ybc, sim[[i]]$prev_no_fracs_per_yr + ybc[i-1])
@@ -1543,8 +1610,6 @@ output$CostBox <- renderInfoBox({
     ybc <- c()
     ys1 <- c()
     
-    
-    print(sim)
     for(i in 1:length(xbc)) {
       if(i > 1) {
         ybc <- cbind(ybc, sim[[i]]$n_patients_with_previous_fracture + ybc[i-1])
@@ -1591,8 +1656,6 @@ output$CostBox <- renderInfoBox({
     ybc <- c()
     ys1 <- c()
     
-    
-    print(sim)
     for(i in 1:length(xbc)) {
       if(i > 1) {
         ybc <- cbind(ybc, sim[[i]]$prev_fracs_per_yr + ybc[i-1])
