@@ -78,7 +78,7 @@ dxa_prob_s1 <- S1ID
 med_base_prob_s1 <- S1TX
 
 price_inflation_2012_2019 <- 104.24/96.184 # https://fred.stlouisfed.org/series/KORCPIALLMINMEI, Korean CPI Jan 2012-Jan 2019
-
+price_inflation_2006_2019 <- 104.24/79.306
 
 
 # Treatment Mix - THIS IS NOT DYNAMIC

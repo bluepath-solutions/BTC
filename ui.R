@@ -322,8 +322,8 @@ fluidPage(
                             column(width = 4, h5(strong("> One Fracture Per Year")), align = "center")),
                           fluidRow(
                             column(width = 4, h5("Inpatient Stay", align = "left")),
-                            column(width = 4, tags$style("#costinpt1 {background-color:#dfdfdf;}"), numericInput(inputId = "costinpt1", label = NULL, value = "2400", step = 1)),
-                            column(width = 4, tags$style("#costinpt2 {background-color:#dfdfdf;}"), numericInput(inputId = "costinpt2", label = NULL, value = "2400"))),
+                            column(width = 4, tags$style("#costinpt1 {background-color:#dfdfdf;}"), numericInput(inputId = "costinpt1", label = NULL, value = "2401", step = 1)),
+                            column(width = 4, tags$style("#costinpt2 {background-color:#dfdfdf;}"), numericInput(inputId = "costinpt2", label = NULL, value = "2401"))),
                           fluidRow(
                             column(width = 4, h5("Outpatient Visit", align = "left")),
                             column(width = 4, tags$style("#costoutpt1 {background-color:#dfdfdf;}"), numericInput(inputId = "costoutpt1", label = NULL, value = "337")),
@@ -350,12 +350,12 @@ fluidPage(
                             column(width = 4, prettyCheckbox(inputId = "IndirectCosts", strong("Include Indirect Costs"), value = TRUE, shape = "square"))),
                           fluidRow(
                             column(width = 4, h5("Productivity Losses", align = "left")),
-                            column(width = 4, tags$style("#costprod1 {background-color:#dfdfdf;}"), numericInput(inputId = "costprod1", label = NULL, value = "198")),
-                            column(width = 4, tags$style("#costprod2 {background-color:#dfdfdf;}"), numericInput(inputId = "costprod2", label = NULL, value = "198"))),
+                            column(width = 4, tags$style("#costprod1 {background-color:#dfdfdf;}"), numericInput(inputId = "costprod1", label = NULL, value = "240")),
+                            column(width = 4, tags$style("#costprod2 {background-color:#dfdfdf;}"), numericInput(inputId = "costprod2", label = NULL, value = "240"))),
                           fluidRow(
                             column(width = 4, h5("Informal Caregiver", align = "left")),
-                            column(width = 4, tags$style("#costcare1 {background-color:#dfdfdf;}"), numericInput(inputId = "costcare1", label = NULL, value = "351")),
-                            column(width = 4, tags$style("#costcare2 {background-color:#dfdfdf;}"), numericInput(inputId = "costcare2", label = NULL, value = "351")))
+                            column(width = 4, tags$style("#costcare1 {background-color:#dfdfdf;}"), numericInput(inputId = "costcare1", label = NULL, value = "426")),
+                            column(width = 4, tags$style("#costcare2 {background-color:#dfdfdf;}"), numericInput(inputId = "costcare2", label = NULL, value = "426")))
                             )
                             ),
                 fluidRow(
