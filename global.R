@@ -32,7 +32,6 @@ library(snow)
 library(doSNOW)
 library(stringr)
 library(tidyverse)
-library(data.table)
 
 
 source("microsim_utilities.R")
@@ -79,8 +78,8 @@ bmd_cutoffs = c(1.00, -3.51, -3.01, -2.51, -2.01, -1.51, -1.01, -0.51, 0.01,
 ID_lookup <- (read_excel("id_lookup.xlsx"))
 
 
-MEDICATION_ADHERENCE <- 0.2221 #0.418 in US
-NON_ADHERENT_INCREASED_FRACTURE_RISK <- 1.46
+MEDICATION_ADHERENCE <- 0.24 #0.418 in US
+NON_ADHERENT_INCREASED_FRACTURE_RISK <- 1.1
 # HIP FRACTURE RATIO is a hard-coded value from the old excel model
 # It extrapolates from the amount of hip fractures the total amount of other fractures
 # (including shoulder, vertebral, and forearm which is why we need to subtract them from

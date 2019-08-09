@@ -90,8 +90,6 @@ fluidPage(
       hidden(actionBttn(inputId="Previous", label=icon("arrow-left"),color="primary",style="float", size="xs")),  
       hidden(actionBttn(inputId="Next", label=icon("arrow-right"),color="primary",style="float", size="xs")),  
       
-      #hidden(actionBttn(inputId ="Previous", label = icon("arrow-left"))),
-      
       setShadow("box"),
       
       tabItems(
@@ -255,24 +253,24 @@ fluidPage(
                                      , style = "width: 100%"
                                      , tags$tr(
                                        tags$td(style = "width: 25%; text-align: left",
-                                               tags$style("#BMD_mean {background-color:#dfdfdf}"), numericInput(inputId = "BMD_mean", label = "Mean Bone Mineral Density", value = 0.578, min = 0, max = 1, step = 0.01)),
+                                               tags$style("#BMD_mean {background-color:#dfdfdf}"), numericInput(inputId = "BMD_mean", label = "Mean Bone Mineral Density", value = 0.71, min = 0, max = 1, step = 0.01)),
                                        tags$td(style = "width: 25%; text-align: left", 
                                                tags$style("#BMD_SD {background-color:#dfdfdf}"), numericInput(inputId = "BMD_SD", label = "Bone Mineral Density Standard Deviation", value = 0.097, min = 0, max = 1, step = 0.01)),
                                        tags$td(style = "width: 25%; text-align: left",
-                                               tags$style("#RA_inp {background-color:#dfdfdf}"), numericInput(inputId = "RA_inp", label = "Rheumatoid Arthritis (%)", value = 3.28, min = 0, max = 100, step = 0.01)),
+                                               tags$style("#RA_inp {background-color:#dfdfdf}"), numericInput(inputId = "RA_inp", label = "Rheumatoid Arthritis (%)", value = 5.7, min = 0, max = 100, step = 0.01)),
                                        tags$td(style = "width: 25%; text-align: left",
-                                               tags$style("#fxr_inp {background-color:#dfdfdf}"), numericInput(inputId = "fxr_inp", label = "Previous Fracture (%)", value = 1.62, min = 0, max = 100, step = 0.01)))),                      
+                                               tags$style("#fxr_inp {background-color:#dfdfdf}"), numericInput(inputId = "fxr_inp", label = "Previous Fracture (%)", value = 10.68, min = 0, max = 100, step = 0.01)))),                      
                           tags$table(id = "inputs-table"
                                      , style = "width: 100%"
                                      , tags$tr(
                                        tags$td(style = "width: 25%; text-align: left",
-                                               tags$style("#parfxr_inp {background-color:#dfdfdf;}"), numericInput(inputId = "parfxr_inp", label = "Parent History of Hip Fracture (%)", value = 5.43, min = 0, max = 100, step = 0.01)),
+                                               tags$style("#parfxr_inp {background-color:#dfdfdf;}"), numericInput(inputId = "parfxr_inp", label = "Parent History of Hip Fracture (%)", value = 16.6, min = 0, max = 100, step = 0.01)),
                                        tags$td(style = "width: 25%; text-align: left",
-                                               tags$style("#smoker {background-color:#dfdfdf;}"), numericInput(inputId = "smoker", label = "Smoker (%)", value = 2.81, min = 0, max = 100, step = 0.01)),
+                                               tags$style("#smoker {background-color:#dfdfdf;}"), numericInput(inputId = "smoker", label = "Smoker (%)", value = 6.3, min = 0, max = 100, step = 0.01)),
                                        tags$td(style = "width: 25%; text-align: left",
-                                               tags$style("#alco {background-color:#dfdfdf;}"), numericInput(inputId = "alco", label = "Excessive Alcohol Use (%)", value = 1.66, min = 0, max = 100, step = 0.01)),
+                                               tags$style("#alco {background-color:#dfdfdf;}"), numericInput(inputId = "alco", label = "Excessive Alcohol Use (%)", value = 5.5, min = 0, max = 100, step = 0.01)),
                                        tags$td(style = "width: 25%; text-align: left",
-                                               tags$style("#gluco_tx {background-color:#dfdfdf;}"), numericInput(inputId = "gluco_tx", label = "Long-Term Glucocorticoid Therapy (%)", value = 1.02, min = 0, max = 100, step = 0.01))))      
+                                               tags$style("#gluco_tx {background-color:#dfdfdf;}"), numericInput(inputId = "gluco_tx", label = "Long-Term Glucocorticoid Therapy (%)", value = 9.9, min = 0, max = 100, step = 0.01))))      
                             ),
                   
                   tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
@@ -523,9 +521,6 @@ fluidPage(
                         # fluidRow(
                         #   column(width = 6, infoBoxOutput("FraxBox_R"), tags$style("#FraxBox_R {width:100%}")),
                         #   column(width = 6, infoBoxOutput("CostBox_R"), tags$style("#CostBox_R {width:100%}") )),
-                        # fluidRow(
-                        #   column(width = 6, infoBoxOutput("nPrimaryBox"), tags$style("#nPrimaryBox {width:100%}")),
-                        #   column(width = 6, infoBoxOutput("nPrevBox"), tags$style("#nPrevBox {width:100%}") )),
                         fluidRow(
                           column(width = 6, infoBoxOutput("nNoPriorsBox"), tags$style("#nNoPriorsBox {width:100%}")),
                           column(width = 6, infoBoxOutput("nPriorsBox"), tags$style("#nPriorsBox {width:100%}") )),
@@ -539,11 +534,6 @@ fluidPage(
                 # fluidRow(
                 #   boxPlus(withSpinner(plotlyOutput("fxrplot")), width = 6),
                 #   boxPlus(withSpinner(plotlyOutput("costplot")), width = 6)),
-                
-                ## testing
-                # fluidRow(
-                #   boxPlus(withSpinner(plotlyOutput('nPrimaryPlot')), width = 6),
-                #   boxPlus(withSpinner(plotlyOutput('nPrevPlot')), width = 6)),
                 fluidRow(
                   boxPlus(withSpinner(plotlyOutput('nNoPriorsPlot')), width = 6),
                   boxPlus(withSpinner(plotlyOutput('nPriorsPlot')), width = 6)),
@@ -563,38 +553,67 @@ fluidPage(
                 fluidRow(
                   width = NULL, background = "black"),
                 h3("Bending the Curve: The Estimated Long-Term Value of Improving Patient Identification and Treatment in Post-Menopausal Osteoporosis", align = "center"),
+                # fluidRow(
+                #   boxPlus(title = "Total Estimated Fractures", 
+                #           closable = FALSE, status = "info", solidHeader = FALSE, collapsible = TRUE, width = 7,
+                #           p(textOutput('totalfxr_content'))
+                #   ),
+                #   column(width=5,infoBoxOutput("FraxBox"), tags$style("#FraxBox {width:100%; word-break: keep-all; overflow-wrap: anywhere;}"))
+                #          ), 
+                # fluidRow(
+                #   boxPlus(title = "Total Estimated Costs", 
+                #           closable = FALSE, status = "info", solidHeader = FALSE, collapsible = TRUE, width = 7,
+                #           p(textOutput('totalcost_content'))
+                #   ),
+                #   column(width=5,infoBoxOutput("CostBox"), tags$style("#CostBox {width:100%; word-break: keep-all; overflow-wrap: anywhere;}"))
+                #         ),
                 fluidRow(
-                  boxPlus(title = "Total Estimated Fractures", 
+                  boxPlus(title = "Primary Estimated Fractures", 
                           closable = FALSE, status = "info", solidHeader = FALSE, collapsible = TRUE, width = 7,
-                          p(textOutput('totalfxr_content'))
+                          p(textOutput('primaryfxr_content'))
                   ),
-                  column(width=5,infoBoxOutput("FraxBox"), tags$style("#FraxBox {width:100%; word-break: keep-all; overflow-wrap: anywhere;}"))
-                         ), 
+                  column(width=5,infoBoxOutput("PrimaryFraxBox"), tags$style("#PrimaryFraxBox {width:100%; word-break: keep-all; overflow-wrap: anywhere;}"))
+                ), 
                 fluidRow(
-                  boxPlus(title = "Total Estimated Costs", 
+                  boxPlus(title = "Primary Estimated Costs", 
                           closable = FALSE, status = "info", solidHeader = FALSE, collapsible = TRUE, width = 7,
-                          p(textOutput('totalcost_content'))
+                          p(textOutput('primarycost_content'))
                   ),
-                  column(width=5,infoBoxOutput("CostBox"), tags$style("#CostBox {width:100%; word-break: keep-all; overflow-wrap: anywhere;}"))
-                        ),
+                  column(width=5,infoBoxOutput("PrimaryCostBox"), tags$style("#PrimaryCostBox {width:100%; word-break: keep-all; overflow-wrap: anywhere;}"))
+                ),
+                fluidRow(
+                  boxPlus(title = "Secondary Estimated Fractures", 
+                          closable = FALSE, status = "info", solidHeader = FALSE, collapsible = TRUE, width = 7,
+                          p(textOutput('secondaryfxr_content'))
+                  ),
+                  column(width=5,infoBoxOutput("SecondaryFraxBox"), tags$style("#SecondaryFraxBox {width:100%; word-break: keep-all; overflow-wrap: anywhere;}"))
+                ), 
+                fluidRow(
+                  boxPlus(title = "Secondary Estimated Costs", 
+                          closable = FALSE, status = "info", solidHeader = FALSE, collapsible = TRUE, width = 7,
+                          p(textOutput('secondarycost_content'))
+                  ),
+                  column(width=5,infoBoxOutput("SecondaryCostBox"), tags$style("#SecondaryCostBox {width:100%; word-break: keep-all; overflow-wrap: anywhere;}"))
+                ),
+                
                 fluidRow(
                   boxPlus(title = "Base Case Fracture Reccurence", 
                           closable = FALSE, status = "warning", solidHeader = FALSE, collapsible = TRUE, width = 8,
                           p(textOutput('reocc_text_1'))
                   ),
                   infoBoxOutput("FractureReoccurence")),
-                fluidRow(
-                  boxPlus(title = "Base Case Fracture Risk Ratio", 
-                          closable = FALSE, status = "warning", solidHeader = FALSE, collapsible = TRUE, width = 8,
-                          p(textOutput('fracture_risk_text'))
-                  ),
-                  infoBoxOutput("FractureRatio")),
-                fluidRow(
-                  boxPlus(title = "New Scenario Fracture Risk Ratio", 
-                          closable = FALSE, status = "warning", solidHeader = FALSE, collapsible = TRUE, width = 8,
-                          p(textOutput('fracture_risk_text_s1'))
-                  ),
-                  infoBoxOutput("FractureRatioS1")),
+                # fluidRow(
+                #   boxPlus(title = "Base Case Fracture Risk Ratio", 
+                #           closable = FALSE, status = "warning", solidHeader = FALSE, collapsible = TRUE, width = 8,
+                #           p(textOutput('fracture_risk_text'))
+                #   ),
+                #   infoBoxOutput("FractureRatio")),
+                # fluidRow(
+                #   boxPlus(title = "New Scenario Fracture Risk Ratio", 
+                #           closable = FALSE, status = "warning", solidHeader = FALSE, collapsible = TRUE, width = 8,
+                #           p(textOutput('fracture_risk_text_s1'))
+                #   ),
+                #   infoBoxOutput("FractureRatioS1")),
 
                 fluidRow(
                   boxPlus(title = "Thank you for visiting.", 

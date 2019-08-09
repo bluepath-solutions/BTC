@@ -864,8 +864,6 @@ sim_data <- reactive({
                                         'getRaceIndex',
                                         'getBMDIndex',
                                         'getRiskFactorIndex',
-                                        'getRiskFactors',
-                                        'countPatientRiskFactorIndex',
                                         'getMedicationUtilization',
                                         'getDXAScans',
                                         'getMedPatients',
@@ -952,6 +950,63 @@ output$totalcost_content <- renderText({
         dollar_format()(abs(total_frax_cost)), 
         " during the years 2018-", inp_year, sep = "", collapse = NULL)
 })
+
+output$primaryfxr_content <- renderText({
+  base_case <- simulation_data$sim
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  for(i in 1:duration) {
+    total_frax <- total_frax + (base_case[[i]]$total_fractures_wo_previous_fracture_s1 - base_case[[i]]$total_fractures_wo_previous_fracture)}
+  formatted_fxrs <- formatC(abs(round(total_frax)), format = 'd', big.mark=',')
+  paste("The total number of primary fractures is estimated to ", 
+        ifelse(total_frax > 0, "increase by ", "decrease by "), 
+        formatted_fxrs, 
+        " during the years 2018-", inp_year, sep = "", collapse = NULL)
+})
+output$primarycost_content <- renderText({
+  base_case <- simulation_data$sim
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  total_frax_cost <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  for(i in 1:duration) {
+    total_frax_cost <- total_frax_cost + (base_case[[i]]$grand_total_wo_prev_frac_s1 - base_case[[i]]$grand_total_wo_prev_frac)}
+  paste("The total cost of primary fractures is estimated to ", ifelse(total_frax_cost > 0, "increase by ", "decrease by "),
+        dollar_format()(abs(total_frax_cost)), 
+        " during the years 2018-", inp_year, sep = "", collapse = NULL)
+})
+
+
+output$secondaryfxr_content <- renderText({
+  base_case <- simulation_data$sim
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  for(i in 1:duration) {
+    total_frax <- total_frax + (base_case[[i]]$total_fractures_with_previous_fracture_s1 - base_case[[i]]$total_fractures_with_previous_fracture)}
+  formatted_fxrs <- formatC(abs(round(total_frax)), format = 'd', big.mark=',')
+  paste("The total number of primary fractures is estimated to ", 
+        ifelse(total_frax > 0, "increase by ", "decrease by "), 
+        formatted_fxrs, 
+        " during the years 2018-", inp_year, sep = "", collapse = NULL)
+})
+output$secondarycost_content <- renderText({
+  base_case <- simulation_data$sim
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  total_frax_cost <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  for(i in 1:duration) {
+    total_frax_cost <- total_frax_cost + (base_case[[i]]$grand_total_with_prev_frac_s1 - base_case[[i]]$grand_total_with_prev_frac)}
+  paste("The total cost of primary fractures is estimated to ", ifelse(total_frax_cost > 0, "increase by ", "decrease by "),
+        dollar_format()(abs(total_frax_cost)), 
+        " during the years 2018-", inp_year, sep = "", collapse = NULL)
+})
+
+
 
 output$reocc_text_1 <- renderText({
   base_case <- simulation_data$sim
@@ -1256,6 +1311,89 @@ output$CostBox <- renderInfoBox({
   )
 })
 
+output$PrimaryFraxBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  for(i in 1:duration) {
+    total_frax <- total_frax + (base_case[[i]]$total_fractures_wo_previous_fracture_s1 - base_case[[i]]$total_fractures_wo_previous_fracture)
+  }
+  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Primary Fracture Incidence Increasing", "Efforts to Improve PMO Management Result in Primary Fracture Incidence Decreasing")
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("Change in Primary Fracture Occurrence, 2018-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    subtitle = subtitle_text, 
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "blue", fill = T, width = NULL#3
+  )
+})
+
+output$PrimaryCostBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax_cost <- (0)
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  for(i in 1:duration) {
+    total_frax_cost <- (total_frax_cost) + (base_case[[i]]$grand_total_wo_prev_frac_s1 - base_case[[i]]$grand_total_wo_prev_frac)
+  }
+  subtitle_text <- ifelse(total_frax_cost > 0, "Efforts to Improve PMO Management Result in Primary Cost Increases", "Efforts to Improve PMO Management Result in Primary Cost Decreases")
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("Change in Total Primary Costs, 2018-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    subtitle = subtitle_text, 
+    value = dollar_format(negative_parens = TRUE)((total_frax_cost)),
+    icon = icon("list"),
+    color = "orange", fill = T, width = NULL#3
+  )
+})
+
+
+output$SecondaryFraxBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  for(i in 1:duration) {
+    total_frax <- total_frax + (base_case[[i]]$total_fractures_with_previous_fracture_s1 - base_case[[i]]$total_fractures_with_previous_fracture)
+  }
+  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Secondary Fracture Incidence Increasing", "Efforts to Improve PMO Management Result in Secondary Fracture Incidence Decreasing")
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("Change in Secondary Fracture Occurrence, 2018-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    subtitle = subtitle_text, 
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "blue", fill = T, width = NULL#3
+  )
+})
+
+output$SecondaryCostBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax_cost <- (0)
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  for(i in 1:duration) {
+    total_frax_cost <- (total_frax_cost) + (base_case[[i]]$grand_total_with_prev_frac_s1 - base_case[[i]]$grand_total_with_prev_frac)
+  }
+  subtitle_text <- ifelse(total_frax_cost > 0, "Efforts to Improve PMO Management Result in Secondary Cost Increases", "Efforts to Improve PMO Management Result in Secondary Cost Decreases")
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("Change in Total Secondary Costs, 2018-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    subtitle = subtitle_text, 
+    value = dollar_format(negative_parens = TRUE)((total_frax_cost)),
+    icon = icon("list"),
+    color = "orange", fill = T, width = NULL#3
+  )
+})
+
+
+
   output$costp <-  renderPlotly({
     costid <- rbind("One per Year", "> One per Year", stringAsFactors = TRUE)
     inpt <- rbind(as.numeric(input$costinpt1), as.numeric(input$costinpt2))
@@ -1318,8 +1456,8 @@ output$CostBox <- renderInfoBox({
     # progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/3, detail = "Preparing Plot")
     color_pal <- brewer.pal(3, "Paired")
     p <- plot_ly(dummybc, x = ~xbc) %>% 
-      add_trace(y = ~ybc, name = "Base Case", mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
-      add_trace(y = ~ys1, name = "Improved PMO Management", mode = 'lines', line = list(color = color_pal[2]),text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
+      add_trace(y = ~ybc, name = "Base Case", type = 'scatter', mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
+      add_trace(y = ~ys1, name = "Improved PMO Management", type = 'scatter', mode = 'lines', line = list(color = color_pal[2]),text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
       config(displayModeBar = F) %>%
       layout(
         title = "Cumulative Fractures vs. Time",
@@ -1357,82 +1495,82 @@ output$CostBox <- renderInfoBox({
       if(i > 1) {
         ybc <- cbind(ybc, sim[[i]]$total_fractures_with_previous_fracture + ybc[i-1])
         ys1 <- cbind(ys1, sim[[i]]$total_fractures_with_previous_fracture_s1 + ys1[i-1])
-        print("Previous with Fracture")
-        print(sim[[i]]$total_fractures_with_previous_fracture)
-        print(sim[[i]]$total_fractures_with_previous_fracture_s1)
-        print("Inpatient")
-        print(sim[[i]]$total_inpatient_with_prev_frac_cost)
-        print(sim[[i]]$total_inpatient_with_prev_frac_cost_s1)
-        print("Outpatient")
-        print(sim[[i]]$total_outpatient_with_prev_frac_cost)
-        print(sim[[i]]$total_outpatient_with_prev_frac_cost_s1)
-        print("LTC")
-        print(sim[[i]]$total_ltc_with_prev_frac_cost)
-        print(sim[[i]]$total_ltc_with_prev_frac_cost_s1)
-        print("ED")
-        print(sim[[i]]$total_ed_with_prev_frac_cost)
-        print(sim[[i]]$total_ed_with_prev_frac_cost_s1)
-        print("Other")
-        print(sim[[i]]$total_other_with_prev_frac_cost)
-        print(sim[[i]]$total_other_with_prev_frac_cost_s1)
-        print("Pharmacy")
-        print(sim[[i]]$total_pharmacy_with_prev_frac_cost)
-        print(sim[[i]]$total_pharmacy_with_prev_frac_cost_s1)
-        
-        print("Productivity")
-        print(sim[[i]]$total_productivity_with_prev_frac_losses)
-        print(sim[[i]]$total_productivity_with_prev_frac_losses_s1)
-        print("Caregiver")
-        print(sim[[i]]$total_caregiver_with_prev_frac_losses)
-        print(sim[[i]]$total_caregiver_with_prev_frac_losses_s1)
-        
-        print("Direct")
-        print(sim[[i]]$total_direct_with_prev_frac_cost)
-        print(sim[[i]]$total_direct_with_prev_frac_cost_s1)
-        
-        print("DXA")
-        print(sim[[i]]$total_dxa_cost)
-        print(sim[[i]]$total_dxa_cost_s1)
-        
-        print("MED")
-        print(sim[[i]]$total_med_cost)
-        print(sim[[i]]$total_med_cost_s1)
-        
-        print("MED_PATIENTS")
-        
-        print(sum(sim[[i]]$num_med_patients))
-        print(sum(sim[[i]]$num_med_patients_s1))
-        
-        
-        print("DXA and Med Costs Partitioned")
-        print((sim[[i]]$total_dxa_cost + sim[[i]]$total_med_cost)*
-                (sim[[i]]$total_fractures_with_previous_fracture/
-                   (sim[[i]]$total_fractures_with_previous_fracture+sim[[i]]$total_fractures_wo_previous_fracture)))
-        print((sim[[i]]$total_dxa_cost_s1 + sim[[i]]$total_med_cost_s1)*
-                (sim[[i]]$total_fractures_with_previous_fracture_s1/
-                   (sim[[i]]$total_fractures_with_previous_fracture_s1+sim[[i]]$total_fractures_wo_previous_fracture_s1)))
-        
-        print("Direct Calculation")
-        print(
-          (sim[[i]]$total_dxa_cost + sim[[i]]$total_med_cost)*
-            (sim[[i]]$total_fractures_with_previous_fracture/
-               (sim[[i]]$total_fractures_with_previous_fracture+sim[[i]]$total_fractures_wo_previous_fracture)) + 
-          sim[[i]]$total_inpatient_with_prev_frac_cost + 
-                sim[[i]]$total_outpatient_with_prev_frac_cost +
-                sim[[i]]$total_ltc_with_prev_frac_cost + 
-                sim[[i]]$total_ed_with_prev_frac_cost + 
-                sim[[i]]$total_other_with_prev_frac_cost + 
-                sim[[i]]$total_pharmacy_with_prev_frac_cost)
-        print(
-          (sim[[i]]$total_dxa_cost_s1 + sim[[i]]$total_med_cost_s1)*
-            (sim[[i]]$total_fractures_with_previous_fracture_s1/
-               (sim[[i]]$total_fractures_with_previous_fracture_s1+sim[[i]]$total_fractures_wo_previous_fracture_s1)) +
-          sim[[i]]$total_inpatient_with_prev_frac_cost_s1 + 
-                sim[[i]]$total_outpatient_with_prev_frac_cost_s1 +
-                sim[[i]]$total_ltc_with_prev_frac_cost_s1 + 
-                sim[[i]]$total_ed_with_prev_frac_cost_s1 + 
-                sim[[i]]$total_other_with_prev_frac_cost_s1 + 
-                sim[[i]]$total_pharmacy_with_prev_frac_cost_s1)
+        # print("Previous with Fracture")
+        # print(sim[[i]]$total_fractures_with_previous_fracture)
+        # print(sim[[i]]$total_fractures_with_previous_fracture_s1)
+        # print("Inpatient")
+        # print(sim[[i]]$total_inpatient_with_prev_frac_cost)
+        # print(sim[[i]]$total_inpatient_with_prev_frac_cost_s1)
+        # print("Outpatient")
+        # print(sim[[i]]$total_outpatient_with_prev_frac_cost)
+        # print(sim[[i]]$total_outpatient_with_prev_frac_cost_s1)
+        # print("LTC")
+        # print(sim[[i]]$total_ltc_with_prev_frac_cost)
+        # print(sim[[i]]$total_ltc_with_prev_frac_cost_s1)
+        # print("ED")
+        # print(sim[[i]]$total_ed_with_prev_frac_cost)
+        # print(sim[[i]]$total_ed_with_prev_frac_cost_s1)
+        # print("Other")
+        # print(sim[[i]]$total_other_with_prev_frac_cost)
+        # print(sim[[i]]$total_other_with_prev_frac_cost_s1)
+        # print("Pharmacy")
+        # print(sim[[i]]$total_pharmacy_with_prev_frac_cost)
+        # print(sim[[i]]$total_pharmacy_with_prev_frac_cost_s1)
+        # 
+        # print("Productivity")
+        # print(sim[[i]]$total_productivity_with_prev_frac_losses)
+        # print(sim[[i]]$total_productivity_with_prev_frac_losses_s1)
+        # print("Caregiver")
+        # print(sim[[i]]$total_caregiver_with_prev_frac_losses)
+        # print(sim[[i]]$total_caregiver_with_prev_frac_losses_s1)
+        # 
+        # print("Direct")
+        # print(sim[[i]]$total_direct_with_prev_frac_cost)
+        # print(sim[[i]]$total_direct_with_prev_frac_cost_s1)
+        # 
+        # print("DXA")
+        # print(sim[[i]]$total_dxa_cost)
+        # print(sim[[i]]$total_dxa_cost_s1)
+        # 
+        # print("MED")
+        # print(sim[[i]]$total_med_cost)
+        # print(sim[[i]]$total_med_cost_s1)
+        # 
+        # print("MED_PATIENTS")
+        # 
+        # print(sum(sim[[i]]$num_med_patients))
+        # print(sum(sim[[i]]$num_med_patients_s1))
+        # 
+        # 
+        # print("DXA and Med Costs Partitioned")
+        # print((sim[[i]]$total_dxa_cost + sim[[i]]$total_med_cost)*
+        #         (sim[[i]]$total_fractures_with_previous_fracture/
+        #            (sim[[i]]$total_fractures_with_previous_fracture+sim[[i]]$total_fractures_wo_previous_fracture)))
+        # print((sim[[i]]$total_dxa_cost_s1 + sim[[i]]$total_med_cost_s1)*
+        #         (sim[[i]]$total_fractures_with_previous_fracture_s1/
+        #            (sim[[i]]$total_fractures_with_previous_fracture_s1+sim[[i]]$total_fractures_wo_previous_fracture_s1)))
+        # 
+        # print("Direct Calculation")
+        # print(
+        #   (sim[[i]]$total_dxa_cost + sim[[i]]$total_med_cost)*
+        #     (sim[[i]]$total_fractures_with_previous_fracture/
+        #        (sim[[i]]$total_fractures_with_previous_fracture+sim[[i]]$total_fractures_wo_previous_fracture)) + 
+        #   sim[[i]]$total_inpatient_with_prev_frac_cost + 
+        #         sim[[i]]$total_outpatient_with_prev_frac_cost +
+        #         sim[[i]]$total_ltc_with_prev_frac_cost + 
+        #         sim[[i]]$total_ed_with_prev_frac_cost + 
+        #         sim[[i]]$total_other_with_prev_frac_cost + 
+        #         sim[[i]]$total_pharmacy_with_prev_frac_cost)
+        # print(
+        #   (sim[[i]]$total_dxa_cost_s1 + sim[[i]]$total_med_cost_s1)*
+        #     (sim[[i]]$total_fractures_with_previous_fracture_s1/
+        #        (sim[[i]]$total_fractures_with_previous_fracture_s1+sim[[i]]$total_fractures_wo_previous_fracture_s1)) +
+        #   sim[[i]]$total_inpatient_with_prev_frac_cost_s1 + 
+        #         sim[[i]]$total_outpatient_with_prev_frac_cost_s1 +
+        #         sim[[i]]$total_ltc_with_prev_frac_cost_s1 + 
+        #         sim[[i]]$total_ed_with_prev_frac_cost_s1 + 
+        #         sim[[i]]$total_other_with_prev_frac_cost_s1 + 
+        #         sim[[i]]$total_pharmacy_with_prev_frac_cost_s1)
       } else {
         ybc <- cbind(ybc, sim[[i]]$total_fractures_with_previous_fracture)
         ys1 <- cbind(ys1, sim[[i]]$total_fractures_with_previous_fracture_s1)
@@ -1441,8 +1579,8 @@ output$CostBox <- renderInfoBox({
     dummybc <- data.frame(xbc, ybc, ys1)
     color_pal <- brewer.pal(3, "Paired")
     p <- plot_ly(dummybc, x = ~xbc) %>% 
-      add_trace(y = ~as.integer(ybc), name = "Base Case", mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
-      add_trace(y = ~as.integer(ys1), name = "Improved PMO Management", mode = 'lines', line = list(color = color_pal[2]),text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
+      add_trace(y = ~as.integer(ybc), name = "Base Case", type = 'scatter', mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
+      add_trace(y = ~as.integer(ys1), name = "Improved PMO Management", type = 'scatter', mode = 'lines', line = list(color = color_pal[2]),text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
       config(displayModeBar = F) %>%
       layout(
         title = "Cumulative Subsequent Fractures vs. Time",
@@ -1487,8 +1625,8 @@ output$CostBox <- renderInfoBox({
     dummybc <- data.frame(xbc, ybc, ys1)
     color_pal <- brewer.pal(3, "Paired")
     p <- plot_ly(dummybc, x = ~xbc) %>% 
-      add_trace(y = ~as.integer(ybc), name = "Base Case", mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
-      add_trace(y = ~as.integer(ys1), name = "Improved PMO Management", mode = 'lines', line = list(color = color_pal[2]),text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
+      add_trace(y = ~as.integer(ybc), name = "Base Case", type = 'scatter', mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
+      add_trace(y = ~as.integer(ys1), name = "Improved PMO Management", type = 'scatter', mode = 'lines', line = list(color = color_pal[2]),text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
       config(displayModeBar = F) %>%
       layout(
         title = "Cumulative Primary Fractures vs. Time",
@@ -1533,8 +1671,8 @@ output$CostBox <- renderInfoBox({
     dummybc <- data.frame(xbc, ybc, ys1)
     color_pal <- brewer.pal(3, "Paired")
     p <- plot_ly(dummybc, x = ~xbc) %>% 
-      add_trace(y = ~as.integer(ybc), name = "Base Case", mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
-      add_trace(y = ~as.integer(ys1), name = "Improved PMO Management", mode = 'lines', line = list(color = color_pal[2]),text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
+      add_trace(y = ~as.integer(ybc), name = "Base Case", type = 'scatter', mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
+      add_trace(y = ~as.integer(ys1), name = "Improved PMO Management", type = 'scatter', mode = 'lines', line = list(color = color_pal[2]),text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
       config(displayModeBar = F) %>%
       layout(
         title = "Cumulative Primary Fracture Patients vs. Time",
@@ -1575,9 +1713,9 @@ output$CostBox <- renderInfoBox({
       }
     }
     dummybc <- data.frame(xbc, ybc)
-    color_pal <- brewer.pal(2, "Paired")
+    color_pal <- brewer.pal(3, "Paired")
     p <- plot_ly(dummybc, x = ~xbc) %>% 
-      add_trace(y = ~as.integer(ybc), name = "Base Case", mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
+      add_trace(y = ~as.integer(ybc), name = "Base Case", type = 'scatter', mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
       config(displayModeBar = F) %>%
       layout(
         title = "Cumulative Population without Previous Fracture vs. Time",
@@ -1622,8 +1760,8 @@ output$CostBox <- renderInfoBox({
     dummybc <- data.frame(xbc, ybc, ys1)
     color_pal <- brewer.pal(3, "Paired")
     p <- plot_ly(dummybc, x = ~xbc) %>% 
-      add_trace(y = ~as.integer(ybc), name = "Base Case", mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
-      add_trace(y = ~as.integer(ys1), name = "Improved PMO Management", mode = 'lines', line = list(color = color_pal[2]),text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
+      add_trace(y = ~as.integer(ybc), name = "Base Case", type = 'scatter', mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
+      add_trace(y = ~as.integer(ys1), name = "Improved PMO Management", type = 'scatter', mode = 'lines', line = list(color = color_pal[2]),text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
       config(displayModeBar = F) %>%
       layout(
         title = "Cumulative Secondary Fracture Patients vs. Time",
@@ -1664,9 +1802,9 @@ output$CostBox <- renderInfoBox({
       }
     }
     dummybc <- data.frame(xbc, ybc)
-    color_pal <- brewer.pal(2, "Paired")
+    color_pal <- brewer.pal(3, "Paired")
     p <- plot_ly(dummybc, x = ~xbc) %>% 
-      add_trace(y = ~as.integer(ybc), name = "Base Case", mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
+      add_trace(y = ~as.integer(ybc), name = "Base Case", type = 'scatter', mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
       config(displayModeBar = F) %>%
       layout(
         title = "Cumulative Population with Previous Fracture vs. Time",
@@ -1713,9 +1851,9 @@ output$CostBox <- renderInfoBox({
     p <- plot_ly(dummybc, 
                  x = ~xbc) %>%
          add_trace(y = ~costybc, name = "Base Case", type = 'scatter', 
-                   mode = "markers", marker = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>%
+                   type = 'scatter', mode = "markers", marker = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>%
          add_trace(y = ~costys1, name = "Improved PMO Management", type = 'scatter',
-                   mode = "markers", marker = list(color = color_pal[2]), text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
+                   type = 'scatter', mode = "markers", marker = list(color = color_pal[2]), text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
               
               config(displayModeBar = F) %>%
               layout(
@@ -1759,9 +1897,9 @@ output$CostBox <- renderInfoBox({
     p <- plot_ly(dummybc,
                  x = ~xbc) %>%
       add_trace(y = ~costybc, name = "Base Case", type = 'scatter',
-                mode = "markers", marker = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>%
+                type = 'scatter', mode = "markers", marker = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>%
       add_trace(y = ~costys1, name = "Improved PMO Management", type = 'scatter',
-                mode = "markers", marker = list(color = color_pal[2]), text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
+                type = 'scatter', mode = "markers", marker = list(color = color_pal[2]), text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
 
       config(displayModeBar = F) %>%
       layout(
@@ -1804,9 +1942,9 @@ output$CostBox <- renderInfoBox({
     p <- plot_ly(dummybc,
                  x = ~xbc) %>%
       add_trace(y = ~costybc, name = "Base Case", type = 'scatter',
-                mode = "markers", marker = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>%
+                type = 'scatter', mode = "markers", marker = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>%
       add_trace(y = ~costys1, name = "Improved PMO Management", type = 'scatter',
-                mode = "markers", marker = list(color = color_pal[2]), text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
+                type = 'scatter', mode = "markers", marker = list(color = color_pal[2]), text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
 
       config(displayModeBar = F) %>%
       layout(

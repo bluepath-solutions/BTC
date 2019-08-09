@@ -34,7 +34,7 @@ population_size <- POP
 if(POP < 100000){
   population_size <- POP
   EXTRAPOLATION_FACTOR <- 1.0
-} else if(POP >= 100001) {
+} else if(POP >= 100000) {
   population_size <- 100000
   EXTRAPOLATION_FACTOR <- POP/population_size
 }
@@ -76,6 +76,11 @@ med_base_prob <-  BASECASETX
 
 dxa_prob_s1 <- S1ID
 med_base_prob_s1 <- S1TX
+
+price_inflation_2012_2019 <- 104.24/96.184 # https://fred.stlouisfed.org/series/KORCPIALLMINMEI, Korean CPI Jan 2012-Jan 2019
+
+
+
 # Treatment Mix - THIS IS NOT DYNAMIC
 treatment_mix <-c(0.167, # Alendronate  PRIMARY (BISPHOSPHONATES?) 0.161
                   0.098,  # Ibandronate 150 MG 0.092
@@ -86,20 +91,21 @@ treatment_mix <-c(0.167, # Alendronate  PRIMARY (BISPHOSPHONATES?) 0.161
                   0.033,  # Conjugated Estrogens/Bazedoxifene 0.028
                   0.098,  # Raloxifene 0.092
                   0.009,  # Forteo 0.004
-                  0.0)  # Tymlos
+                  0.0) # Tymlos
 
 
 # Monthly Costs
-treatment_monthly_cost <-c(0.67*(30/365),  # Alendronate PRIMARY 10.00
-                           17.03*(30/365),  # Ibandronate 150 MG 28.33
-                           0.64*(30/365), # Risedronate 212.54
-                           47.94*(30/365),  # Ibandronate IV 80.00
-                           273.56*(30/365),  # Zoledronic  PRIMARY 18.75
-                           192.07*(30/365), # Denosumab   PRIMARY 203.18
-                           0.94*(30/365), # Conjugated Estrogens/Bazedoxifene 176.79
-                           0.63*(30/365),  # Raloxifene 69.30
-                           290.78*(30/365),# Forteo  3426.50
-                           1822.41)# Tymlos 1822.41
+treatment_monthly_cost <- (price_inflation_2012_2019 * 
+                            c(0.67,  # Alendronate PRIMARY 10.00
+                            17.03,  # Ibandronate 150 MG 28.33
+                            0.64, # Risedronate 212.54
+                            47.94,  # Ibandronate IV 80.00
+                            273.56,  # Zoledronic  PRIMARY 18.75
+                            192.07, # Denosumab   PRIMARY 203.18
+                            0.94, # Conjugated Estrogens/Bazedoxifene 176.79
+                            0.63,  # Raloxifene 69.30
+                            290.78,# Forteo  3426.50
+                            1822.41))# Tymlos 1822.41
 
 treatment_efficacy_hip <- c(0.65, # Alendronate Primary
                             0.73, # Ibandronate 150 MG
@@ -142,6 +148,7 @@ ANY_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_other * MEDICATION_
 
 # THIS IS NOT DYNAMIC
 dxa_cost <- 33.36 # 41.63 in US
+
 # Taken from the Excel Model
 weird_coefficient <- c(25.892946, 26.700267, 27.525255, 28.376817, 29.276951,
                        30.224627, 31.221119, 32.207436, 33.237197, 34.256655,
@@ -150,7 +157,7 @@ weird_coefficient <- c(25.892946, 26.700267, 27.525255, 28.376817, 29.276951,
                        43.018822, 43.619101, 44.170949, 44.581490, 44.882428,
                        45.124642, 45.392507)
 
-#weird_coefficient <- weird_coefficient*1000000/population_size # Coefficient here extrapolates to census data
+# Coefficient here extrapolates to census data
 weird_coefficient <- weird_coefficient/weird_coefficient[1]
 
 inpatient_wo_subsequent_fracture <- COSTINPT1 #9576
@@ -199,15 +206,6 @@ bmd_index <- getBMDIndex(population_size,
                          bmd_index_scores
 )
 
-## detailed risk assignment ####
-# riskTable <- getRiskFactors(population_size, risk_factor_prob, risk_names)
-# # n_prev_frac <- riskTable[, sum(prevFrac)] # can be used to count number of patients assigned prevFrac = 1
-# 
-# prevFractures <- riskTable[, prevFrac]
-# risk_factor_index <- countPatientRiskFactorIndex(riskTable)
-# rm(riskTable)
-#####
-
 risk_factor_index <- getRiskFactorIndex(population_size,
                                        risk_factor_prob)
 
@@ -236,13 +234,11 @@ dxa_scans_s1 <- getDXAScans(population_size,
                             dxa_prob_s1) 
 
 
-med_patients <- getMedPatients(#population_size,
-                               frax_major,
+med_patients <- getMedPatients(frax_major,
                                med_base_prob,
                                year)
 
-med_patients_s1 <- getMedPatients(#population_size,
-                               frax_major,
+med_patients_s1 <- getMedPatients(frax_major,
                                med_base_prob_s1,
                                year)
 # Determine Fractures
@@ -274,9 +270,6 @@ hip_fracture_s1 <- getFracture(med_patients_s1,
 other_fracture <- ifelse(!any_fracture,
                          F,
                          !hip_fracture)
-## this is saying if you had any_fracture and it was a hip, no other_fracture.
-## if you had any_fracture, and it was not a hip, other_fracture.
-## if you did not have any_fracture, then you did not have other_fracture.
 
 
 other_fracture_s1 <- ifelse(!any_fracture_s1,
@@ -292,9 +285,7 @@ fracture_given_no_previous_fractures <- (!risk_factor_index$prev_fracture_incide
 
 fracture_given_no_previous_fractures_s1 <- (!risk_factor_index$prev_fracture_incidence) & (any_fracture_s1 | hip_fracture_s1)
 
-## getting at total people with fractures
-
-
+# getting at total people with fractures
 
 prob_fracture_given_previous_fractures <- sum(fracture_given_previous_fractures)/sum(risk_factor_index$prev_fracture_incidence)
 prob_fracture_given_previous_fractures_s1 <- sum(fracture_given_previous_fractures_s1)/sum(risk_factor_index$prev_fracture_incidence)
@@ -305,14 +296,8 @@ prob_fracture_given_no_previous_fractures_s1 <- sum(fracture_given_no_previous_f
 prev_fracs_per_yr <- sum(risk_factor_index$prev_fracture_incidence)*weird_coefficient[year - 2013]
 prev_no_fracs_per_yr <- sum(!risk_factor_index$prev_fracture_incidence)*weird_coefficient[year - 2013]
 
-# total_fractures_with_previous_fracture <- as.integer(prev_fracs_per_yr*MULTI_FRACTURE_FACTOR*prob_fracture_given_previous_fractures)
-# total_fractures_with_previous_fracture_s1 <- as.integer(prev_fracs_per_yr*MULTI_FRACTURE_FACTOR*prob_fracture_given_previous_fractures_s1)
-# total_fractures_wo_previous_fracture <- as.integer(prev_no_fracs_per_yr*MULTI_FRACTURE_FACTOR*prob_fracture_given_no_previous_fractures)
-# total_fractures_wo_previous_fracture_s1 <- as.integer(prev_no_fracs_per_yr*MULTI_FRACTURE_FACTOR*prob_fracture_given_no_previous_fractures_s1)
 
-## trying to use bayes to get counts of populations 
-# prob_history <- sum(any_fracture)/population_size
-# prob_history_s1 <- sum(any_fracture_s1)/population_size
+# use bayes to get counts of populations 
 prob_history_given_fracture <- (prob_fracture_given_previous_fractures*prev_fracture_prob)/(prob_fracture_given_no_previous_fractures*(1-prev_fracture_prob) + prob_fracture_given_previous_fractures*prev_fracture_prob)
 prob_no_history_given_fracture <- (prob_fracture_given_no_previous_fractures*(1-prev_fracture_prob))/(prob_fracture_given_no_previous_fractures*(1-prev_fracture_prob) + prob_fracture_given_previous_fractures*prev_fracture_prob)
 prob_history_given_fracture_s1 <- (prob_fracture_given_previous_fractures_s1*prev_fracture_prob)/(prob_fracture_given_no_previous_fractures_s1*(1-prev_fracture_prob) + prob_fracture_given_previous_fractures_s1*prev_fracture_prob)
@@ -349,12 +334,6 @@ total_fractures_with_previous_fracture <- total_fractures*prob_history_given_fra
 total_fractures_with_previous_fracture_s1 <- total_fractures_s1*prob_history_given_fracture_s1
 total_fractures_wo_previous_fracture <- total_fractures*prob_no_history_given_fracture
 total_fractures_wo_previous_fracture_s1 <- total_fractures_s1*prob_no_history_given_fracture_s1
-
-## note 8.5.19 this is not actually getting you the number of patients
-n_patients_with_previous_fracture <- total_fractures_with_previous_fracture
-n_patients_with_previous_fracture_s1 <- total_fractures_with_previous_fracture_s1
-n_patients_wo_previous_fracture <- total_fractures_wo_previous_fracture
-n_patients_wo_previous_fracture_s1 <- total_fractures_wo_previous_fracture_s1
 
 # End of Clinical Data, Beginning of Financial Data
 # Calculate Costs
@@ -693,14 +672,12 @@ prob_data_s1 <- data.frame(prob_fracture_given_previous_fractures_s1, prob_fract
 
 prev_frac_data <- data.frame(prev_fracs_per_yr,
                               total_fractures_with_previous_fracture,
-                             n_patients_with_previous_fracture,
                              total_inpatient_with_prev_frac_cost, total_outpatient_with_prev_frac_cost, total_ltc_with_prev_frac_cost,
                              total_ed_with_prev_frac_cost, total_other_with_prev_frac_cost, total_pharmacy_with_prev_frac_cost,
                              total_productivity_with_prev_frac_losses, total_caregiver_with_prev_frac_losses, total_direct_with_prev_frac_cost,
                              total_indirect_with_prev_frac_cost, grand_total_with_prev_frac,
                              #
                              total_fractures_with_previous_fracture_s1, 
-                             n_patients_with_previous_fracture_s1,
                              total_inpatient_with_prev_frac_cost_s1, total_outpatient_with_prev_frac_cost_s1, total_ltc_with_prev_frac_cost_s1,
                              total_ed_with_prev_frac_cost_s1, total_other_with_prev_frac_cost_s1, total_pharmacy_with_prev_frac_cost_s1,
                              total_productivity_with_prev_frac_losses_s1, total_caregiver_with_prev_frac_losses_s1, total_direct_with_prev_frac_cost_s1,
@@ -708,27 +685,22 @@ prev_frac_data <- data.frame(prev_fracs_per_yr,
 
 no_prev_frac_data <- data.frame(prev_no_fracs_per_yr,
                                 total_fractures_wo_previous_fracture,
-                                n_patients_wo_previous_fracture,
                              total_inpatient_wo_prev_frac_cost, total_outpatient_wo_prev_frac_cost, total_ltc_wo_prev_frac_cost,
                              total_ed_wo_prev_frac_cost, total_other_wo_prev_frac_cost, total_pharmacy_wo_prev_frac_cost,
                              total_productivity_wo_prev_frac_losses, total_caregiver_wo_prev_frac_losses, total_direct_wo_prev_frac_cost,
                              total_indirect_wo_prev_frac_cost, grand_total_wo_prev_frac,
                              #
                              total_fractures_wo_previous_fracture_s1,
-                             n_patients_wo_previous_fracture_s1,
                              total_inpatient_wo_prev_frac_cost_s1, total_outpatient_wo_prev_frac_cost_s1, total_ltc_wo_prev_frac_cost_s1,
                              total_ed_wo_prev_frac_cost_s1, total_other_wo_prev_frac_cost_s1, total_pharmacy_wo_prev_frac_cost_s1,
                              total_productivity_wo_prev_frac_losses_s1, total_caregiver_wo_prev_frac_losses_s1, total_direct_wo_prev_frac_cost_s1,
                              total_indirect_wo_prev_frac_cost_s1, grand_total_wo_prev_frac_s1)
 
 
-num_med_patients <- sum(med_patients)
-num_med_patients_s1 <- sum(med_patients_s1)
-
 packaged_data <- data.frame(clinical_data, financial_data, clinical_data_s1, financial_data_s1, prev_frac_data, no_prev_frac_data)*EXTRAPOLATION_FACTOR 
 packaged_data <- data.frame(packaged_data, prob_data, prob_data_s1,
                             prob_history_given_fracture, prob_no_history_given_fracture,
-                            prob_history_given_fracture_s1, prob_no_history_given_fracture_s1, num_med_patients, num_med_patients_s1)#, med_patients, med_patients_s1)
+                            prob_history_given_fracture_s1, prob_no_history_given_fracture_s1)
 
 return(packaged_data)
 }

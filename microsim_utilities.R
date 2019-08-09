@@ -148,41 +148,6 @@ getRiskFactorIndex <- function(POPULATION_SIZE,
   return(list("risk_factor_index" = risk_factor_index, "prev_fracture_incidence" = prev_fracture_incidence))
 }
 
-# getRiskFactors
-# @param POPULATION_SIZE int, the total number of people to be included
-# @param FACTOR_PROBABILITES vector, a vector of floats corresponding to an arbitrary
-#                                  number of additional risk factors
-# @param FACTOR_NAMES vector of names to be used for the risk columns. Must be same length
-#                     as FACTOR_PROBABILITIES
-# generates a data.table with the booleans for each risk. columns are named so that you may
-# pull out individual risk factor vectors.
-getRiskFactors <- function(POPULATION_SIZE,
-                           FACTOR_PROBABILITIES,
-                           FACTOR_NAMES) { 
-  ## function to randomly assign factors to patients
-  ## driven by the logic behind getRiskFactorIndex(),
-  ## but allows us to retain the risk information for each patient.
-  
-  dtbl <- setNames(data.table(matrix(nrow = POPULATION_SIZE, ncol = length(FACTOR_NAMES))), FACTOR_NAMES)
-  
-  for(i in 1:length(FACTOR_NAMES)) {
-    dtbl[, FACTOR_NAMES[i] := sample(0:1, 
-                                     size=POPULATION_SIZE,
-                                     replace=TRUE,
-                                     prob=c(1-FACTOR_PROBABILITIES[i], FACTOR_PROBABILITIES[i]))]
-  }
-  
-  return(dtbl[])
-  
-  
-}
-
-
-countPatientRiskFactorIndex <- function(riskFactorTable){
-  
-  return(riskFactorTable[, rowSums(.SD)])
-}
-
 
 # getMedicationUtilization
 # @param BASE_MEDICATION_ADHERENCE float, the starting medication utilization in 2014
