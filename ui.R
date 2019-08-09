@@ -253,13 +253,13 @@ fluidPage(
                                      , style = "width: 100%"
                                      , tags$tr(
                                        tags$td(style = "width: 25%; text-align: left",
-                                               tags$style("#BMD_mean {background-color:#dfdfdf}"), numericInput(inputId = "BMD_mean", label = "Mean Bone Mineral Density", value = 0.71, min = 0, max = 1, step = 0.01)),
+                                               tags$style("#BMD_mean {background-color:#dfdfdf}"), numericInput(inputId = "BMD_mean", label = "Mean Bone Mineral Density", value = 0.86, min = 0, max = 1, step = 0.01)),
                                        tags$td(style = "width: 25%; text-align: left", 
                                                tags$style("#BMD_SD {background-color:#dfdfdf}"), numericInput(inputId = "BMD_SD", label = "Bone Mineral Density Standard Deviation", value = 0.097, min = 0, max = 1, step = 0.01)),
                                        tags$td(style = "width: 25%; text-align: left",
                                                tags$style("#RA_inp {background-color:#dfdfdf}"), numericInput(inputId = "RA_inp", label = "Rheumatoid Arthritis (%)", value = 5.7, min = 0, max = 100, step = 0.01)),
                                        tags$td(style = "width: 25%; text-align: left",
-                                               tags$style("#fxr_inp {background-color:#dfdfdf}"), numericInput(inputId = "fxr_inp", label = "Previous Fracture (%)", value = 10.68, min = 0, max = 100, step = 0.01)))),                      
+                                               tags$style("#fxr_inp {background-color:#dfdfdf}"), numericInput(inputId = "fxr_inp", label = "Previous Fracture (%)", value = 10.8, min = 0, max = 100, step = 0.01)))),                      
                           tags$table(id = "inputs-table"
                                      , style = "width: 100%"
                                      , tags$tr(
