@@ -1120,7 +1120,7 @@ output$nNoPriorsBox <- renderInfoBox({
   }
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
-  title_text <- paste("Cumulative amount of the population with no prior history of fractures, 2018-", inp_year, sep = "", collapse = NULL)
+  title_text <- paste("Cumulative number of patients with no prior history of fractures, 2018-", inp_year, sep = "", collapse = NULL)
   infoBox(
     title = title_text,
     value = formatC(round(total_frax), format = 'd', big.mark=','),
@@ -1201,7 +1201,7 @@ output$nPriorsBox <- renderInfoBox({
   }
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
-  title_text <- paste("Cumulative amount of the population with prior history of fractures, 2018-", inp_year, sep = "", collapse = NULL)
+  title_text <- paste("Cumulative number of patients with prior history of fractures, 2018-", inp_year, sep = "", collapse = NULL)
   infoBox(
     title = title_text,
     value = formatC(round(total_frax), format = 'd', big.mark=','),
