@@ -1903,7 +1903,7 @@ output$SecondaryCostBox <- renderInfoBox({
 
       config(displayModeBar = F) %>%
       layout(
-        title = "Cumulative Total Cost of Subsequent Fractures vs. Time",
+        title = "Cumulative Total Costs among Subsequent Fracture Population by Year",
         xaxis = list(showgrid = FALSE,
                      title = "Year",
                      zeroline = TRUE
@@ -1948,7 +1948,7 @@ output$SecondaryCostBox <- renderInfoBox({
 
       config(displayModeBar = F) %>%
       layout(
-        title = "Cumulative Total Cost of Primary Fractures vs. Time",
+        title = "Cumulative Total Costs Among the Primary Fracture Population by Year",
         xaxis = list(showgrid = FALSE,
                      title = "Year",
                      zeroline = TRUE
