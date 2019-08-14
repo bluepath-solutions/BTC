@@ -496,7 +496,7 @@ fluidPage(
                             column(width = 4, align="left", blockQuote("    Improved PMO Management")),
                             column(width = 4, tags$style("#scenario1ID {background-color:#dfdfdf;}"), numericInput(inputId = "scenario1ID", label = NULL, value = "43.16", step = 0.1)),
                             bsTooltip("scenario1ID", "The model only allows scenarios to be evlauted that increase rates of identification and treatment. Please enter a value above the value entered for base case.", "left", options = list(container = "body")),
-                            column(width = 4, tags$style("#scenario1Tx {background-color:#dfdfdf;}"), numericInput(inputId = "scenario1Tx", label = NULL, value = "55.90", step = 0.1)),
+                            column(width = 4, tags$style("#scenario1Tx {background-color:#dfdfdf;}"), numericInput(inputId = "scenario1Tx", label = NULL, value = "44.70", step = 0.1)),
                             bsTooltip("scenario1Tx", "The model only allows scenarios to be evlauted that increase rates of identification and treatment. Please enter a value above the value entered for base case.", "left", options = list(container = "body"))),
                           fluidRow(
                             column(width = 4, align="left", blockQuote("    Time Horizon")),
