@@ -72,10 +72,10 @@ function(input, output, session) {
     reset("smoker")
     reset("alco")
     reset("gluco_tx")
-    reset("RE_cauc")
-    reset("RE_hisp")
-    reset("RE_asian")
-    reset("RE_black")
+    # reset("RE_cauc")
+    # reset("RE_hisp")
+    # reset("RE_asian")
+    # reset("RE_black")
    
     reset("costinpt1")
     reset("costinpt2")
@@ -115,10 +115,10 @@ function(input, output, session) {
     reset("smoker")
     reset("alco")
     reset("gluco_tx")
-    reset("RE_cauc")
-    reset("RE_hisp")
-    reset("RE_asian")
-    reset("RE_black")
+    # reset("RE_cauc")
+    # reset("RE_hisp")
+    # reset("RE_asian")
+    # reset("RE_black")
   })  
   
   observeEvent(input$restorefxrcosts, {
@@ -197,133 +197,135 @@ function(input, output, session) {
   ignoreInit = T,
   priority = 500)
   
-  cauc_rate <- reactive({
-    validate(
-      need(input$RE_cauc >= 0 && input$RE_cauc <= 100, 
-           "Caucasion demographic must be within range of [0,100]")
-      %then% need(abs(100 - (input$RE_cauc + input$RE_hisp +
-                    input$RE_asian + input$RE_black)) < 0.0001,
-                  "Demographic percentages must sum to 100"))
-    return(input$RE_cauc/100.0)
-  })
-  observeEvent(input$RE_cauc, {
-    if(!is.numeric(input$RE_cauc) || input$RE_cauc < 0 || input$RE_cauc > 100) {
-      shinyalert("Demographic Breakdown Error", 
-                 "Caucasian demographic must be within range of [0,100].", 
-                 type = "error")
-    }
-    if(!is.numeric(input$RE_cauc) || !is.numeric(input$RE_hisp) ||
-       !is.numeric(input$RE_asian) || !is.numeric(input$RE_black)) {
-      shinyalert("Demographic Breakdown Error", 
-                 "Demographic breakdown values must be numeric.", 
-                 type = "error")
-      return()
-    }
-    if(abs(100 - (input$RE_cauc + input$RE_hisp +
-                  input$RE_asian + input$RE_black)) >= 0.0001) {
-      shinyalert("Demographic Breakdown Error", 
-                 "Demographic percentages must sum to 100.", 
-                 type = "error")
-    }
-  },
-  ignoreInit = T,
-  priority = 500)
+  # cauc_rate <- reactive({
+  #   validate(
+  #     need(input$RE_cauc >= 0 && input$RE_cauc <= 100, 
+  #          "Caucasion demographic must be within range of [0,100]")
+  #     %then% need(abs(100 - (input$RE_cauc + input$RE_hisp +
+  #                   input$RE_asian + input$RE_black)) < 0.0001,
+  #                 "Demographic percentages must sum to 100"))
+  #   return(input$RE_cauc/100.0)
+  # })
+  # observeEvent(input$RE_cauc, {
+  #   if(!is.numeric(input$RE_cauc) || input$RE_cauc < 0 || input$RE_cauc > 100) {
+  #     shinyalert("Demographic Breakdown Error", 
+  #                "Caucasian demographic must be within range of [0,100].", 
+  #                type = "error")
+  #   }
+  #   if(!is.numeric(input$RE_cauc) || !is.numeric(input$RE_hisp) ||
+  #      !is.numeric(input$RE_asian) || !is.numeric(input$RE_black)) {
+  #     shinyalert("Demographic Breakdown Error", 
+  #                "Demographic breakdown values must be numeric.", 
+  #                type = "error")
+  #     return()
+  #   }
+  #   if(abs(100 - (input$RE_cauc + input$RE_hisp +
+  #                 input$RE_asian + input$RE_black)) >= 0.0001) {
+  #     shinyalert("Demographic Breakdown Error", 
+  #                "Demographic percentages must sum to 100.", 
+  #                type = "error")
+  #   }
+  # },
+  # ignoreInit = T,
+  # priority = 500)
+  # 
+  # hisp_rate <- reactive({
+  #   validate(
+  #     need(input$RE_hisp >= 0 && input$RE_hisp <= 100, 
+  #          "Hispanic demographic must be within range of [0,100]")
+  #     %then% need(abs(100 - (input$RE_cauc + input$RE_hisp +
+  #                              input$RE_asian + input$RE_black)) < 0.0001,
+  #                 "Demographic percentages must sum to 100"))
+  #   return(input$RE_hisp/100.0)
+  # })
+  # observeEvent(input$RE_hisp, {
+  #   if(!is.numeric(input$RE_hisp) || input$RE_hisp < 0 || input$RE_hisp > 100) {
+  #     shinyalert("Demographic Breakdown Error", 
+  #                "Hispanic demographic must be within range of [0,100].", 
+  #                type = "error")
+  #   }
+  #   if(!is.numeric(input$RE_cauc) || !is.numeric(input$RE_hisp) ||
+  #      !is.numeric(input$RE_asian) || !is.numeric(input$RE_black)) {
+  #     shinyalert("Demographic Breakdown Error", 
+  #                "Demographic breakdown values must be numeric.", 
+  #                type = "error")
+  #     return()
+  #   }
+  #   if(abs(100 - (input$RE_cauc + input$RE_hisp +
+  #                 input$RE_asian + input$RE_black)) >= 0.0001) {
+  #     shinyalert("Demographic Breakdown Error", 
+  #                "Demographic percentages must sum to 100.", 
+  #                type = "error")
+  #   }
+  # },
+  # ignoreInit = T,
+  # priority = 500)
+  # 
+  # asian_rate <- reactive({
+  #   validate(
+  #     need(input$RE_asian >= 0 && input$RE_asian <= 100, 
+  #          "Asian demographic must be within range of [0,100]")
+  #     %then% need(abs(100 - (input$RE_cauc + input$RE_hisp +
+  #                              input$RE_asian + input$RE_black)) < 0.0001,
+  #                 "Demographic percentages must sum to 100"))
+  #   return(input$RE_asian/100.0)
+  # })
+  # observeEvent(input$RE_asian, {
+  #   if(!is.numeric(input$RE_asian) || input$RE_asian < 0 || input$RE_asian > 100) {
+  #     shinyalert("Demographic Breakdown Error", 
+  #                "Asian demographic must be within range of [0,100].", 
+  #                type = "error")
+  #   }
+  #   if(!is.numeric(input$RE_cauc) || !is.numeric(input$RE_hisp) ||
+  #      !is.numeric(input$RE_asian) || !is.numeric(input$RE_black)) {
+  #     shinyalert("Demographic Breakdown Error", 
+  #                "Demographic breakdown values must be numeric.", 
+  #                type = "error")
+  #     return()
+  #   }
+  #   if(abs(100 - (input$RE_cauc + input$RE_hisp +
+  #                 input$RE_asian + input$RE_black)) >= 0.0001) {
+  #     shinyalert("Demographic Breakdown Error", 
+  #                "Demographic percentages must sum to 100.", 
+  #                type = "error")
+  #   }
+  # },
+  # ignoreInit = T,
+  # priority = 500)
+  # 
+  # black_rate <- reactive({
+  #   validate(
+  #     need(input$RE_black >= 0 && input$RE_black <= 100, 
+  #          "Black demographic must be within range of [0,100]")
+  #     %then% need(abs(100 - (input$RE_cauc + input$RE_hisp +
+  #                              input$RE_asian + input$RE_black)) < 0.0001,
+  #                 "Demographic percentages must sum to 100"))
+  #   return(input$RE_black/100.0)
+  # })
+  # observeEvent(input$RE_black, {
+  #   if(!is.numeric(input$RE_black) || input$RE_black < 0 || input$RE_black > 100) {
+  #     shinyalert("Demographic Breakdown Error", 
+  #                "Black demographic must be within range of [0,100].", 
+  #                type = "error")
+  #   }
+  #   if(!is.numeric(input$RE_cauc) || !is.numeric(input$RE_hisp) ||
+  #      !is.numeric(input$RE_asian) || !is.numeric(input$RE_black)) {
+  #     shinyalert("Demographic Breakdown Error", 
+  #                "Demographic breakdown values must be numeric.", 
+  #                type = "error")
+  #     return()
+  #   }
+  #   if(abs(100 - (input$RE_cauc + input$RE_hisp +
+  #                 input$RE_asian + input$RE_black)) >= 0.0001) {
+  #     shinyalert("Demographic Breakdown Error", 
+  #                "Demographic percentages must sum to 100.", 
+  #                type = "error")
+  #   }
+  # },
+  # ignoreInit = T,
+  # priority = 500)
   
-  hisp_rate <- reactive({
-    validate(
-      need(input$RE_hisp >= 0 && input$RE_hisp <= 100, 
-           "Hispanic demographic must be within range of [0,100]")
-      %then% need(abs(100 - (input$RE_cauc + input$RE_hisp +
-                               input$RE_asian + input$RE_black)) < 0.0001,
-                  "Demographic percentages must sum to 100"))
-    return(input$RE_hisp/100.0)
-  })
-  observeEvent(input$RE_hisp, {
-    if(!is.numeric(input$RE_hisp) || input$RE_hisp < 0 || input$RE_hisp > 100) {
-      shinyalert("Demographic Breakdown Error", 
-                 "Hispanic demographic must be within range of [0,100].", 
-                 type = "error")
-    }
-    if(!is.numeric(input$RE_cauc) || !is.numeric(input$RE_hisp) ||
-       !is.numeric(input$RE_asian) || !is.numeric(input$RE_black)) {
-      shinyalert("Demographic Breakdown Error", 
-                 "Demographic breakdown values must be numeric.", 
-                 type = "error")
-      return()
-    }
-    if(abs(100 - (input$RE_cauc + input$RE_hisp +
-                  input$RE_asian + input$RE_black)) >= 0.0001) {
-      shinyalert("Demographic Breakdown Error", 
-                 "Demographic percentages must sum to 100.", 
-                 type = "error")
-    }
-  },
-  ignoreInit = T,
-  priority = 500)
-  
-  asian_rate <- reactive({
-    validate(
-      need(input$RE_asian >= 0 && input$RE_asian <= 100, 
-           "Asian demographic must be within range of [0,100]")
-      %then% need(abs(100 - (input$RE_cauc + input$RE_hisp +
-                               input$RE_asian + input$RE_black)) < 0.0001,
-                  "Demographic percentages must sum to 100"))
-    return(input$RE_asian/100.0)
-  })
-  observeEvent(input$RE_asian, {
-    if(!is.numeric(input$RE_asian) || input$RE_asian < 0 || input$RE_asian > 100) {
-      shinyalert("Demographic Breakdown Error", 
-                 "Asian demographic must be within range of [0,100].", 
-                 type = "error")
-    }
-    if(!is.numeric(input$RE_cauc) || !is.numeric(input$RE_hisp) ||
-       !is.numeric(input$RE_asian) || !is.numeric(input$RE_black)) {
-      shinyalert("Demographic Breakdown Error", 
-                 "Demographic breakdown values must be numeric.", 
-                 type = "error")
-      return()
-    }
-    if(abs(100 - (input$RE_cauc + input$RE_hisp +
-                  input$RE_asian + input$RE_black)) >= 0.0001) {
-      shinyalert("Demographic Breakdown Error", 
-                 "Demographic percentages must sum to 100.", 
-                 type = "error")
-    }
-  },
-  ignoreInit = T,
-  priority = 500)
-  
-  black_rate <- reactive({
-    validate(
-      need(input$RE_black >= 0 && input$RE_black <= 100, 
-           "Black demographic must be within range of [0,100]")
-      %then% need(abs(100 - (input$RE_cauc + input$RE_hisp +
-                               input$RE_asian + input$RE_black)) < 0.0001,
-                  "Demographic percentages must sum to 100"))
-    return(input$RE_black/100.0)
-  })
-  observeEvent(input$RE_black, {
-    if(!is.numeric(input$RE_black) || input$RE_black < 0 || input$RE_black > 100) {
-      shinyalert("Demographic Breakdown Error", 
-                 "Black demographic must be within range of [0,100].", 
-                 type = "error")
-    }
-    if(!is.numeric(input$RE_cauc) || !is.numeric(input$RE_hisp) ||
-       !is.numeric(input$RE_asian) || !is.numeric(input$RE_black)) {
-      shinyalert("Demographic Breakdown Error", 
-                 "Demographic breakdown values must be numeric.", 
-                 type = "error")
-      return()
-    }
-    if(abs(100 - (input$RE_cauc + input$RE_hisp +
-                  input$RE_asian + input$RE_black)) >= 0.0001) {
-      shinyalert("Demographic Breakdown Error", 
-                 "Demographic percentages must sum to 100.", 
-                 type = "error")
-    }
-  },
-  ignoreInit = T,
-  priority = 500)
+  asian_rate <- function(){return(1)}
   
   
   BMD_mean <- reactive({
@@ -785,10 +787,10 @@ sim_data <- reactive({
   on.exit(progress$close())
   # Validate Inputs
   population <-     pop_input()
-  caucasian_rate <- cauc_rate()
-  hispanic_rate <-  hisp_rate()
+  # caucasian_rate <- cauc_rate()
+  # hispanic_rate <-  hisp_rate()
   asian_rate <-     asian_rate() 
-  black_rate <-     black_rate()
+  # black_rate <-     black_rate()
   
   bmd_mean <-       BMD_mean()
   bmd_sd <-         BMD_SD()
@@ -847,8 +849,8 @@ sim_data <- reactive({
                                         'maximum_age',
                                         'age_cutoffs',
                                         'age_index_scores',
-                                        'race_categories',
-                                        'race_index_scores',
+                                        # 'race_categories',
+                                        # 'race_index_scores',
                                         'fracture_breakdown',
                                         'centering_mean',
                                         'bmd_index_scores',
@@ -861,7 +863,7 @@ sim_data <- reactive({
                                         'input',
                                         'isolate',
                                         'getAgeIndex',
-                                        'getRaceIndex',
+                                        # 'getRaceIndex',
                                         'getBMDIndex',
                                         'getRiskFactorIndex',
                                         'getMedicationUtilization',
@@ -872,10 +874,10 @@ sim_data <- reactive({
                                         ), .verbose = F,
                                         .options.snow = opts) %dopar% {
                                isolate({microsim(population,
-                                                 caucasian_rate,
-                                                 hispanic_rate,
+                                                 # caucasian_rate,
+                                                 # hispanic_rate,
                                                  asian_rate,
-                                                 black_rate,
+                                                 # black_rate,
                                                  bmd_mean,
                                                  bmd_sd,
                                                  ra_rate,

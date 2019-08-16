@@ -73,21 +73,21 @@ getAgeIndex <- function(MINIMUM_AGE,
 #                        scores corresponding to the generated population
 #  Generates an arbitrary population according to provided race data
 #  and returns a list with the FRAX age index score.
-getRaceIndex <- function(POPULATION_SIZE,
-                         RACE_DISTRIBUTION,
-                         RACE_CATEGORIES,
-                         RACE_INDEX_SCORES) {
-  race_array <- sample(1:length(RACE_DISTRIBUTION), 
-                       size=POPULATION_SIZE,
-                       replace=TRUE,
-                       prob=RACE_DISTRIBUTION)
-  race_array[race_array == RACE_CATEGORIES[1]] = RACE_INDEX_SCORES[1]#20000
-  race_array[race_array == RACE_CATEGORIES[2]] = RACE_INDEX_SCORES[2]#10000
-  race_array[race_array == RACE_CATEGORIES[3]] = RACE_INDEX_SCORES[3]#30000
-  race_array[race_array == RACE_CATEGORIES[4]] = RACE_INDEX_SCORES[4]#40000
-  
-  return(race_array)
-}
+# getRaceIndex <- function(POPULATION_SIZE,
+#                          RACE_DISTRIBUTION,
+#                          RACE_CATEGORIES,
+#                          RACE_INDEX_SCORES) {
+#   race_array <- sample(1:length(RACE_DISTRIBUTION), 
+#                        size=POPULATION_SIZE,
+#                        replace=TRUE,
+#                        prob=RACE_DISTRIBUTION)
+#   race_array[race_array == RACE_CATEGORIES[1]] = RACE_INDEX_SCORES[1]#20000
+#   race_array[race_array == RACE_CATEGORIES[2]] = RACE_INDEX_SCORES[2]#10000
+#   race_array[race_array == RACE_CATEGORIES[3]] = RACE_INDEX_SCORES[3]#30000
+#   race_array[race_array == RACE_CATEGORIES[4]] = RACE_INDEX_SCORES[4]#40000
+#   
+#   return(race_array)
+# }
 
 
 # getBMDIndex

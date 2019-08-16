@@ -12,7 +12,13 @@
 # Can Improve Outcomes and Reduce Costs in the US by Lewiecki et. al.      #
 #                                                                          #
 ############################################################################
-microsim <- function(POP, CAUC, HISP, ASIAN, BLACK, BMD_MEAN, BMD_SD, RA_INP,
+# microsim <- function(POP, CAUC, HISP, ASIAN, BLACK, BMD_MEAN, BMD_SD, RA_INP,
+#                      FXR_INP, PARFXR_INP, SMOKER, ALCO, GLUCO_TX, BASECASEID,
+#                      BASECASETX, S1ID, S1TX, COSTINPT1, COSTINPT2, COSTOUTPT1, COSTOUTPT2,
+#                      COSTLTC1, COSTLTC2, COSTED1, COSTED2, COSTOTHER1, COSTOTHER2,
+#                      COSTPHARM1, COSTPHARM2, COSTPROD1, COSTPROD2, COSTCARE1,
+#                      COSTCARE2, YEAR, CASE) {
+microsim <- function(POP, ASIAN, BMD_MEAN, BMD_SD, RA_INP,
                      FXR_INP, PARFXR_INP, SMOKER, ALCO, GLUCO_TX, BASECASEID,
                      BASECASETX, S1ID, S1TX, COSTINPT1, COSTINPT2, COSTOUTPT1, COSTOUTPT2,
                      COSTLTC1, COSTLTC2, COSTED1, COSTED2, COSTOTHER1, COSTOTHER2,
@@ -41,10 +47,10 @@ if(POP < 100000){
 #EXTRAPOLATION_FACTOR <- POP/population_size
 
 # Demographic Percentages
-race_prob <- c(CAUC, 
-               HISP, 
-               ASIAN, 
-               BLACK)
+# race_prob <- c(CAUC, 
+#                HISP, 
+#                ASIAN, 
+#                BLACK)
 
 # Mean Bone Mineral Density (g/cm2)
 bmdTScoremean <- BMD_MEAN
@@ -145,19 +151,21 @@ ANY_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_other * MEDICATION_
 ## this is equal to almost .9 (~.8932)
 
 # Weird Coefficent - This extrapolates the simulated population to the projected 
-#                    US population of women 65+ in the US.  2040 is the last possible
-#                    year that can be simulated with the provided data.
+#                    Korean population (of women).
 
 # THIS IS NOT DYNAMIC
-dxa_cost <- 33.36 # 41.63 in US
+dxa_cost <- 33.36 
 
-# Taken from the Excel Model
-weird_coefficient <- c(25.892946, 26.700267, 27.525255, 28.376817, 29.276951,
-                       30.224627, 31.221119, 32.207436, 33.237197, 34.256655,
-                       35.256342, 36.291667, 37.283552, 38.213439, 39.112738,
-                       39.977522, 40.762367, 41.395753, 41.962435, 42.487148,
-                       43.018822, 43.619101, 44.170949, 44.581490, 44.882428,
-                       45.124642, 45.392507)
+# Population projection using data from korea government stats website.
+# data and model located in "C:\Users\mjackson\Documents\BTC SK\SK_popn_projections.xlsx"
+# uses a quadratic projection of census to account for predicted decline
+# in Korean population.
+weird_coefficient <- c(5072.137, 5097.536, # 2014, 2015
+                       5121.37, 5143.64, 5164.346, 5183.488, 5201.066,
+                       5217.079, 5231.528, 5244.413, 5255.734, 5265.491, # 2021-2025
+                       5273.683, 5280.311, 5285.375, 5288.875, 5290.811,
+                       5291.182, 5289.989, 5287.232, 5282.911, 5277.026, # 2031-2035
+                       5269.576, 5260.562, 5249.984, 5237.842, 5224.136)
 
 # Coefficient here extrapolates to census data
 weird_coefficient <- weird_coefficient/weird_coefficient[1]
@@ -195,10 +203,10 @@ age_index <- getAgeIndex(minimum_age,
                          age_cutoffs,
                          age_index_scores)
 
-race_index <- getRaceIndex(population_size, 
-                           race_prob,
-                           race_categories,
-                           race_index_scores)
+# race_index <- getRaceIndex(population_size, 
+#                            race_prob,
+#                            race_categories,
+#                            race_index_scores)
 
 bmd_index <- getBMDIndex(population_size,
                          bmdTScoremean,
@@ -212,7 +220,7 @@ risk_factor_index <- getRiskFactorIndex(population_size,
                                        risk_factor_prob)
 
 
-index <- as.integer(age_index + race_index + bmd_index + risk_factor_index$risk_factor_index)
+index <- as.integer(age_index + bmd_index + risk_factor_index$risk_factor_index) # + race_index
 
 # This is where index scores are assigned
 # THIS IS THE MOST TIME CONSUMING STEP

@@ -218,24 +218,25 @@ fluidPage(
                                                h5("")),
                                        tags$td(style = "width: 25%; text-align: left",
                                                tags$img(src="grey_boxes.PNG", width = "190px", height = "60px", style="display: block; margin-left: auto; margin-right: 0px;"))
-                                     )),
+                                     ))#,
                           # bsTooltip("pop_input", "Enter eligible population. Default value of 1 million is based on ....","right", options = list(container = "body"))),
                           
-                          tags$table(id = "inputs-table"
-                                     , style = "width: 100%"
-                                     , tags$tr(
-                                       tags$td(style = "width: 11.8%; text-align: left", p("Race/Ethnicity", br(), "Distribution (%)")),
-                                       tags$td(style = "width: 11.8%; text-align: left",
-                                               tags$style("#RE_cauc {background-color:#dfdfdf;}"), numericInput(inputId = "RE_cauc", label = "Caucasian", value = 0, min = 0, max = 100, step = 0.1)),
-                                       tags$td(style = "width: 11.8%; text-align: left",
-                                               tags$style("#RE_hisp {background-color:#dfdfdf;}"), numericInput(inputId = "RE_hisp", label = "Hispanic", value = 0, min = 0, max = 100, step = 0.1)),
-                                       tags$td(style = "width: 11.8%; text-align: left",
-                                               tags$style("#RE_asian {background-color:#dfdfdf;}"), numericInput(inputId = "RE_asian", label = "Asian", value = 100, min = 0, max = 100, step = 0.1)),
-                                       tags$td(style = "width: 11.8%; text-align: left",
-                                               tags$style("#RE_black {background-color:#dfdfdf;}"), numericInput(inputId = "RE_black", label = "Black", value = 0, min = 0, max = 100, step = 0.1)),
-                                       tags$td(style = "width: 11.8%; text-align: left",
-                                               h5(textOutput("sum_RE"), align="center",style="margin-right: 0px; padding-bottom:15px"))
-                                     ))),
+                          # tags$table(id = "inputs-table"
+                          #            , style = "width: 100%"
+                          #            , tags$tr(
+                          #              tags$td(style = "width: 11.8%; text-align: left", p("Race/Ethnicity", br(), "Distribution (%)")),
+                          #              tags$td(style = "width: 11.8%; text-align: left",
+                          #                      tags$style("#RE_cauc {background-color:#dfdfdf;}"), numericInput(inputId = "RE_cauc", label = "Caucasian", value = 0, min = 0, max = 100, step = 0.1)),
+                          #              tags$td(style = "width: 11.8%; text-align: left",
+                          #                      tags$style("#RE_hisp {background-color:#dfdfdf;}"), numericInput(inputId = "RE_hisp", label = "Hispanic", value = 0, min = 0, max = 100, step = 0.1)),
+                          #              tags$td(style = "width: 11.8%; text-align: left",
+                          #                      tags$style("#RE_asian {background-color:#dfdfdf;}"), numericInput(inputId = "RE_asian", label = "Asian", value = 100, min = 0, max = 100, step = 0.1)),
+                          #              tags$td(style = "width: 11.8%; text-align: left",
+                          #                      tags$style("#RE_black {background-color:#dfdfdf;}"), numericInput(inputId = "RE_black", label = "Black", value = 0, min = 0, max = 100, step = 0.1)),
+                          #              tags$td(style = "width: 11.8%; text-align: left",
+                          #                      h5(textOutput("sum_RE"), align="center",style="margin-right: 0px; padding-bottom:15px"))
+                          #            ))
+                          ),
                   
                   boxPlus(id = "Risk_Fact", title = "Risk Factors", width = 12, closable = FALSE, collapsible = TRUE,
                           bsPopover("Risk_Fact", title='<font size="2">Source:', content='<font size="3">DOF, Amgen, Bend the Curve PMO Microsimulation, 2019', placement="left", options = list(container = "body")),

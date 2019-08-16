@@ -55,14 +55,14 @@ age_index_scores <- c(0, 2000, 4000, 6000, 8000, 10000, 12000, 14000)
 ## zeroed out race index scores because we don't use them in sk_id_lookup.
 ## also prevents needing to remove all traces of race in the code. 
 ## can clean up later.
-race_categories = c(1, # Caucasian
-                    2, # Hispanic
-                    3, # Asian
-                    4  ) # Black
-race_index_scores = c(0,
-                      0,
-                      0,
-                      0)
+# race_categories = c(1, # Caucasian
+#                     2, # Hispanic
+#                     3, # Asian
+#                     4  ) # Black
+# race_index_scores = c(0,
+#                       0,
+#                       0,
+#                       0)
 
 fracture_breakdown = c(0.28, # Shoulder,
                        0.5, # vertebral
