@@ -27,7 +27,7 @@ MAX_MAJOR_FRACTURE_RATE <- max(ID_lookup$`FRAX- MAJOR`)
 # Gather and Assign inputs
 year <- YEAR
 index <- which(age_probabilities$Year == year)
-age_prob <- c(age_probabilities[index,2:37])
+age_prob <- c(age_probabilities[index,2:52])
 
 # Population Size - THIS VALUE IS CURRENTLY FIXED, IT WILL NOT CHANGE WITH UI INPUTS
 population_size <- POP
@@ -77,7 +77,9 @@ med_base_prob <-  BASECASETX
 dxa_prob_s1 <- S1ID
 med_base_prob_s1 <- S1TX
 
-price_inflation_2012_2019 <- 104.24/96.184 # https://fred.stlouisfed.org/series/KORCPIALLMINMEI, Korean CPI Jan 2012-Jan 2019
+# https://fred.stlouisfed.org/series/KORCPIALLMINMEI
+# Korean CPI Jan 2012-Jan 2019, Jan 2006-Jan 2019
+price_inflation_2012_2019 <- 104.24/96.184 
 price_inflation_2006_2019 <- 104.24/79.306
 
 
@@ -217,11 +219,13 @@ index <- as.integer(age_index + race_index + bmd_index + risk_factor_index$risk_
 # Hashmaps were purposefully used here to minimize lookup time
 # Direct FRAX calculations are not available as the model is proprietary.
 
+
 frax       <- id_to_frax_hash[[ index ]] # frax hip
 frax[is.na(frax)] <- MAX_HIP_FRACTURE_RATE
 
 frax_major <- id_to_frax_major_hash[[ index ]] # frax major
 frax_major[is.na(frax_major)] <- MAX_MAJOR_FRACTURE_RATE
+
 
 # Determine Identification and Treatment Populations
 

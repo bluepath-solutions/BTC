@@ -45,21 +45,24 @@ tab_id <- c("Overview", "Mechanics", "Pop_Inputs", "ClinEcon_Inputs", "Scenarios
 
 NUM_PAGES <- length(tab_id) + 1
 
-age_probabilities <- (read_excel("age_distribution.xlsx"))
+age_probabilities <- (read_excel("age_distribution_women_50up.xlsx"))
 
-minimum_age <- 65
+minimum_age <- 50
 maximum_age <- 100
-age_cutoffs = c(65, 70.5, 75.5, 80.5, 85.5, 100)
-age_index_scores <- c(0, 200, 400, 600, 800, 1000)
+age_cutoffs = c(50, 55.5, 60.5, 65.5, 70.5, 75.5, 80.5, 85.5, 100)
+age_index_scores <- c(0, 2000, 4000, 6000, 8000, 10000, 12000, 14000)
 
+## zeroed out race index scores because we don't use them in sk_id_lookup.
+## also prevents needing to remove all traces of race in the code. 
+## can clean up later.
 race_categories = c(1, # Caucasian
                     2, # Hispanic
                     3, # Asian
                     4  ) # Black
-race_index_scores = c(20000,
-                      10000,
-                      30000,
-                      40000)
+race_index_scores = c(0,
+                      0,
+                      0,
+                      0)
 
 fracture_breakdown = c(0.28, # Shoulder,
                        0.5, # vertebral
@@ -75,7 +78,7 @@ bmd_cutoffs = c(1.00, -3.51, -3.01, -2.51, -2.01, -1.51, -1.01, -0.51, 0.01,
 
 
 
-ID_lookup <- (read_excel("id_lookup.xlsx"))
+ID_lookup <- (read_excel("sk_id_lookup.xlsx"))
 
 
 MEDICATION_ADHERENCE <- 0.24 #0.418 in US

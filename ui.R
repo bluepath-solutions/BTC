@@ -211,7 +211,7 @@ fluidPage(
                           tags$table(id = "inputs-table"
                                      , style = "width: 100%"
                                      , tags$tr(
-                                       tags$td(style = "width: 12.5%; text-align: left", p("Population, Women Aged 65 Years and Older")),
+                                       tags$td(style = "width: 12.5%; text-align: left", p("Population, Women Aged 50 Years and Older")),
                                        tags$td(style = "width: 12.5%; text-align: left",
                                                tags$style("#pop_input {background-color:#dfdfdf;}"), numericInput(inputId = "pop_input", label = "", value = 1000000, min = 0, max = 30000000)),
                                        tags$td(style = "width: 25%; text-align: left",

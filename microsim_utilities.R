@@ -47,7 +47,13 @@ getAgeIndex <- function(MINIMUM_AGE,
   age_array[age_array >= AGE_CUTOFFS[4] & 
                        age_array < AGE_CUTOFFS[5]] = AGE_INDEX_SCORES[5]
   age_array[age_array >= AGE_CUTOFFS[5] & 
-                      age_array <= AGE_CUTOFFS[6]] = AGE_INDEX_SCORES[6]
+              age_array < AGE_CUTOFFS[6]] = AGE_INDEX_SCORES[6]
+  age_array[age_array >= AGE_CUTOFFS[6] &
+              age_array < AGE_CUTOFFS[7]] = AGE_INDEX_SCORES[7]
+  age_array[age_array >= AGE_CUTOFFS[7] &
+              age_array < AGE_CUTOFFS[8]] = AGE_INDEX_SCORES[8]
+  age_array[age_array >= AGE_CUTOFFS[8] &
+              age_array <= AGE_CUTOFFS[9]] = AGE_INDEX_SCORES[9]
   
   
   return(age_array)
