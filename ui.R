@@ -181,7 +181,7 @@ fluidPage(
                       column(
                         width = 12,
                         descriptionBlock(
-                          tags$img(src="model_mech.PNG", width = "95%", height = "90%", style="display: block; margin-left: auto; margin-right: auto;")),
+                          tags$img(src="Simulation_Mechanics.PNG", width = "95%", height = "90%", style="display: block; margin-left: auto; margin-right: auto;")),
                         text = "Model Flow")
                     )),
                 bsPopover("mod_mech", title='<font size="2">Source:', content='<font size="3">DOF, Amgen, Bend the Curve PMO Microsimulation, 2019', placement="left", options = list(container = "body")),
@@ -522,9 +522,9 @@ fluidPage(
                         # fluidRow(
                         #   column(width = 6, infoBoxOutput("FraxBox_R"), tags$style("#FraxBox_R {width:100%}")),
                         #   column(width = 6, infoBoxOutput("CostBox_R"), tags$style("#CostBox_R {width:100%}") )),
-                        fluidRow(
-                          column(width = 6, infoBoxOutput("nNoPriorsBox"), tags$style("#nNoPriorsBox {width:100%}")),
-                          column(width = 6, infoBoxOutput("nPriorsBox"), tags$style("#nPriorsBox {width:100%}") )),
+                        # fluidRow(
+                        #   column(width = 6, infoBoxOutput("nNoPriorsBox"), tags$style("#nNoPriorsBox {width:100%}")),
+                        #   column(width = 6, infoBoxOutput("nPriorsBox"), tags$style("#nPriorsBox {width:100%}") )),
                         fluidRow(
                           column(width = 6, infoBoxOutput("primaryFracBox"), tags$style("#primaryFracBox {width:100%}")),
                           column(width = 6, infoBoxOutput("prevFracBox"), tags$style("#prevFracBox {width:100%}") )),
@@ -535,9 +535,9 @@ fluidPage(
                 # fluidRow(
                 #   boxPlus(withSpinner(plotlyOutput("fxrplot")), width = 6),
                 #   boxPlus(withSpinner(plotlyOutput("costplot")), width = 6)),
-                fluidRow(
-                  boxPlus(withSpinner(plotlyOutput('nNoPriorsPlot')), width = 6),
-                  boxPlus(withSpinner(plotlyOutput('nPriorsPlot')), width = 6)),
+                # fluidRow(
+                #   boxPlus(withSpinner(plotlyOutput('nNoPriorsPlot')), width = 6),
+                #   boxPlus(withSpinner(plotlyOutput('nPriorsPlot')), width = 6)),
                 
                 fluidRow(
                   boxPlus(withSpinner(plotlyOutput("primaryFracPlot")), width = 6),
