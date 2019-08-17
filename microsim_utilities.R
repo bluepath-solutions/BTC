@@ -7,6 +7,8 @@
 # This file contains helper functions for the primary microsimulation      #
 # function.                                                                #
 ############################################################################
+
+
 # getAgeIndex
 #  @param MINIMUM_AGE int, the minimum age to be included in the population
 #  @param MAXIMUM_AGE int, the maximum age to be included in the population
@@ -50,6 +52,8 @@ getAgeIndex <- function(MINIMUM_AGE,
   
   return(age_array)
 }
+
+
 # getRaceIndex
 #  @param POPULATION_SIZE int, the total number of people to be generated
 #  @param RACE_DISTRIBUTION list, a list containing the probability distribution
@@ -78,6 +82,8 @@ getRaceIndex <- function(POPULATION_SIZE,
   
   return(race_array)
 }
+
+
 # getBMDIndex
 #  @param POPULATION_SIZE int, the total number of people to be generated
 #  @param BMD_MEAN float, the mean value for bone mineral density in the population
@@ -111,6 +117,8 @@ getBMDIndex <- function(POPULATION_SIZE,
   
   return(bmd_array)
 }
+
+
 # getRiskFactorIndex
 # @param POPULATION_SIZE int, the total number of people to be included
 # @param FACTOR_PROBABILITES list, a list of floats corresponding to an arbitrary
@@ -135,6 +143,43 @@ getRiskFactorIndex <- function(POPULATION_SIZE,
   }
   return(risk_factor_index)
 }
+
+# getRiskFactors
+# @param POPULATION_SIZE int, the total number of people to be included
+# @param FACTOR_PROBABILITES vector, a vector of floats corresponding to an arbitrary
+#                                  number of additional risk factors
+# @param FACTOR_NAMES vector of names to be used for the risk columns. Must be same length
+#                     as FACTOR_PROBABILITIES
+# generates a data.table with the booleans for each risk. columns are named so that you may
+# pull out individual risk factor vectors.
+getRiskFactors <- function(POPULATION_SIZE,
+                           FACTOR_PROBABILITIES,
+                           FACTOR_NAMES) { 
+  ## function to randomly assign factors to patients
+  ## driven by the logic behind getRiskFactorIndex(),
+  ## but allows us to retain the risk information for each patient.
+  
+  dtbl <- setNames(data.table(matrix(nrow = POPULATION_SIZE, ncol = length(FACTOR_NAMES))), FACTOR_NAMES)
+  
+  for(i in 1:length(FACTOR_NAMES)) {
+    dtbl[, FACTOR_NAMES[i] := sample(0:1, 
+                                     size=POPULATION_SIZE,
+                                     replace=TRUE,
+                                     prob=c(1-FACTOR_PROBABILITIES[i], FACTOR_PROBABILITIES[i]))]
+  }
+  
+  return(dtbl[])
+  
+  
+}
+
+
+countPatientRiskFactorIndex <- function(riskFactorTable){
+  
+  return(riskFactorTable[, rowSums(.SD)])
+}
+
+
 # getMedicationUtilization
 # @param BASE_MEDICATION_ADHERENCE float, the starting medication utilization in 2014
 # @param YEAR int, the current year being simulated
@@ -144,6 +189,8 @@ getMedicationUtilization <- function(BASE_MEDICATION_UTILIZATION,
                                    YEAR) {
   return(BASE_MEDICATION_UTILIZATION - 0.026 * log(YEAR - 2013))
 }
+
+
 # getDXAScans
 # @param POPULATION_SIZE int, the population size being simulated
 # @param FRAX_MAJOR list, a list of doubles corresponding to the fracture rates of the population
@@ -159,38 +206,48 @@ getDXAScans <- function(POPULATION_SIZE,
     return(FRAX_MAJOR >= quantile(FRAX_MAJOR, 1 - DXA_PROB))  
   }
 }
+
+
 # getMedPatients
-# @param POPULATION_SIZE int, the population size being simulated
 # @param FRAX_MAJOR list, a list of doubles corresponding to the fracture rates of the population
 # @param MED_PROB double, the base treatment rate in 2014
-# Returns a boolean list of length POPULATION_SIZE corresponding to the number of people
+# Returns a boolean list of length FRAX_MAJOR corresponding to the number of people
 # who receive treatment.
-getMedPatients <- function(POPULATION_SIZE,
-                           FRAX_MAJOR,
+getMedPatients <- function(FRAX_MAJOR,
                            MED_PROB,
                            YEAR) {
   if(MED_PROB == 0 || getMedicationUtilization(MED_PROB, YEAR) <= 0) {
-    return(replicate(POPULATION_SIZE, 0))
+    return(replicate(length(FRAX_MAJOR), 0))
   } else {
+    # this line is assigning all FRAX_MAJOR above (or equal to) the quantile corresponding to percent of patients
+    # who are not utilizing their meds a 1. So all higher FRAX_MAJOR are being assigned as medical patients.
+    # Shouldn't this be randomized amongst the patients?
     return(FRAX_MAJOR >= quantile(FRAX_MAJOR, 1 - getMedicationUtilization(MED_PROB, YEAR) ))
   }  
 }
+
+
 # getFracture
 # @param MED_PATIENTS list, a list of booleans corresponding to treatment and no-treatment
 # @param FRACTURE_AVERAGE double, a double corresponding to the fracture average, a CONSTANT
-# @param FRAX list, a list of doubles that corresponds to fracture risk percentage
+# @param FRAX list, a list of doubles that corresponds to fracture risk probability
 # @param SAMPLE list, a list of pseudo-randomly generated doubles for determining risk
 # This function returns a boolean list of the patients who experienced fractures
-# over the course of a given year.  Note that 10 year averages are used which 
-# accounts for the 10 found in the calculations.
+# over the course of a given year.  Note that FRAX uses P( > 0 fractures occuring in 10 years).
+# Hence the ^.1 in the probability calculation.
 getFracture <- function(MED_PATIENTS,
                         FRACTURE_AVERAGE,
                         FRAX,
                         SAMPLE) {
+  
+  prob_of_fracture_in_given_year <- 1-(1-FRAX)^.1
+  
   return(ifelse(MED_PATIENTS,
-                         SAMPLE < (FRACTURE_AVERAGE*(1-exp(-(-log(1-FRAX)/10)))),
-                         SAMPLE < (1-exp(-(-log(1-FRAX)/10)))))  
+                         SAMPLE < (FRACTURE_AVERAGE*prob_of_fracture_in_given_year),
+                         SAMPLE < prob_of_fracture_in_given_year))  
 }
+
+
 # getMultiFraxCost
 # @param TOTAL_FRAX double, the total number of fractures that occured in a given year
 # @param FRAX_FACTOR double, a factor used to compensate for the people who experience multiple fractures
