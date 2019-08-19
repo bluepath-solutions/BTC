@@ -931,7 +931,7 @@ output$totalfxr_content <- renderText({
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
   total_frax <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_frax <- total_frax + (base_case[[i]]$total_fractures_with_previous_fracture_s1 - base_case[[i]]$total_fractures_with_previous_fracture)}
   formatted_fxrs <- formatC(abs(round(total_frax)), format = 'd', big.mark=',')
@@ -945,7 +945,7 @@ output$totalcost_content <- renderText({
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
   total_frax_cost <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_frax_cost <- total_frax_cost + (base_case[[i]]$grand_total_with_prev_frac_s1 - base_case[[i]]$grand_total_with_prev_frac)}
   paste("The total cost is estimated to ", ifelse(total_frax_cost > 0, "increase by ", "decrease by "),
@@ -958,7 +958,7 @@ output$primaryfxr_content <- renderText({
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
   total_frax <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_frax <- total_frax + (base_case[[i]]$total_fractures_wo_previous_fracture_s1 - base_case[[i]]$total_fractures_wo_previous_fracture)}
   formatted_fxrs <- formatC(abs(round(total_frax)), format = 'd', big.mark=',')
@@ -972,7 +972,7 @@ output$primarycost_content <- renderText({
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
   total_frax_cost <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_frax_cost <- total_frax_cost + (base_case[[i]]$grand_total_wo_prev_frac_s1 - base_case[[i]]$grand_total_wo_prev_frac)}
   paste("The total cost of primary fractures is estimated to ", ifelse(total_frax_cost > 0, "increase by ", "decrease by "),
@@ -986,7 +986,7 @@ output$secondaryfxr_content <- renderText({
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
   total_frax <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_frax <- total_frax + (base_case[[i]]$total_fractures_with_previous_fracture_s1 - base_case[[i]]$total_fractures_with_previous_fracture)}
   formatted_fxrs <- formatC(abs(round(total_frax)), format = 'd', big.mark=',')
@@ -1000,7 +1000,7 @@ output$secondarycost_content <- renderText({
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
   total_frax_cost <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_frax_cost <- total_frax_cost + (base_case[[i]]$grand_total_with_prev_frac_s1 - base_case[[i]]$grand_total_with_prev_frac)}
   paste("The total cost of primary fractures is estimated to ", ifelse(total_frax_cost > 0, "increase by ", "decrease by "),
@@ -1015,7 +1015,7 @@ output$reocc_text_1 <- renderText({
   total_reoccurence_prob <- 0.0
   base_occur_dist <- c()
   s1_occur_dist <- c()
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_reoccurence_prob <- (total_reoccurence_prob) + base_case[[i]]$prob_fracture_given_previous_fractures
     base_occur_dist <- c(base_occur_dist, base_case[[i]]$prob_fracture_given_previous_fractures)
@@ -1038,7 +1038,7 @@ output$fracture_risk_text <- renderText({
   total_reoccurence_prob <- 0.0
   new_frac_prob <- 0.0
   
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_reoccurence_prob <- (total_reoccurence_prob) + base_case[[i]]$prob_fracture_given_previous_fractures
     new_frac_prob <- (new_frac_prob) + base_case[[i]]$prob_fracture_given_no_previous_fractures
@@ -1057,7 +1057,7 @@ output$fracture_risk_text_s1 <- renderText({
   total_reoccurence_prob <- 0.0
   new_frac_prob <- 0.0
   
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_reoccurence_prob <- (total_reoccurence_prob) + base_case[[i]]$prob_fracture_given_previous_fractures_s1
     new_frac_prob <- (new_frac_prob) + base_case[[i]]$prob_fracture_given_no_previous_fractures_s1
@@ -1074,7 +1074,7 @@ output$fracture_risk_text_s1 <- renderText({
 output$FraxBox_R <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_frax <- total_frax + (base_case[[i]]$total_fractures_with_previous_fracture_s1 - base_case[[i]]$total_fractures_with_previous_fracture)
   }
@@ -1095,7 +1095,7 @@ output$FraxBox_R <- renderInfoBox({
 output$nPrimaryBox <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_frax <- total_frax + (base_case[[i]]$n_patients_wo_previous_fracture_s1 - base_case[[i]]$n_patients_wo_previous_fracture)
   }
@@ -1116,7 +1116,7 @@ output$nPrimaryBox <- renderInfoBox({
 output$nNoPriorsBox <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_frax <- total_frax + base_case[[i]]$prev_no_fracs_per_yr
   }
@@ -1134,7 +1134,7 @@ output$nNoPriorsBox <- renderInfoBox({
 output$primaryFracBox <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_frax <- total_frax + (base_case[[i]]$total_fractures_wo_previous_fracture_s1 - base_case[[i]]$total_fractures_wo_previous_fracture)
   }
@@ -1154,7 +1154,7 @@ output$primaryFracBox <- renderInfoBox({
 output$primaryFracCostBox <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_frax <- total_frax + (base_case[[i]]$grand_total_wo_prev_frac_s1 - base_case[[i]]$grand_total_wo_prev_frac)
   }
@@ -1176,7 +1176,7 @@ output$primaryFracCostBox <- renderInfoBox({
 output$nPrevBox <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_frax <- total_frax + (base_case[[i]]$n_patients_with_previous_fracture_s1 - base_case[[i]]$n_patients_with_previous_fracture)
   }
@@ -1197,7 +1197,7 @@ output$nPrevBox <- renderInfoBox({
 output$nPriorsBox <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_frax <- total_frax + base_case[[i]]$prev_fracs_per_yr
   }
@@ -1216,7 +1216,7 @@ output$nPriorsBox <- renderInfoBox({
 output$prevFracBox <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_frax <- total_frax + (base_case[[i]]$total_fractures_with_previous_fracture_s1 - base_case[[i]]$total_fractures_with_previous_fracture)
   }
@@ -1236,7 +1236,7 @@ output$prevFracBox <- renderInfoBox({
 output$prevFracCostBox <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_frax <- total_frax + (base_case[[i]]$grand_total_with_prev_frac_s1 - base_case[[i]]$grand_total_with_prev_frac)
   }
@@ -1256,7 +1256,7 @@ output$prevFracCostBox <- renderInfoBox({
 output$CostBox_R <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax_cost <- (0)
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_frax_cost <- (total_frax_cost) + (base_case[[i]]$grand_total_with_prev_frac_s1 - base_case[[i]]$grand_total_with_prev_frac)
   }
@@ -1276,7 +1276,7 @@ output$CostBox_R <- renderInfoBox({
 output$FraxBox <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_frax <- total_frax + (base_case[[i]]$total_fractures_with_previous_fracture_s1 - base_case[[i]]$total_fractures_with_previous_fracture)
   }
@@ -1296,7 +1296,7 @@ output$FraxBox <- renderInfoBox({
 output$CostBox <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax_cost <- (0)
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_frax_cost <- (total_frax_cost) + (base_case[[i]]$grand_total_with_prev_frac_s1 - base_case[[i]]$grand_total_with_prev_frac)
   }
@@ -1316,7 +1316,7 @@ output$CostBox <- renderInfoBox({
 output$PrimaryFraxBox <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_frax <- total_frax + (base_case[[i]]$total_fractures_wo_previous_fracture_s1 - base_case[[i]]$total_fractures_wo_previous_fracture)
   }
@@ -1336,7 +1336,7 @@ output$PrimaryFraxBox <- renderInfoBox({
 output$PrimaryCostBox <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax_cost <- (0)
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_frax_cost <- (total_frax_cost) + (base_case[[i]]$grand_total_wo_prev_frac_s1 - base_case[[i]]$grand_total_wo_prev_frac)
   }
@@ -1357,7 +1357,7 @@ output$PrimaryCostBox <- renderInfoBox({
 output$SecondaryFraxBox <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_frax <- total_frax + (base_case[[i]]$total_fractures_with_previous_fracture_s1 - base_case[[i]]$total_fractures_with_previous_fracture)
   }
@@ -1377,7 +1377,7 @@ output$SecondaryFraxBox <- renderInfoBox({
 output$SecondaryCostBox <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax_cost <- (0)
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_frax_cost <- (total_frax_cost) + (base_case[[i]]$grand_total_with_prev_frac_s1 - base_case[[i]]$grand_total_with_prev_frac)
   }
@@ -1968,7 +1968,7 @@ output$SecondaryCostBox <- renderInfoBox({
     total_reoccurence_prob <- 0.0
     base_occur_dist <- c()
     s1_occur_dist <- c()
-    duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+    duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
     for(i in 1:duration) {
       total_reoccurence_prob <- (total_reoccurence_prob) + base_case[[i]]$prob_fracture_given_previous_fractures
       base_occur_dist <- c(base_occur_dist, base_case[[i]]$prob_fracture_given_previous_fractures)
@@ -2001,7 +2001,7 @@ output$SecondaryCostBox <- renderInfoBox({
     total_reoccurence_prob <- 0.0
     new_frac_prob <- 0.0
 
-    duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+    duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1 
     for(i in 1:duration) {
       total_reoccurence_prob <- (total_reoccurence_prob) + base_case[[i]]$prob_fracture_given_previous_fractures
       new_frac_prob <- (new_frac_prob) + base_case[[i]]$prob_fracture_given_no_previous_fractures
@@ -2029,7 +2029,7 @@ output$SecondaryCostBox <- renderInfoBox({
     total_reoccurence_prob <- 0.0
     new_frac_prob <- 0.0
     
-    duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+    duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
     for(i in 1:duration) {
       total_reoccurence_prob <- (total_reoccurence_prob) + base_case[[i]]$prob_fracture_given_previous_fractures_s1
       new_frac_prob <- (new_frac_prob) + base_case[[i]]$prob_fracture_given_no_previous_fractures_s1
