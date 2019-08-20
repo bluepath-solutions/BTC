@@ -181,7 +181,7 @@ fluidPage(
                       column(
                         width = 12,
                         descriptionBlock(
-                          tags$img(src="Simulation_Mechanics.PNG", width = "95%", height = "90%", style="display: block; margin-left: auto; margin-right: auto;")),
+                          tags$img(src="Simulation_Mechanics.png", width = "95%", height = "90%", style="display: block; margin-left: auto; margin-right: auto;")),
                         text = "Model Flow")
                     )),
                 bsPopover("mod_mech", title='<font size="2">Source:', content='<font size="3">DOF, Amgen, Bend the Curve PMO Microsimulation, 2019', placement="left", options = list(container = "body")),
@@ -331,16 +331,16 @@ fluidPage(
                             column(width = 4, tags$style("#costoutpt2 {background-color:#dfdfdf;}"), numericInput(inputId = "costoutpt2", label = NULL, value = "337"))),
                           fluidRow(
                             column(width = 4, h5("Long-Term Care", align = "left")),
-                            column(width = 4, tags$style("#costLTC1 {background-color:#dfdfdf;}"), numericInput(inputId = "costLTC1", label = NULL, value = "200")),
-                            column(width = 4, tags$style("#costLTC2 {background-color:#dfdfdf;}"), numericInput(inputId = "costLTC2", label = NULL, value = "200"))),
+                            column(width = 4, tags$style("#costLTC1 {background-color:#dfdfdf;}"), numericInput(inputId = "costLTC1", label = NULL, value = "0")),
+                            column(width = 4, tags$style("#costLTC2 {background-color:#dfdfdf;}"), numericInput(inputId = "costLTC2", label = NULL, value = "0"))),
                           fluidRow(
                             column(width = 4, h5("Emergency Department Visit", align = "left")),
-                            column(width = 4, tags$style("#costED1 {background-color:#dfdfdf;}"), numericInput(inputId = "costED1", label = NULL, value = "400")),
-                            column(width = 4, tags$style("#costED2 {background-color:#dfdfdf;}"), numericInput(inputId = "costED2", label = NULL, value = "400"))),
+                            column(width = 4, tags$style("#costED1 {background-color:#dfdfdf;}"), numericInput(inputId = "costED1", label = NULL, value = "0")),
+                            column(width = 4, tags$style("#costED2 {background-color:#dfdfdf;}"), numericInput(inputId = "costED2", label = NULL, value = "0"))),
                           fluidRow(
                             column(width = 4, h5("Other", align = "left")),
-                            column(width = 4, tags$style("#costother1 {background-color:#dfdfdf;}"), numericInput(inputId = "costother1", label = NULL, value = "200")),
-                            column(width = 4, tags$style("#costother2 {background-color:#dfdfdf;}"), numericInput(inputId = "costother2", label = NULL, value = "200"))),
+                            column(width = 4, tags$style("#costother1 {background-color:#dfdfdf;}"), numericInput(inputId = "costother1", label = NULL, value = "0")),
+                            column(width = 4, tags$style("#costother2 {background-color:#dfdfdf;}"), numericInput(inputId = "costother2", label = NULL, value = "0"))),
                           fluidRow(
                             column(width = 4, h5("Pharmacy", align = "left")),
                             column(width = 4, tags$style("#costpharm1 {background-color:#dfdfdf;}"), numericInput(inputId = "costpharm1", label = NULL, value = "161")),
