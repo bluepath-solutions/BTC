@@ -456,14 +456,14 @@ function(input, output, session) {
   
   Base_Case_ID <- reactive({
     validate(
-      need(input$basecaseID >= 11.3 && input$basecaseID <= 100.0, 
-           "Base case identification rate must be within the range [11.3, 100.0]"))
+      need(input$basecaseID >= 0 && input$basecaseID <= 100.0, 
+           "Base case identification rate must be within the range [0, 100.0]"))
     return(input$basecaseID/100.0)
   })
   observeEvent(input$basecaseID, {
-    if(!is.numeric(input$basecaseID) ||input$basecaseID < 11.3 || input$basecaseID > 100.0) {
+    if(!is.numeric(input$basecaseID) ||input$basecaseID < 0 || input$basecaseID > 100.0) {
       shinyalert("Identification Rate Error", 
-                 "Base case identification rate must be within the range [11.3, 100.0].", 
+                 "Base case identification rate must be within the range [0, 100.0].", 
                  type = "error")
     }
   },
@@ -472,14 +472,14 @@ function(input, output, session) {
   
   Base_Case_Treatment <- reactive({
     validate(
-      need(input$basecaseTx >= 9.0 && input$basecaseTx <= 100.0, 
-           "Base case treatment percentage must be within the range [9.0, 100.0]"))
+      need(input$basecaseTx >= 0 && input$basecaseTx <= 100.0, 
+           "Base case treatment percentage must be within the range [0, 100.0]"))
     return(input$basecaseTx/100.0)
   })
   observeEvent(input$basecaseTx, {
-    if(!is.numeric(input$basecaseTx) || input$basecaseTx < 9.0 || input$basecaseTx > 100.0) {
+    if(!is.numeric(input$basecaseTx) || input$basecaseTx < 0 || input$basecaseTx > 100.0) {
       shinyalert("Treatment Rate Error", 
-                 "Base case treatment percentage must be within the range [9.0, 100.0].", 
+                 "Base case treatment percentage must be within the range [0, 100.0].", 
                  type = "error")
     }
   },
@@ -488,14 +488,14 @@ function(input, output, session) {
   
   S1_ID <- reactive({
     validate(
-      need(input$scenario1ID >= 11.3 && input$scenario1ID <= 100.0, 
-           "New scenario identification rate must be within the range [11.3, 100.0]"))
+      need(input$scenario1ID >= input$basecaseID && input$scenario1ID <= 100.0, 
+           paste0("New scenario identification rate must be within the range [", input$basecaseID,", 100.0].")))
     return(input$scenario1ID/100.0)
   })
   observeEvent(input$scenario1ID, {
-    if(!is.numeric(input$scenario1ID) || input$scenario1ID < 11.3 || input$scenario1ID > 100.0) {
+    if(!is.numeric(input$scenario1ID) || input$scenario1ID < input$basecaseID || input$scenario1ID > 100.0) {
       shinyalert("Identification Rate Error", 
-                 "New scenario identification rate must be within the range [11.3, 100.0].", 
+                 paste0("New scenario identification rate must be within the range [", input$basecaseID,", 100.0]."), 
                  type = "error")
     }
   },
@@ -504,15 +504,15 @@ function(input, output, session) {
   
   S1_Treatment <- reactive({
     validate(
-      need(input$scenario1Tx >= 9.0 && input$scenario1Tx <= 100.0, 
-           "New scenario treatment percentage must be within the range [9.0, 100.0]"))
+      need(input$scenario1Tx >= input$basecaseTx && input$scenario1Tx <= 100.0, 
+           paste0("New scenario treatment percentage must be within the range [", input$basecaseTx,", 100.0].")))
     return(input$scenario1Tx/100.0)
   })
   observeEvent(input$scenario1Tx, {
-    if(!is.numeric(input$scenario1Tx) || input$scenario1Tx < 9.0 || input$scenario1Tx > 100.0) {
+    if(!is.numeric(input$scenario1Tx) || input$scenario1Tx < input$basecaseTx || input$scenario1Tx > 100.0) {
       shinyalert("Treatment 
                  Rate Error", 
-                 "New scenario treatment percentage must be within the range [9.0, 100.0].", 
+                 paste0("New scenario treatment percentage must be within the range [", input$basecaseTx,", 100.0]."), 
                  type = "error")
     }
   },
