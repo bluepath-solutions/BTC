@@ -1,0 +1,51 @@
+Package: BTC
+Title: Bending the Curve
+Version: 0.0.1
+Authors@R: c(person("Max", "Feinberg", email = "maxwell.a.feinberg@gmail.com",
+    role = c("aut", "cre")), person("Sophie", "Snyder", email = "s.snyder@bluepathsolutions.com",
+    role = c("aut", "cre")) 
+Description: BTC App
+URL: https://github.com/BPSModeling/BTC
+BugReports: https://github.com/BPSModeling/BTC/issues
+Depends:
+    R (>= 3.5.3)
+Imports:
+    aws.signature,
+    bcrypt,
+    digest,
+    poibin,
+    doParallel,
+    dplyr,
+    lubridate,
+    ggplot2,
+    ggvis,
+    gganimate,
+    hashmap,
+    htmlwidgets,
+    magrittr,
+    plotly,
+    prettyR,
+    readxl,
+    rsconnect,
+    RColorBrewer,
+    scales,
+    shiny,
+    shinycssloaders,
+    shinyEffects,
+    shinythemes,
+    shinyLP,
+    shinyBS,
+    shinyjs,
+    shinyalert,
+    shinyWidgets,
+    shinydashboard,
+    shinydashboardPlus,
+    snow,
+    doSNOW,
+    stringr,
+    tidyverse
+License: AGPL-3
+SystemRequirements: pandoc with https support
+LazyData: true
+VignetteBuilder: knitr
+RoxygenNote: 6.0.1
