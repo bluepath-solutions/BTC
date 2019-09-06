@@ -1,9 +1,11 @@
 Package: BTC
 Title: Bending the Curve
-Version: 0.0.1
-Authors@R: c(person("Max", "Feinberg", email = "maxwell.a.feinberg@gmail.com",
-    role = c("aut", "cre")), person("Sophie", "Snyder", email = "s.snyder@bluepathsolutions.com",
-    role = c("aut", "cre")) 
+Version: 0.0.1.2
+Authors@R: as.person(c(
+    "Max Feinberg <maxwell.a.feinberg@gmail.com> [aut]",
+    "Sophie Snyder <s.snyder@bluepathsolutions.com> [aut, cre]",
+    "Micah Jackson <MJackson@bluepathsolutions.com> [aut]"
+    ))
 Description: BTC App
 URL: https://github.com/BPSModeling/BTC
 BugReports: https://github.com/BPSModeling/BTC/issues
@@ -44,7 +46,7 @@ Imports:
     doSNOW,
     stringr,
     tidyverse
-License: AGPL-3
+License: file LICENSE
 SystemRequirements: pandoc with https support
 LazyData: true
 VignetteBuilder: knitr
