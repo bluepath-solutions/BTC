@@ -1,5 +1,5 @@
-
 library(aws.signature)
+library(bcrypt)
 library(digest)
 library(poibin)
 library(doParallel)
@@ -36,6 +36,8 @@ library(tidyverse)
 
 source("microsim_utilities.R")
 source("microsim.R")
+
+credentials <- load_hashmap("credentials")
 
 cl <- makeCluster(detectCores() - 1)
 registerDoSNOW(cl)

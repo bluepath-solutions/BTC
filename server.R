@@ -4,12 +4,75 @@ abbreviations <- data.frame(abbrev = c("BMD", "CPI", "DXA", "FRAX", "NHANES"),
 
 tab_id <- c("Home", "Overview", "Mechanics", "Pop_Inputs", "ClinEcon_Inputs", "Scenarios", "Results", "Assumptions", "Disclosures", "Terms", "References")
 
-
-
 #################################################################
 function(input, output, session) {
   output$value <- renderText({ input$inpt })
+###############LOGIN PAGE########################################
+  loginData <- reactiveValues(authenticated = F)
   
+  loginModal <- function(failed = F) {
+    modalDialog(
+      tags$h2("LOG IN",
+              class = "text-center",
+              style = "padding-top: 0;
+                       color: #333;
+                       font-weight:600;"),
+      textInput(inputId = "username",
+                placeholder = "Username",
+                label = tagList(icon("user"), "Username")),
+      passwordInput(inputId = "password",
+                    placeholder = "Password",
+                    label = tagList(icon("unlock-alt"), "Password")),
+      footer = tagList(
+        verbatimTextOutput("loginInfo"),
+        actionButton("ok", "OK")
+      )
+    )
+  }
+  
+  loginBlock <- observe({
+    showModal(loginModal())
+  },
+  priority = 100000)
+  
+  loginUnblock <- observe({
+    req(input$ok)
+    isolate({
+      Username <- input$username
+      Password <- input$password
+    })
+    if(length(Username) > 0 && length(Password) > 0 && credentials$has_key(Username)) {
+      if(checkpw(Password, credentials$find(Username))) {
+        loginData$authenticated <- T
+        loginBlock$suspend()
+        removeModal()
+      } else {
+        loginData$authenicated <- F
+      }
+    } else {
+      loginData$authenticated <- F
+    }
+    
+  },
+  priority = 250000)
+  
+  output$loginInfo <- renderPrint({
+    req(input$ok)
+    if(loginData$authenticated) {
+      "Success!"
+    } else {
+      "Authentication Failed"
+    }
+  })
+  
+  output$logoutButton <- renderUI({
+    req(loginData$authenticated) 
+      tags$li(a(icon("fa fa-sign-out"), "Logout",
+                href="javascript:window.location.reload(true)"),
+              class = "dropdown",
+              style = "background-color: #eee !important; border: 0;
+                       font-weight: bold; margin: 5px; padding: 10px;")
+  })
 ###############DEFAULT ACTIONS###################################
   observe({
     lapply(c("Next", "Previous"),
