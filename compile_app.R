@@ -14,6 +14,7 @@ create_app( app_name = "BTC",
                      "gganimate",
                      "hashmap",
                      "htmlwidgets",
+                     "jsonlite",
                      "magrittr",
                      "plotly",
                      "prettyR",
@@ -35,5 +36,9 @@ create_app( app_name = "BTC",
                      "snow",
                      "doSNOW",
                      "stringr",
-                     "tidyverse"), auth_token = "c9ece2da1cf7b1584fc43a3cb772d57233a8243c", overwrite = T, out_dir = "~/BP/BTC_Out")
+                     "tidyverse"), 
+            auth_token = "c9ece2da1cf7b1584fc43a3cb772d57233a8243c", 
+            overwrite = T,
+            include_R = T,
+            include_Rtools = T)
 compile_iss()

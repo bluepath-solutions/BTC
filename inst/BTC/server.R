@@ -2152,6 +2152,14 @@ outputOptions(output, 'FraxBox', priority = 0)
 outputOptions(output, 'CostBox', priority = 0)
 outputOptions(output, 'FraxBox_R', priority = 0)
 outputOptions(output, 'CostBox_R', priority = 0)
+
+
+  session$onSessionEnded(function() {
+    stopApp()
+    q("no")
+  })
+
+
 }
 
 
