@@ -872,7 +872,9 @@ sim_data <- reactive({
                                         'getDXAScans',
                                         'getMedPatients',
                                         'getFracture',
-                                        'getMultiFraxCost'
+                                        'getMultiFraxCost',
+                                        'getCostWO',
+                                        'getCostWP'
                                         ), .verbose = F,
                                         .options.snow = opts) %dopar% {
                                isolate({microsim(population,

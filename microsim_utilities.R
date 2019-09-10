@@ -239,3 +239,31 @@ getMultiFraxCost <- function(TOTAL_FRAX,
   return(TOTAL_FRAX * (1/FRAX_FACTOR)*WO_COST + 
            TOTAL_FRAX * ((FRAX_FACTOR-1)/FRAX_FACTOR)*W_COST)  
 }
+
+
+
+
+
+# getCostWO
+# get costs of fractures with people who did not have previous fractures. These are people that did not have a prior
+# fracture and only get 1 this year.
+getCostWO <- function(nFRACS_WO, FRAX_FACTOR, SINGLE_COST) {
+  return(nFRACS_WO*(1/FRAX_FACTOR)*SINGLE_COST)
+}
+
+
+
+
+# getCostWP
+# gets costs of fractures from people that have had a previous fracture. These are people that had a fracture in the past
+# and either do or don't get a new frac this year, as well as people that did not have a frac in the past, but have had 
+# multiple fractures this year. 
+getCostWP <- function(nFRACS_WITH, nFRACS_WO, FRAX_FACTOR, SINGLE_COST, MULTI_COST) {
+  costs_singles_with_history <- nFRACS_WITH*(1/FRAX_FACTOR)*SINGLE_COST
+  costs_multi_with_history <- nFRACS_WITH*(1-1/FRAX_FACTOR)*MULTI_COST
+  costs_multi_without_history <- nFRACS_WO*(1-1/FRAX_FACTOR)*MULTI_COST
+  
+  return(sum(costs_singles_with_history, costs_multi_with_history, costs_multi_without_history))
+  
+}
+
