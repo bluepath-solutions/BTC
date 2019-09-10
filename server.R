@@ -497,7 +497,8 @@ function(input, output, session) {
   observeEvent(input$scenario1ID, {
     if(!is.numeric(input$scenario1ID) || input$scenario1ID < input$basecaseID || input$scenario1ID > 100.0) {
       shinyalert("Identification Rate Error", 
-                 paste0("New scenario identification rate must be within the range [", input$basecaseID,", 100.0]."), 
+                 paste0("New scenario identification rate must be within the range [", input$basecaseID,
+                        ", 100.0] and treatment percentage within [", input$basecaseTx,", 100.0]."), 
                  type = "error")
     }
   },
@@ -514,7 +515,8 @@ function(input, output, session) {
     if(!is.numeric(input$scenario1Tx) || input$scenario1Tx < input$basecaseTx || input$scenario1Tx > 100.0) {
       shinyalert("Treatment 
                  Rate Error", 
-                 paste0("New scenario treatment percentage must be within the range [", input$basecaseTx,", 100.0]."), 
+                 paste0("New scenario identification rate must be within the range [", input$basecaseID,
+                        ", 100.0] and treatment percentage within [", input$basecaseTx,", 100.0]."), 
                  type = "error")
     }
   },
@@ -870,7 +872,9 @@ sim_data <- reactive({
                                         'getDXAScans',
                                         'getMedPatients',
                                         'getFracture',
-                                        'getMultiFraxCost'
+                                        'getMultiFraxCost',
+                                        'getCostWO',
+                                        'getCostWP'
                                         ), .verbose = F,
                                         .options.snow = opts) %dopar% {
                                isolate({microsim(population,

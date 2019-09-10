@@ -323,12 +323,12 @@ fluidPage(
                             column(width = 4, h5(strong("> One Fracture Per Year")), align = "center")),
                           fluidRow(
                             column(width = 4, h5("Inpatient Stay", align = "left")),
-                            column(width = 4, tags$style("#costinpt1 {background-color:#dfdfdf;}"), numericInput(inputId = "costinpt1", label = NULL, value = "2401", step = 1)),
-                            column(width = 4, tags$style("#costinpt2 {background-color:#dfdfdf;}"), numericInput(inputId = "costinpt2", label = NULL, value = "2401"))),
+                            column(width = 4, tags$style("#costinpt1 {background-color:#dfdfdf;}"), numericInput(inputId = "costinpt1", label = NULL, value = "4698.97", step = 1)),
+                            column(width = 4, tags$style("#costinpt2 {background-color:#dfdfdf;}"), numericInput(inputId = "costinpt2", label = NULL, value = "8084.90"))),
                           fluidRow(
                             column(width = 4, h5("Outpatient Visit", align = "left")),
-                            column(width = 4, tags$style("#costoutpt1 {background-color:#dfdfdf;}"), numericInput(inputId = "costoutpt1", label = NULL, value = "337")),
-                            column(width = 4, tags$style("#costoutpt2 {background-color:#dfdfdf;}"), numericInput(inputId = "costoutpt2", label = NULL, value = "337"))),
+                            column(width = 4, tags$style("#costoutpt1 {background-color:#dfdfdf;}"), numericInput(inputId = "costoutpt1", label = NULL, value = "1243.64")),
+                            column(width = 4, tags$style("#costoutpt2 {background-color:#dfdfdf;}"), numericInput(inputId = "costoutpt2", label = NULL, value = "1904.44"))),
                           fluidRow(
                             column(width = 4, h5("Long-Term Care", align = "left")),
                             column(width = 4, tags$style("#costLTC1 {background-color:#dfdfdf;}"), numericInput(inputId = "costLTC1", label = NULL, value = "0")),
@@ -343,8 +343,8 @@ fluidPage(
                             column(width = 4, tags$style("#costother2 {background-color:#dfdfdf;}"), numericInput(inputId = "costother2", label = NULL, value = "0"))),
                           fluidRow(
                             column(width = 4, h5("Pharmacy", align = "left")),
-                            column(width = 4, tags$style("#costpharm1 {background-color:#dfdfdf;}"), numericInput(inputId = "costpharm1", label = NULL, value = "161")),
-                            column(width = 4, tags$style("#costpharm2 {background-color:#dfdfdf;}"), numericInput(inputId = "costpharm2", label = NULL, value = "161"))),
+                            column(width = 4, tags$style("#costpharm1 {background-color:#dfdfdf;}"), numericInput(inputId = "costpharm1", label = NULL, value = "1123.51")),
+                            column(width = 4, tags$style("#costpharm2 {background-color:#dfdfdf;}"), numericInput(inputId = "costpharm2", label = NULL, value = "1285.73"))),
                           fluidRow(
                             box(id="IndirectCosts", "", color = "blue", width = 12, height = 4),
                             bsPopover("IndirectCosts", title='<font size="2">Source:', content='<font size="3">DOF, Amgen, Bend the Curve PMO Microsimulation, 2019', placement="left", options = list(container = "body")),
@@ -492,12 +492,12 @@ fluidPage(
                           fluidRow(
                             column(width = 4, align="left", blockQuote("    Base Case")),
                             column(width = 4, tags$style("#basecaseID {background-color:#dfdfdf;}"), numericInput(inputId = "basecaseID", label = NULL, value = "23.16", step = 0.1)),
-                            column(width = 4, tags$style("#basecaseTx {background-color:#dfdfdf;}"), numericInput(inputId = "basecaseTx", label = NULL, value = "35.90", step = 0.1))),
+                            column(width = 4, tags$style("#basecaseTx {background-color:#dfdfdf;}"), numericInput(inputId = "basecaseTx", label = NULL, value = "14.3", step = 0.1))),
                           fluidRow(
                             column(width = 4, align="left", blockQuote("    Improved PMO Management")),
                             column(width = 4, tags$style("#scenario1ID {background-color:#dfdfdf;}"), numericInput(inputId = "scenario1ID", label = NULL, value = "43.16", step = 0.1)),
                             bsTooltip("scenario1ID", "The model only allows scenarios to be evlauted that increase rates of identification and treatment. Please enter a value above the value entered for base case.", "left", options = list(container = "body")),
-                            column(width = 4, tags$style("#scenario1Tx {background-color:#dfdfdf;}"), numericInput(inputId = "scenario1Tx", label = NULL, value = "44.70", step = 0.1)),
+                            column(width = 4, tags$style("#scenario1Tx {background-color:#dfdfdf;}"), numericInput(inputId = "scenario1Tx", label = NULL, value = "23.1", step = 0.1)),
                             bsTooltip("scenario1Tx", "The model only allows scenarios to be evlauted that increase rates of identification and treatment. Please enter a value above the value entered for base case.", "left", options = list(container = "body"))),
                           fluidRow(
                             column(width = 4, align="left", blockQuote("    Time Horizon")),
