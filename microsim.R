@@ -31,15 +31,18 @@ index <- which(age_probabilities$Year == year)
 age_prob <- c(age_probabilities[index,2:37])
 
 # Population Size - THIS VALUE IS CURRENTLY FIXED, IT WILL NOT CHANGE WITH UI INPUTS
-population_size <- POP
-if(POP < 100000){
-  population_size <- POP
-  EXTRAPOLATION_FACTOR <- 1.0
-} else if(POP >= 100001) {
-  population_size <- 100000
-  EXTRAPOLATION_FACTOR <- POP/population_size
-}
+# population_size <- POP
+# if(POP < 100000){
+#   population_size <- POP
+#   EXTRAPOLATION_FACTOR <- 1.0
+# } else if(POP >= 100001) {
+#   population_size <- 100000
+#   EXTRAPOLATION_FACTOR <- POP/population_size
+# }
 #EXTRAPOLATION_FACTOR <- POP/population_size
+
+population_size <- 100000
+EXTRAPOLATION_FACTOR <- POP/population_size
 
 # Demographic Percentages
 race_prob <- c(CAUC, 
@@ -249,7 +252,11 @@ med_patients_s1 <- getMedPatients(#population_size,
 
 # Determine Fractures
 
-samples <- runif(population_size)
+# using truncnorm to induce lower variance than runif, but without biasing the samples.
+# could also adjust the sd of the distribution, but may run into issue of too many samples
+# (not) getting fractures
+samples <- truncnorm::rtruncnorm(population_size, a=0, b=1, mean=.5) 
+# samples <- runif(population_size)
 
 any_fracture <- getFracture(med_patients,
                             ANY_FRACTURE_AVERAGE,
@@ -261,7 +268,8 @@ any_fracture_s1 <- getFracture(med_patients_s1,
                             frax_major,
                             samples)
 
-samples <- runif(population_size)
+samples <- truncnorm::rtruncnorm(population_size, a=0, b=1, mean=.5) 
+# samples <- runif(population_size)
 
 hip_fracture <- getFracture(med_patients,
                             HIP_FRACTURE_AVERAGE,
@@ -457,6 +465,7 @@ packaged_data <- data.frame(clinical_data, prevFracData, financial_data, clinica
 
 return_data <- packaged_data*EXTRAPOLATION_FACTOR
 return_data$percent_subsequent <- return_data$n_sbsqnt/return_data$first_fracs
+return_data$percent_medPatients <- sum(any_fracture)/population_size
 
 return(return_data)
 }

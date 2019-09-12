@@ -32,6 +32,7 @@ library(doSNOW)
 library(stringr)
 library(tidyverse)
 library(data.table)
+library(truncnorm)
 
 
 source("microsim_utilities.R")

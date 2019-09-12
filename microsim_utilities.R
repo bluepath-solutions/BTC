@@ -180,17 +180,6 @@ countPatientRiskFactorIndex <- function(riskFactorTable){
 }
 
 
-# getMedicationUtilization
-# @param BASE_MEDICATION_ADHERENCE float, the starting medication utilization in 2014
-# @param YEAR int, the current year being simulated
-# Returns the medication utilization rate based on the current year.  This 
-# implementation scheme utilizes logarithmic decay as described in the Excel Model.
-getMedicationUtilization <- function(BASE_MEDICATION_UTILIZATION,
-                                   YEAR) {
-  return(BASE_MEDICATION_UTILIZATION - 0.026 * log(YEAR - 2013))
-}
-
-
 # getDXAScans
 # @param POPULATION_SIZE int, the population size being simulated
 # @param FRAX_MAJOR list, a list of doubles corresponding to the fracture rates of the population
@@ -206,6 +195,18 @@ getDXAScans <- function(POPULATION_SIZE,
     return(FRAX_MAJOR >= quantile(FRAX_MAJOR, 1 - DXA_PROB))  
   }
 }
+
+
+# getMedicationUtilization
+# @param BASE_MEDICATION_ADHERENCE float, the starting medication utilization in 2014
+# @param YEAR int, the current year being simulated
+# Returns the medication utilization rate based on the current year.  This 
+# implementation scheme utilizes logarithmic decay as described in the Excel Model.
+getMedicationUtilization <- function(BASE_MEDICATION_UTILIZATION,
+                                   YEAR) {
+  return(BASE_MEDICATION_UTILIZATION - 0.026 * log(YEAR - 2013))
+}
+
 
 
 # getMedPatients
