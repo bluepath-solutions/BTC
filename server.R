@@ -10,6 +10,9 @@ tab_id <- c("Home", "Overview", "Mechanics", "Pop_Inputs", "ClinEcon_Inputs", "S
 function(input, output, session) {
   output$value <- renderText({ input$inpt })
   
+  # stop app when browser is closed
+  session$onSessionEnded(stopApp)
+  
 ###############DEFAULT ACTIONS###################################
   observe({
     lapply(c("Next", "Previous"),
@@ -158,6 +161,17 @@ function(input, output, session) {
     reset("scenario1ID")
     reset("scenario1Tx")
   })
+    
+    
+    observeEvent(input$basecaseID, {
+      isolate(updateNumericInput(session,
+                                 inputId = 'scenario1ID',
+                                 label = NULL,
+                                 value = input$basecaseID + 15))
+    },
+    ignoreInit = T, 
+    priority = 1000)
+    
   
   observeEvent(input$scenario1ID, {
     isolate(updateNumericInput(session,
@@ -167,6 +181,7 @@ function(input, output, session) {
   },
   ignoreInit = T, 
   priority = 1000)
+  
   observeEvent(input$gluco_tx, {
     simulation_data$sim <- sim_data()
   }, ignoreInit = F,
@@ -174,6 +189,7 @@ function(input, output, session) {
   once = T,  
   autoDestroy = T
   )
+  
   observeEvent(input$run_simulation, {
     simulation_data$sim <- sim_data()
   }, 

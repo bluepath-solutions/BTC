@@ -260,7 +260,7 @@ fluidPage(
                                        tags$td(style = "width: 25%; text-align: left",
                                                tags$style("#RA_inp {background-color:#dfdfdf}"), numericInput(inputId = "RA_inp", label = "Rheumatoid Arthritis (%)", value = 5.7, min = 0, max = 100, step = 0.01)),
                                        tags$td(style = "width: 25%; text-align: left",
-                                               tags$style("#fxr_inp {background-color:#dfdfdf}"), numericInput(inputId = "fxr_inp", label = "Previous Fracture (%)", value = 10.8, min = 0, max = 100, step = 0.01)))),                      
+                                               tags$style("#fxr_inp {background-color:#dfdfdf}"), numericInput(inputId = "fxr_inp", label = "Previous Fracture (%)", value = 14.3, min = 0, max = 100, step = 0.01)))),                      
                           tags$table(id = "inputs-table"
                                      , style = "width: 100%"
                                      , tags$tr(
@@ -474,6 +474,7 @@ fluidPage(
                   boxPlus(id = "scenarios_box", title = "Treatment, Identification Rates & Time Horizon", width = 12, closable = FALSE, collapsible = TRUE,
                           enable_dropdown = TRUE, dropdown_icon = "question-circle",
                           dropdown_menu = dropdownItemList(
+                            # TODO: UPDATE THIS INFO
                             dropdownItem(name = HTML("Identification Rate in the Base Case scenario was based on Lewiecki et al. 2016. This analysis identified the proportion of Medicare patients with <br/>
                                                      ≥ 1 DXA scan each year from 2002-2014 (11.3% in 2014), based on health care claims and enrollment data from the 5% sample of Medicare fee-for-service  <br/>
                                                      beneficiaries. Current treatment rates and trends were based on unpublished market share data, which indicated 9% of those ages 65+ years were treated  <br/>
@@ -492,12 +493,12 @@ fluidPage(
                           fluidRow(
                             column(width = 4, align="left", blockQuote("    Base Case")),
                             column(width = 4, tags$style("#basecaseID {background-color:#dfdfdf;}"), numericInput(inputId = "basecaseID", label = NULL, value = "23.16", step = 0.1)),
-                            column(width = 4, tags$style("#basecaseTx {background-color:#dfdfdf;}"), numericInput(inputId = "basecaseTx", label = NULL, value = "14.3", step = 0.1))),
+                            column(width = 4, tags$style("#basecaseTx {background-color:#dfdfdf;}"), numericInput(inputId = "basecaseTx", label = NULL, value = "14.4", step = 0.1))),
                           fluidRow(
                             column(width = 4, align="left", blockQuote("    Improved PMO Management")),
-                            column(width = 4, tags$style("#scenario1ID {background-color:#dfdfdf;}"), numericInput(inputId = "scenario1ID", label = NULL, value = "43.16", step = 0.1)),
+                            column(width = 4, tags$style("#scenario1ID {background-color:#dfdfdf;}"), numericInput(inputId = "scenario1ID", label = NULL, value = "38.16", step = 0.1)),
                             bsTooltip("scenario1ID", "The model only allows scenarios to be evlauted that increase rates of identification and treatment. Please enter a value above the value entered for base case.", "left", options = list(container = "body")),
-                            column(width = 4, tags$style("#scenario1Tx {background-color:#dfdfdf;}"), numericInput(inputId = "scenario1Tx", label = NULL, value = "23.1", step = 0.1)),
+                            column(width = 4, tags$style("#scenario1Tx {background-color:#dfdfdf;}"), numericInput(inputId = "scenario1Tx", label = NULL, value = "21.0", step = 0.1)),
                             bsTooltip("scenario1Tx", "The model only allows scenarios to be evlauted that increase rates of identification and treatment. Please enter a value above the value entered for base case.", "left", options = list(container = "body"))),
                           fluidRow(
                             column(width = 4, align="left", blockQuote("    Time Horizon")),
@@ -544,6 +545,7 @@ fluidPage(
                   boxPlus(withSpinner(plotlyOutput("primaryFracCost")), width = 6),
                   boxPlus(withSpinner(plotlyOutput("prevFracCost")), width = 6)),
                 
+                # uncomment this chunk to see number of population with and without fracs
                 boxPlus(width = 12, closable = FALSE, collapsible = TRUE, collapsed = TRUE,
                         fluidRow(
                           column(width = 6, infoBoxOutput("nNoPriorsBox"), tags$style("#nNoPriorsBox {width:100%}")),
@@ -599,12 +601,14 @@ fluidPage(
                   column(width=5,infoBoxOutput("SecondaryCostBox"), tags$style("#SecondaryCostBox {width:100%; word-break: keep-all; overflow-wrap: anywhere;}"))
                 ),
                 
-                fluidRow(
-                  boxPlus(title = "Base Case Fracture Reccurence", 
-                          closable = FALSE, status = "warning", solidHeader = FALSE, collapsible = TRUE, width = 8,
-                          p(textOutput('reocc_text_1'))
-                  ),
-                  infoBoxOutput("FractureReoccurence")),
+                # fluidRow(
+                #   boxPlus(title = "Base Case Fracture Reccurence", 
+                #           closable = FALSE, status = "warning", solidHeader = FALSE, collapsible = TRUE, width = 8,
+                #           p(textOutput('reocc_text_1'))
+                #   ),
+                #   infoBoxOutput("FractureReoccurence")),
+                
+                
                 # fluidRow(
                 #   boxPlus(title = "Base Case Fracture Risk Ratio", 
                 #           closable = FALSE, status = "warning", solidHeader = FALSE, collapsible = TRUE, width = 8,
