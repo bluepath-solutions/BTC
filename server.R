@@ -1605,13 +1605,13 @@ output$SecondaryCostBox <- renderInfoBox({
       add_trace(y = ~as.integer(ys1), name = "Improved PMO Management", type = 'scatter', mode = 'lines', line = list(color = color_pal[2]),text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
       config(displayModeBar = F) %>%
       layout(
-        title = "Cumulative Subsequent Fractures vs. Time",
+        title = "Cumulative Secondary Fractures vs. Time",
         xaxis = list(showgrid = FALSE,
                      title = "Year",
                      zeroline = TRUE
         ),
         yaxis = list(
-          title = "Total Number of Subsequent Fractures",
+          title = "Total Number of Secondary Fractures",
           zeroline = TRUE
         ),
         xaxis = list(
@@ -1925,7 +1925,7 @@ output$SecondaryCostBox <- renderInfoBox({
 
       config(displayModeBar = F) %>%
       layout(
-        title = "Cumulative Total Costs among Subsequent Fracture Population by Year",
+        title = "Cumulative Total Costs among Secondary Fracture Population by Year",
         xaxis = list(showgrid = FALSE,
                      title = "Year",
                      zeroline = TRUE
