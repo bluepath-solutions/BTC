@@ -231,13 +231,14 @@ frax_major[is.na(frax_major)] <- MAX_MAJOR_FRACTURE_RATE
 
 # Determine Identification and Treatment Populations
 
+## get fcns
 dxa_scans <- getDXAScans(population_size,
                          frax_major,
-                         dxa_prob) 
+                         dxa_prob)
 
 dxa_scans_s1 <- getDXAScans(population_size,
                             frax_major,
-                            dxa_prob_s1) 
+                            dxa_prob_s1)
 
 
 med_patients <- getMedPatients(#population_size,
@@ -249,6 +250,43 @@ med_patients_s1 <- getMedPatients(#population_size,
                                frax_major,
                                med_base_prob_s1,
                                year)
+
+## sim fcns
+# dxa_scans <- simDXAScans(population_size,
+#                          dxa_prob)
+# 
+# dxa_scans_s1 <- simDXAScans(population_size,
+#                             dxa_prob_s1)
+# 
+# 
+# med_patients <- simMedPatients(population_size,
+#   med_base_prob,
+#   year)
+# 
+# med_patients_s1 <- simMedPatients(population_size,
+#   med_base_prob_s1,
+#   year)
+
+## det fcns
+# dxa_scans <- detDXAScans(population_size,
+#                          dxa_prob)
+# 
+# dxa_scans_s1 <- detDXAScans(population_size,
+#                             dxa_prob_s1)
+# 
+# 
+# med_patients <- detMedPatients(population_size,
+#                                med_base_prob,
+#                                year)
+# 
+# med_patients_s1 <- detMedPatients(population_size,
+#                                   med_base_prob_s1,
+#                                   year)
+
+sim_dxa_prob <- sum(dxa_scans)/population_size
+sim_dxa_prob_s1 <- sum(dxa_scans_s1)/population_size
+sim_med_patients <- sum(med_patients)/population_size
+sim_med_patients_s1 <- sum(med_patients_s1)/population_size
 
 # Determine Fractures
 
@@ -466,6 +504,12 @@ packaged_data <- data.frame(clinical_data, prevFracData, financial_data, clinica
 return_data <- packaged_data*EXTRAPOLATION_FACTOR
 return_data$percent_subsequent <- return_data$n_sbsqnt/return_data$first_fracs
 return_data$percent_medPatients <- sum(any_fracture)/population_size
+
+## looking at %age of people that actually get scanned and treated
+return_data$dxa_scan_prob <- sim_dxa_prob
+return_data$dxa_scan_prob_s1 <- sim_dxa_prob_s1
+return_data$med_prob <- sim_med_patients
+return_data$med_prob_s1 <- sim_med_patients_s1
 
 return(return_data)
 }

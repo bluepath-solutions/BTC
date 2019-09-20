@@ -870,6 +870,10 @@ sim_data <- reactive({
                                         'getMedicationUtilization',
                                         'getDXAScans',
                                         'getMedPatients',
+                                        'simDXAScans',
+                                        'simMedPatients',
+                                        'detDXAScans',
+                                        'detMedPatients',
                                         'getFracture',
                                         'getMultiFraxCost'
                                         ), .verbose = F,

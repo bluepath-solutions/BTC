@@ -186,6 +186,7 @@ countPatientRiskFactorIndex <- function(riskFactorTable){
 # @param DXA_PROB double, the identification rate for DXA scans
 # Returns a boolean list of length POPULATION_SIZE corresponding to the number of people
 # who receive DXA scans.
+## assigns dxa if your frax prob is in top dxa_prob %
 getDXAScans <- function(POPULATION_SIZE,
                         FRAX_MAJOR,
                         DXA_PROB) {
@@ -193,6 +194,26 @@ getDXAScans <- function(POPULATION_SIZE,
     return(replicate(POPULATION_SIZE,0))
   } else {
     return(FRAX_MAJOR >= quantile(FRAX_MAJOR, 1 - DXA_PROB))  
+  }
+}
+
+simDXAScans <- function(POPULATION_SIZE,
+                        DXA_PROB) {
+  if(DXA_PROB == 0) {
+    return(replicate(POPULATION_SIZE,0))
+  } else {
+    return(rbinom(n=POPULATION_SIZE, size=1, prob=DXA_PROB))  
+  }
+}
+
+detDXAScans <- function(POPULATION_SIZE,
+                        DXA_PROB) {
+  if(DXA_PROB == 0) {
+    return(replicate(POPULATION_SIZE,0))
+  } else {
+    size <- as.integer(POPULATION_SIZE*DXA_PROB)
+    scans <- c(rep(1, size), rep(0, POPULATION_SIZE - size))
+    return(scans)  
   }
 }
 
@@ -214,6 +235,7 @@ getMedicationUtilization <- function(BASE_MEDICATION_UTILIZATION,
 # @param MED_PROB double, the base treatment rate in 2014
 # Returns a boolean list of length FRAX_MAJOR corresponding to the number of people
 # who receive treatment.
+## assigns med if your frax prob is in top getMedUtil %
 getMedPatients <- function(FRAX_MAJOR,
                            MED_PROB,
                            YEAR) {
@@ -226,6 +248,38 @@ getMedPatients <- function(FRAX_MAJOR,
     return(FRAX_MAJOR >= quantile(FRAX_MAJOR, 1 - getMedicationUtilization(MED_PROB, YEAR) ))
   }  
 }
+
+
+simMedPatients <- function(POPULATION_SIZE,
+                           MED_PROB,
+                           YEAR) {
+  if(MED_PROB == 0 || getMedicationUtilization(MED_PROB, YEAR) <= 0) {
+    return(replicate(POPULATION_SIZE, 0))
+  } else {
+    # this line is assigning all FRAX_MAJOR above (or equal to) the quantile corresponding to percent of patients
+    # who are not utilizing their meds a 1. So all higher FRAX_MAJOR are being assigned as medical patients.
+    # Shouldn't this be randomized amongst the patients?
+    return(rbinom(n=POPULATION_SIZE, size=1, prob=getMedicationUtilization(MED_PROB, YEAR)))
+  }  
+}
+
+detMedPatients <- function(POPULATION_SIZE,
+                           MED_PROB,
+                           YEAR) {
+  if(MED_PROB == 0 || getMedicationUtilization(MED_PROB, YEAR) <= 0) {
+    return(replicate(POPULATION_SIZE, 0))
+  } else {
+    # this line is assigning all FRAX_MAJOR above (or equal to) the quantile corresponding to percent of patients
+    # who are not utilizing their meds a 1. So all higher FRAX_MAJOR are being assigned as medical patients.
+    # Shouldn't this be randomized amongst the patients?
+    size <- as.integer(POPULATION_SIZE*getMedicationUtilization(MED_PROB, YEAR))
+    patients <- c(rep(1,size), rep(0, POPULATION_SIZE - size))
+    return(patients)
+  }  
+  
+  
+}
+
 
 
 # getFracture
