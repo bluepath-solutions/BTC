@@ -37,8 +37,8 @@ library(tidyverse)
 source("microsim_utilities.R")
 source("microsim.R")
 
-cl <- makeCluster(detectCores() - 1)
-registerDoSNOW(cl)
+# cl <- makeCluster(detectCores() - 1)
+# registerDoSNOW(cl)
 
 
 tab_id <- c("Overview", "Mechanics", "Pop_Inputs", "ClinEcon_Inputs", "Scenarios", "Results", "Assumptions", "Break", "Disclosures", "Terms", "References")
