@@ -832,13 +832,13 @@ sim_data <- reactive({
   costcare1 <- costcare1()
   costcare2 <- costcare2()
   
-  start_year <- 2018
-  end_year   <- as.integer(substring(input$endYear, 1, 4))
+  start_year <- as.integer(substring(input$endYear[1], 1, 4))
+  end_year   <- as.integer(substring(input$endYear[2], 1, 4))
   
   progressB <- function() progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/(end_year - start_year), detail = "Preparing Plot")
   opts <- list(progress = progressB)
   # Utilize parallelization to increase speed
-  return(foreach(i=start_year:2040,
+  return(foreach(i=2018:2040,
                               .packages = c('readxl',
                                             'hashmap',
                                             'data.table'),
@@ -929,45 +929,50 @@ simulation_data <- reactiveValues(sim = NULL)
 #simulation_data$sim <- sim_data()
   
 #sim_data_d <- sim_data %>% debounce(2000)
+
+full_years <- 2018:2040
   
 # Summary Info Box Details
 output$totalfxr_content <- renderText({
   base_case <- simulation_data$sim
-  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- as.Date(input$endYear[2], "%Y")
   inp_year <- format(inp_year, "%Y")
   total_frax <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
-  for(i in 1:duration) {
+  duration <-  as.integer(substring(input$endYear[2], 1, 4)) - as.integer(substring(input$endYear[1], 1, 4)) + 1
+  beginIndex <- which(full_years == as.integer(substring(input$endYear[1], 1, 4)))-1
+  for(i in beginIndex+(1:duration)) {
     total_frax <- total_frax + (base_case[[i]]$total_fractures_s1 - base_case[[i]]$total_fractures)}
   formatted_fxrs <- formatC(abs(round(total_frax)), format = 'd', big.mark=',')
   paste("The total number of fractures is estimated to ", 
                                             ifelse(total_frax > 0, "increase by ", "decrease by "), 
                                              formatted_fxrs, 
-                                             " during the years 2018-", inp_year, sep = "", collapse = NULL)
+                                             " during the years ",  format(as.Date(input$endYear[1], '%Y'), '%Y'), "-", inp_year, sep = "", collapse = NULL)
                                             })
 output$totalcost_content <- renderText({
   base_case <- simulation_data$sim
-  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- as.Date(input$endYear[2], "%Y")
   inp_year <- format(inp_year, "%Y")
   total_frax_cost <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
-  for(i in 1:duration) {
+  duration <-  as.integer(substring(input$endYear[2], 1, 4)) - as.integer(substring(input$endYear[1], 1, 4)) + 1
+  beginIndex <- which(full_years == as.integer(substring(input$endYear[1], 1, 4)))-1
+  for(i in beginIndex+(1:duration)) {
     total_frax_cost <- total_frax_cost + (base_case[[i]]$grand_total_s1 - base_case[[i]]$grand_total)}
   paste("The total cost is estimated to ", ifelse(total_frax_cost > 0, "increase by ", "decrease by "),
         dollar_format()(abs(total_frax_cost)), 
-        " during the years 2018-", inp_year, sep = "", collapse = NULL)
+        " during the years ",  format(as.Date(input$endYear[1], '%Y'), '%Y'), "-", inp_year, sep = "", collapse = NULL)
 })
 output$FraxBox_R <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
-  for(i in 1:duration) {
+  duration <-  as.integer(substring(input$endYear[2], 1, 4)) - as.integer(substring(input$endYear[1], 1, 4)) + 1
+  beginIndex <- which(full_years == as.integer(substring(input$endYear[1], 1, 4)))-1
+  for(i in beginIndex+(1:duration)) {
     total_frax <- total_frax + (base_case[[i]]$total_fractures_s1 - base_case[[i]]$total_fractures)
   }
   subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Fracture Incidence Increasing", "Efforts to Improve PMO Management Result in Fracture Incidence Decreasing")
-  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- as.Date(input$endYear[2], "%Y")
   inp_year <- format(inp_year, "%Y")
-  title_text <- paste("Change in Fracture Occurrence, 2018-", inp_year, sep = "", collapse = NULL)
+  title_text <- paste("Change in Fracture Occurrence,  ",  format(as.Date(input$endYear[1], '%Y'), '%Y'), "-", inp_year, sep = "", collapse = NULL)
   infoBox(
     title = title_text,
     subtitle = subtitle_text, 
@@ -980,14 +985,15 @@ output$FraxBox_R <- renderInfoBox({
 output$CostBox_R <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax_cost <- (0)
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
-  for(i in 1:duration) {
+  duration <-  as.integer(substring(input$endYear[2], 1, 4)) - as.integer(substring(input$endYear[1], 1, 4)) + 1
+  beginIndex <- which(full_years == as.integer(substring(input$endYear[1], 1, 4)))-1
+  for(i in beginIndex+(1:duration)) {
     total_frax_cost <- (total_frax_cost) + (base_case[[i]]$grand_total_s1 - base_case[[i]]$grand_total)
   }
   subtitle_text <- ifelse(total_frax_cost > 0, "Efforts to Improve PMO Management Result in Cost Increases", "Efforts to Improve PMO Management Result in Cost Decreases")
-  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- as.Date(input$endYear[2], "%Y")
   inp_year <- format(inp_year, "%Y")
-  title_text <- paste("Change in Total Costs, 2018-", inp_year, sep = "", collapse = NULL)
+  title_text <- paste("Change in Total Costs,  ",  format(as.Date(input$endYear[1], '%Y'), '%Y'), "-", inp_year, sep = "", collapse = NULL)
   infoBox(
     title = title_text,
     subtitle = subtitle_text, 
@@ -1000,14 +1006,15 @@ output$CostBox_R <- renderInfoBox({
 output$FraxBox <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
-  for(i in 1:duration) {
+  duration <-  as.integer(substring(input$endYear[2], 1, 4)) - as.integer(substring(input$endYear[1], 1, 4)) + 1
+  beginIndex <- which(full_years == as.integer(substring(input$endYear[1], 1, 4)))-1
+  for(i in beginIndex+(1:duration)) {
     total_frax <- total_frax + (base_case[[i]]$total_fractures_s1 - base_case[[i]]$total_fractures)
   }
   subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Fracture Incidence Increasing", "Efforts to Improve PMO Management Result in Fracture Incidence Decreasing")
-  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- as.Date(input$endYear[2], "%Y")
   inp_year <- format(inp_year, "%Y")
-  title_text <- paste("Change in Fracture Occurrence, 2018-", inp_year, sep = "", collapse = NULL)
+  title_text <- paste("Change in Fracture Occurrence,  ",  format(as.Date(input$endYear[1], '%Y'), '%Y'), "-", inp_year, sep = "", collapse = NULL)
   infoBox(
     title = title_text,
     subtitle = subtitle_text, 
@@ -1020,15 +1027,16 @@ output$FraxBox <- renderInfoBox({
 output$CostBox <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax_cost <- (0)
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
-  for(i in 1:duration) {
+  duration <-  as.integer(substring(input$endYear[2], 1, 4)) - as.integer(substring(input$endYear[1], 1, 4)) + 1
+  beginIndex <- which(full_years == as.integer(substring(input$endYear[1], 1, 4)))-1
+  for(i in beginIndex+(1:duration)) {
     total_frax_cost <- (total_frax_cost) + (base_case[[i]]$grand_total_s1 - base_case[[i]]$grand_total)
   }
   print(total_frax_cost)
   subtitle_text <- ifelse(total_frax_cost > 0, "Efforts to Improve PMO Management Result in Cost Increases", "Efforts to Improve PMO Management Result in Cost Decreases")
-  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- as.Date(input$endYear[2], "%Y")
   inp_year <- format(inp_year, "%Y")
-  title_text <- paste("Change in Total Costs, 2018-", inp_year, sep = "", collapse = NULL)
+  title_text <- paste("Change in Total Costs,  ",  format(as.Date(input$endYear[1], '%Y'), '%Y'), "-", inp_year, sep = "", collapse = NULL)
   infoBox(
     title = title_text,
     subtitle = subtitle_text, 
@@ -1079,8 +1087,8 @@ output$CostBox <- renderInfoBox({
     sim <- simulation_data$sim
     # progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/3, detail = "Preparing Plot")
 
-    start_year <- 2018
-    end_year   <- as.integer(substring(input$endYear, 1, 4))
+    start_year <- as.integer(substring(input$endYear[1], 1, 4))
+    end_year   <- as.integer(substring(input$endYear[2], 1, 4))
     
     xbc <- c(start_year:end_year)
     ybc <- c()
@@ -1127,8 +1135,8 @@ output$CostBox <- renderInfoBox({
     
     sim <- simulation_data$sim
     
-    start_year <- 2018
-    end_year   <- as.integer(substring(input$endYear, 1, 4))
+    start_year <- as.integer(substring(input$endYear[1], 1, 4))
+    end_year   <- as.integer(substring(input$endYear[2], 1, 4))
     
     xbc <- c(start_year:end_year)
     costybc <- c()

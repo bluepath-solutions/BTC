@@ -507,7 +507,7 @@ fluidPage(
                                                label = NULL,
                                                min = as.Date("2022", '%Y'),
                                                max = as.Date("2040", '%Y'),
-                                               value = as.Date("2040", '%Y'),
+                                               value = c(as.Date('2022', '%Y'), as.Date("2040", '%Y')),
                                                step = 365,
                                                timeFormat = "%Y"), align = "center"),
                             column(width = 2,
