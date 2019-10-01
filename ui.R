@@ -197,7 +197,7 @@ fluidPage(
                 fluidRow(
                   boxPlus(id = "Pop_Demo", title = "Population Size & Demographics", width = 12, closable = FALSE, collapsible = TRUE,
                           bsPopover("Pop_Demo", title='<font size="2">Source:', content='<font size="3">DOF, Amgen, Bend the Curve PMO Microsimulation, 2019', placement="left", options = list(container = "body")),
-                          enable_dropdown = TRUE, dropdown_icon = "question-circle",
+                          enable_dropdown = FALSE, dropdown_icon = "question-circle",
                           dropdown_menu = dropdownItemList(
                             dropdownDivider(),
                             dropdownItem(name = HTML("Using the Census projection estimates for females of any race or ethnicity, <br/>
@@ -240,7 +240,7 @@ fluidPage(
                   
                   boxPlus(id = "Risk_Fact", title = "Risk Factors", width = 12, closable = FALSE, collapsible = TRUE,
                           bsPopover("Risk_Fact", title='<font size="2">Source:', content='<font size="3">DOF, Amgen, Bend the Curve PMO Microsimulation, 2019', placement="left", options = list(container = "body")),
-                          enable_dropdown = TRUE, dropdown_icon = "question-circle",
+                          enable_dropdown = FALSE, dropdown_icon = "question-circle",
                           dropdown_menu = dropdownItemList(
                             dropdownDivider(),
                             dropdownItem(name = HTML("Risk factor prevalence was estimated from analyzing National Health and Nutrition Examination Survey (NHANES), <br/>
@@ -285,7 +285,7 @@ fluidPage(
                             "The Estimated Long-Term Value of Improving Patient Identification and Treatment Rates in Post-Menopausal Osteoporosis"), align = "center"),
                 fluidRow(
                   boxPlus(id="FxrCostInp", title = "Fracture Costs", width = 12, closable = FALSE, collapsible = TRUE,
-                          enable_dropdown = TRUE, dropdown_icon = "question-circle",
+                          enable_dropdown = FALSE, dropdown_icon = "question-circle",
                           dropdown_menu = dropdownItemList(
                             dropdownItem(name = HTML("Direct medical costs related to fracture were derived from Weaver et al. This retrospective claims analysis included<br/>
                                                      45,603 patients (mean age of 78.1 years) with Humana Medicare Advantage who experienced an incident fracture between <br/>
@@ -361,7 +361,7 @@ fluidPage(
                             ),
                 fluidRow(
                   boxPlus(id = "clin_inp", title = "Treatment Inputs", width = 12, closable = FALSE, collapsible = TRUE, collapsed = TRUE,
-                          enable_dropdown = TRUE, dropdown_icon = "question-circle",
+                          enable_dropdown = FALSE, dropdown_icon = "question-circle",
                           dropdown_menu = dropdownItemList(
                             dropdownItem(name = HTML("A pre-set market basket of treatments is analyzed with the market mix, monthly cost, and efficacy shown here. The treatment mix comes from an Amgen internal market analysis as of January 2019.<br/>
                                                      <br/>
@@ -472,7 +472,7 @@ fluidPage(
                             "The Estimated Long-Term Value of Improving Patient Identification and Treatment Rates in Post-Menopausal Osteoporosis"), align = "center"),
                 fluidRow(
                   boxPlus(id = "scenarios_box", title = "Treatment, Identification Rates & Time Horizon", width = 12, closable = FALSE, collapsible = TRUE,
-                          enable_dropdown = TRUE, dropdown_icon = "question-circle",
+                          enable_dropdown = FALSE, dropdown_icon = "question-circle",
                           dropdown_menu = dropdownItemList(
                             # TODO: UPDATE THIS INFO
                             dropdownItem(name = HTML("Identification Rate in the Base Case scenario was based on Lewiecki et al. 2016. This analysis identified the proportion of Medicare patients with <br/>

@@ -45,7 +45,6 @@ tab_id <- c("Overview", "Mechanics", "Pop_Inputs", "ClinEcon_Inputs", "Scenarios
 
 NUM_PAGES <- length(tab_id) + 1
 
-# age_probabilities <- (read_excel("age_distribution_women_50up.xlsx"))
 age_probabilities <- (read_excel("grouped_age_distribution_women_50up.xlsx"))
 
 # lumps 90+
@@ -91,13 +90,4 @@ NON_ADHERENT_INCREASED_FRACTURE_RISK <- 1.1
 HIP_FRACTURE_RATIO <- (45603/5024) # ~9.077
 MULTI_FRACTURE_FACTOR <- 1.226
 
-accumulate_by <- function(dat, var) {
-  var <- lazyeval::f_eval(var, dat)
-  lvls <- plotly:::getLevels(var)
-  dats <- lapply(seq_along(lvls), function(x) {
-    cbind(dat[var %in% lvls[seq(1, x)], ], frame = lvls[[x]])
-  })
-  dplyr::bind_rows(dats)
-}
 
-`%then%` <- shiny:::`%OR%`
