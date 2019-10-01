@@ -1,1 +1,0 @@
-id_lookup uses South Korean frax table for Race == 'A'. Rest of the values are populated from the original id_lookup from the US version (master branch).

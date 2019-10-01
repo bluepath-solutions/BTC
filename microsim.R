@@ -33,7 +33,7 @@ MAX_MAJOR_FRACTURE_RATE <- max(ID_lookup$`FRAX- MAJOR`)
 # Gather and Assign inputs
 year <- YEAR
 index <- which(age_probabilities$Year == year)
-age_prob <- c(age_probabilities[index,2:52])
+age_prob <- c(age_probabilities[index,2:10])
 
 # Population Size - THIS VALUE IS CURRENTLY FIXED, IT WILL NOT CHANGE WITH UI INPUTS
 population_size <- 100000
@@ -190,12 +190,16 @@ caregiver_w_subsequent_fracture <- COSTCARE2#2445
 
 
 # Simulate Population and Assign Index Scores
-age_index <- getAgeIndex(minimum_age,
-                         maximum_age,
-                         population_size,
+# age_index <- getAgeIndex(minimum_age,
+#                          maximum_age,
+#                          population_size,
+#                          age_prob,
+#                          age_cutoffs,
+#                          age_index_scores)
+
+age_index <- getAgeIndex(age_index_scores,
                          age_prob,
-                         age_cutoffs,
-                         age_index_scores)
+                         population_size)
 
 # race_index <- getRaceIndex(population_size, 
 #                            race_prob,

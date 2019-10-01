@@ -37,20 +37,20 @@ library(tidyverse)
 source("microsim_utilities.R")
 source("microsim.R")
 
-# cl <- makeCluster(detectCores() - 1)
-# registerDoSNOW(cl)
+cl <- makeCluster(detectCores() - 1)
+registerDoSNOW(cl)
 
 
 tab_id <- c("Overview", "Mechanics", "Pop_Inputs", "ClinEcon_Inputs", "Scenarios", "Results", "Assumptions", "Break", "Disclosures", "Terms", "References")
 
 NUM_PAGES <- length(tab_id) + 1
 
-age_probabilities <- (read_excel("age_distribution_women_50up.xlsx"))
+age_probabilities <- (read_excel("grouped_age_distribution_women_50up.xlsx"))
 
-minimum_age <- 50
-maximum_age <- 100
-age_cutoffs = c(50, 55.5, 60.5, 65.5, 70.5, 75.5, 80.5, 85.5, 100)
-age_index_scores <- c(0, 2000, 4000, 6000, 8000, 10000, 12000, 14000)
+# lumps 90+
+age_index_scores <- c(0, 2000, 4000, 6000, 8000, 10000, 12000, 14000, 16000) # assumes 50-54, 55-59, ...85-89, 90+
+
+
 
 ## zeroed out race index scores because we don't use them in sk_id_lookup.
 ## also prevents needing to remove all traces of race in the code. 
@@ -81,7 +81,7 @@ bmd_cutoffs = c(1.00, -3.51, -3.01, -2.51, -2.01, -1.51, -1.01, -0.51, 0.01,
 ID_lookup <- (read_excel("sk_id_lookup.xlsx"))
 
 
-MEDICATION_ADHERENCE <- 0.24 #0.418 in US
+MEDICATION_ADHERENCE <- 0.2221 #0.418 in US
 NON_ADHERENT_INCREASED_FRACTURE_RISK <- 1.1
 # HIP FRACTURE RATIO is a hard-coded value from the old excel model
 # It extrapolates from the amount of hip fractures the total amount of other fractures
@@ -90,13 +90,4 @@ NON_ADHERENT_INCREASED_FRACTURE_RISK <- 1.1
 HIP_FRACTURE_RATIO <- (45603/5024) # ~9.077
 MULTI_FRACTURE_FACTOR <- 1.226
 
-accumulate_by <- function(dat, var) {
-  var <- lazyeval::f_eval(var, dat)
-  lvls <- plotly:::getLevels(var)
-  dats <- lapply(seq_along(lvls), function(x) {
-    cbind(dat[var %in% lvls[seq(1, x)], ], frame = lvls[[x]])
-  })
-  dplyr::bind_rows(dats)
-}
 
-`%then%` <- shiny:::`%OR%`

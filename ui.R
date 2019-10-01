@@ -546,11 +546,11 @@ fluidPage(
                   boxPlus(withSpinner(plotlyOutput("prevFracCost")), width = 6)),
                 
                 # uncomment this chunk to see number of population with and without fracs
-                boxPlus(width = 12, closable = FALSE, collapsible = TRUE, collapsed = TRUE,
-                        fluidRow(
-                          column(width = 6, infoBoxOutput("nNoPriorsBox"), tags$style("#nNoPriorsBox {width:100%}")),
-                          column(width = 6, infoBoxOutput("nPriorsBox"), tags$style("#nPriorsBox {width:100%}") ))
-                ),
+                # boxPlus(width = 12, closable = FALSE, collapsible = TRUE, collapsed = TRUE,
+                #         fluidRow(
+                #           column(width = 6, infoBoxOutput("nNoPriorsBox"), tags$style("#nNoPriorsBox {width:100%}")),
+                #           column(width = 6, infoBoxOutput("nPriorsBox"), tags$style("#nPriorsBox {width:100%}") ))
+                # ),
 
                 tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
                 ),
