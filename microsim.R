@@ -33,7 +33,6 @@ MAX_MAJOR_FRACTURE_RATE <- max(ID_lookup$`FRAX- MAJOR`)
 # Gather and Assign inputs
 year <- YEAR
 index <- which(age_probabilities$Year == year)
-# age_prob <- c(age_probabilities[index,2:52])
 age_prob <- c(age_probabilities[index,2:10])
 
 # Population Size - THIS VALUE IS CURRENTLY FIXED, IT WILL NOT CHANGE WITH UI INPUTS
