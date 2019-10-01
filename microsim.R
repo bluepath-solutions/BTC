@@ -574,6 +574,22 @@ if(CASE) {
   total_caregiver_wo_prev_frac_losses_s1 <- 0
 }
 
+
+# to account for the extra .226 fracs being attributed to primary popn instead of secondary
+## YO YO YO! I'M GOING TO RENAME THESE TO {total_fractures...} so I don't have to create a lot of new
+## objects and logic. YO YO YO!!
+# adj_fractures_wo_previous_fracture <- total_fractures_wo_previous_fracture/MULTI_FRACTURE_FACTOR
+# adj_fractures_wo_previous_fracture_s1 <- total_fractures_wo_previous_fracture_s1/MULTI_FRACTURE_FACTOR
+# adj_fractures_with_previous_fracture <- total_fractures_with_previous_fracture + (total_fractures_wo_previous_fracture - adj_fractures_wo_previous_fracture)
+# adj_fractures_with_previous_fracture_s1 <- total_fractures_with_previous_fracture_s1 + (total_fractures_wo_previous_fracture_s1 - adj_fractures_wo_previous_fracture_s1)
+# 
+# total_fractures_with_previous_fracture <- adj_fractures_with_previous_fracture
+# total_fractures_with_previous_fracture_s1 <- adj_fractures_with_previous_fracture_s1
+# total_fractures_wo_previous_fracture <- adj_fractures_wo_previous_fracture
+# total_fractures_wo_previous_fracture_s1 <- adj_fractures_wo_previous_fracture_s1
+# 
+# ## YO YO YO, END THE YO YO YO SECTION. YO.
+
 total_direct_cost <- total_dxa_cost + total_med_cost + total_inpatient_cost +
                      total_outpatient_cost + total_ltc_cost + total_ed_cost +
                      total_other_cost + total_pharmacy_cost
