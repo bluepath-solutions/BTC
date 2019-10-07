@@ -1,0 +1,10 @@
+name: BTC_China
+title:
+username:
+account: bluepathsolutions-ss
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1278262
+bundleId: 2463958
+url: https://bluepathsolutions-ss.shinyapps.io/BTC_China/
+when: 1570058735.01157

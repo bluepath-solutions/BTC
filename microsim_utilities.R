@@ -9,7 +9,7 @@
 ############################################################################
 
 
-# getAgeIndex
+# getAgeIndex (description outdated 10.2.19, need to update)
 #  @param MINIMUM_AGE int, the minimum age to be included in the population
 #  @param MAXIMUM_AGE int, the maximum age to be included in the population
 #  @param POPULATION_SIZE int, the total number of people to be generated
@@ -24,41 +24,6 @@
 #                        scores corresponding to the generated population
 #  Generates an arbitrary population according to provided ranges and distributions
 #  and returns a list with the FRAX age index score.
-# getAgeIndex <- function(MINIMUM_AGE, 
-#                       MAXIMUM_AGE, 
-#                       POPULATION_SIZE,
-#                       AGE_DISTRIBUTION,
-#                       AGE_CUTOFFS,
-#                       AGE_INDEX_SCORES) {
-#   
-#   age_array <- sample(MINIMUM_AGE:MAXIMUM_AGE, 
-#                       size=POPULATION_SIZE,
-#                       replace=TRUE,
-#                       prob=AGE_DISTRIBUTION)
-# 
-#   
-#   age_array[age_array ==  AGE_CUTOFFS[1]] = AGE_INDEX_SCORES[1]
-#   age_array[age_array >  AGE_CUTOFFS[1] & 
-#                        age_array < AGE_CUTOFFS[2]] = AGE_INDEX_SCORES[2]
-#   age_array[age_array >= AGE_CUTOFFS[2] & 
-#                        age_array < AGE_CUTOFFS[3]] = AGE_INDEX_SCORES[3]
-#   age_array[age_array >= AGE_CUTOFFS[3] & 
-#                        age_array < AGE_CUTOFFS[4]] = AGE_INDEX_SCORES[4]
-#   age_array[age_array >= AGE_CUTOFFS[4] & 
-#                        age_array < AGE_CUTOFFS[5]] = AGE_INDEX_SCORES[5]
-#   age_array[age_array >= AGE_CUTOFFS[5] & 
-#               age_array < AGE_CUTOFFS[6]] = AGE_INDEX_SCORES[6]
-#   age_array[age_array >= AGE_CUTOFFS[6] &
-#               age_array < AGE_CUTOFFS[7]] = AGE_INDEX_SCORES[7]
-#   age_array[age_array >= AGE_CUTOFFS[7] &
-#               age_array < AGE_CUTOFFS[8]] = AGE_INDEX_SCORES[8]
-#   age_array[age_array >= AGE_CUTOFFS[8] &
-#               age_array <= AGE_CUTOFFS[9]] = AGE_INDEX_SCORES[9]
-#   
-#   
-#   return(age_array)
-# }
-
 getAgeIndex <- function(AGE_INDEX_SCORES, AGE_DISTRIBUTION, POPULATION_SIZE) {
   
   
@@ -115,13 +80,20 @@ getAgeIndex <- function(AGE_INDEX_SCORES, AGE_DISTRIBUTION, POPULATION_SIZE) {
 getBMDIndex <- function(POPULATION_SIZE,
                         BMD_MEAN,
                         BMD_STDDEV,
-                        CENTERING_MEAN,
+                        # CENTERING_MEAN,
                         BMD_CUTOFFS,
                         BMD_INDEX_SCORES
                         ) {
-  
-  bmd_array <- (qnorm(runif(POPULATION_SIZE,0,1), BMD_MEAN, BMD_STDDEV)-CENTERING_MEAN)/BMD_STDDEV
+  ## this is just drawing from a standard normal.
+  ## the description even says it's for centering the population around 0. Why would they do this??
+  # bmd_array <- (qnorm(runif(POPULATION_SIZE,0,1), BMD_MEAN, BMD_STDDEV)-CENTERING_MEAN)/BMD_STDDEV
 
+  # null hypothesis
+  # bmd_array <- rnorm(POPULATION_SIZE)
+  
+  # alternative (what they wanted it to do I think)
+  bmd_array <- rnorm(POPULATION_SIZE, BMD_MEAN, BMD_STDDEV)
+  
   bmd_array[bmd_array >= BMD_CUTOFFS[1]] = BMD_INDEX_SCORES[1]
   bmd_array[bmd_array >= BMD_CUTOFFS[2] & bmd_array < BMD_CUTOFFS[3]] = BMD_INDEX_SCORES[2]
   bmd_array[bmd_array >= BMD_CUTOFFS[3] & bmd_array < BMD_CUTOFFS[4]] = BMD_INDEX_SCORES[3]

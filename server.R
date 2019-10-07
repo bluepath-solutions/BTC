@@ -4,9 +4,83 @@ abbreviations <- data.frame(abbrev = c("BMD", "CPI", "DXA", "FRAX", "NHANES"),
 
 tab_id <- c("Home", "Overview", "Mechanics", "Pop_Inputs", "ClinEcon_Inputs", "Scenarios", "Results", "Assumptions", "Disclosures", "Terms", "References")
 
+######################### FUNKY FUNCTIONS ######################
+
+update_popn_inputs <- function(session, country) {
+  updateNumericInput(session, 'pop_input', value = country_popn_value(country, 'popn'))
+  updateNumericInput(session, 'BMD_mean', value = country_popn_value(country, 'bmdMean'))
+  updateNumericInput(session, 'BMD_SD', value = country_popn_value(country, 'bmdSD'))
+  updateNumericInput(session, 'RA_inp', value = country_popn_value(country, 'RAinp'))
+  updateNumericInput(session, 'fxr_inp', value = country_popn_value(country, 'fracInp'))
+  updateNumericInput(session, 'parfxr_inp', value = country_popn_value(country, 'parfracInp'))
+  updateNumericInput(session, 'smoker', value = country_popn_value(country, 'smoker'))
+  updateNumericInput(session, 'alco', value = country_popn_value(country, 'alco'))
+  updateNumericInput(session, 'gluco_tx', value = country_popn_value(country, 'gluco'))
+}
 
 
-#################################################################
+update_cost_inputs <- function(session, country) {
+  ## single fracs
+  updateNumericInput(session, 'costinpt1', value = country_cost_value(country, 'inpatient', FALSE))
+  updateNumericInput(session, 'costoutpt1', value = country_cost_value(country, 'outpatient', FALSE))
+  updateNumericInput(session, 'costLTC1', value = country_cost_value(country, 'ltc', FALSE))
+  updateNumericInput(session, 'costED1', value = country_cost_value(country, 'ed', FALSE))
+  updateNumericInput(session, 'costother1', value = country_cost_value(country, 'other', FALSE))
+  updateNumericInput(session, 'costpharm1', value = country_cost_value(country, 'pharmacy', FALSE))
+  updateNumericInput(session, 'costprod1', value = country_cost_value(country, 'productivity', FALSE))
+  updateNumericInput(session, 'costcare1', value = country_cost_value(country, 'cgBurden', FALSE))
+  
+  ## multi fracs
+  updateNumericInput(session, 'costinpt2', value = country_cost_value(country, 'inpatient', TRUE))
+  updateNumericInput(session, 'costoutpt2', value = country_cost_value(country, 'outpatient', TRUE))
+  updateNumericInput(session, 'costLTC2', value = country_cost_value(country, 'ltc', TRUE))
+  updateNumericInput(session, 'costED2', value = country_cost_value(country, 'ed', TRUE))
+  updateNumericInput(session, 'costother2', value = country_cost_value(country, 'other', TRUE))
+  updateNumericInput(session, 'costpharm2', value = country_cost_value(country, 'pharmacy', TRUE))
+  updateNumericInput(session, 'costprod2', value = country_cost_value(country, 'productivity', TRUE))
+  updateNumericInput(session, 'costcare2', value = country_cost_value(country, 'cgBurden', TRUE))
+}
+
+
+update_scenario_inputs <- function(session, country) {
+  updateNumericInput(session, 'basecaseID', value = country_scenario_value(country, 'baseID'))
+  updateNumericInput(session, 'basecaseTx', value = country_scenario_value(country, 'baseTreat'))
+  updateNumericInput(session, 'scenario1ID', value = country_scenario_value(country, 'improvedID'))
+  updateNumericInput(session, 'scenario1Tx', value = country_scenario_value(country, 'improvedTreat'))
+}
+
+
+## other ####
+
+popn_projections <- list(China = c(687997, 691559, 694970, 698159, 701076, # 2016-2020
+                                  703694, 706017, 708062, 709863, 711448, # 2021-2025
+                                  712815, 713960, 714893, 715630, 716181, # 2026-2030
+                                  716555, 716751, 716765, 716587, 716211, # 2031-2035
+                                  715637, 714871, 713918, 712784, 711477), # 2036-2040
+                        `Hong Kong` = c(3892, 3933, 3976, 4018, 4057,
+                                     4094, 4128, 4160, 4192, 4223,
+                                     4254, 4285, 4314, 4341, 4363,
+                                     4382, 4396, 4407, 4416, 4424,
+                                     4431, 4436, 4440, 4443, 4444),
+                        Taiwan = c(11835, 11876, 11914, 11950, 11982,
+                                   12012, 12039, 12064, 12086, 12106,
+                                   12124, 12139, 12152, 12162, 12169,
+                                   12173, 12173, 12169, 12160, 12147,
+                                   12130, 12107, 12079, 12047, 12009),
+                        Japan = c(65345, 65221, 65076, 64910, 64723,
+                                  64516, 64289, 64044, 63781, 63503,
+                                  63211, 62904, 62586, 62258, 61921,
+                                  61578, 61228, 60872, 60509, 60138,
+                                  59761, 59378, 58991, 58599, 58205),
+                        Thailand = c(35311, 35458, 35595, 35721, 35834,
+                                     35934, 36021, 36096, 36159, 36211,
+                                     36251, 36281, 36300, 36308, 36306,
+                                     36293, 36271, 36238, 36194, 36141,
+                                     36077, 36003, 35918, 35823, 35716))
+## made a reactive variable in server function to update with current country popn_projection
+## country_popn_projection
+
+################ START. THE. COOOOOODE!!!! #################################################
 function(input, output, session) {
   output$value <- renderText({ input$inpt })
   
@@ -75,10 +149,6 @@ function(input, output, session) {
     reset("smoker")
     reset("alco")
     reset("gluco_tx")
-    # reset("RE_cauc")
-    # reset("RE_hisp")
-    # reset("RE_asian")
-    # reset("RE_black")
    
     reset("costinpt1")
     reset("costinpt2")
@@ -96,7 +166,7 @@ function(input, output, session) {
     reset("costprod2")
     reset("costcare1")
     reset("costcare2")
-	reset("basecaseID")
+	  reset("basecaseID")
     reset("basecaseTx")
     reset("scenario1ID")
     reset("scenario1Tx")
@@ -118,10 +188,6 @@ function(input, output, session) {
     reset("smoker")
     reset("alco")
     reset("gluco_tx")
-    # reset("RE_cauc")
-    # reset("RE_hisp")
-    # reset("RE_asian")
-    # reset("RE_black")
   })  
   
   observeEvent(input$restorefxrcosts, {
@@ -172,6 +238,32 @@ function(input, output, session) {
     ignoreInit = T, 
     priority = 1000)
     
+    
+  ## Beginning logic section to add all countries in one app ####
+    
+  
+    
+  ## well, that's what this was, but then I moved all of the machinery outside of
+  ## this section and into global or server pre-function.
+
+  ## section to initialize and update numeric inputs
+  updateSelectizeInput(session, 'countrySelect', selected = 'China',
+                       choices = country_names)
+  
+  
+  ## section to update inputs when country has been changed
+  observeEvent(input$countrySelect, {
+    update_popn_inputs(session, input$countrySelect)
+    update_cost_inputs(session, input$countrySelect) 
+    update_scenario_inputs(session, input$countrySelect)
+  })
+    
+  country_popn_projections <- reactive({
+    projections <- unlist(unname(popn_projections[input$countrySelect]))
+    return(projections)
+    })
+
+  ## other sections ####
   
   observeEvent(input$scenario1ID, {
     isolate(updateNumericInput(session,
@@ -213,147 +305,20 @@ function(input, output, session) {
   ignoreInit = T,
   priority = 500)
   
-  # cauc_rate <- reactive({
-  #   validate(
-  #     need(input$RE_cauc >= 0 && input$RE_cauc <= 100, 
-  #          "Caucasion demographic must be within range of [0,100]")
-  #     %then% need(abs(100 - (input$RE_cauc + input$RE_hisp +
-  #                   input$RE_asian + input$RE_black)) < 0.0001,
-  #                 "Demographic percentages must sum to 100"))
-  #   return(input$RE_cauc/100.0)
-  # })
-  # observeEvent(input$RE_cauc, {
-  #   if(!is.numeric(input$RE_cauc) || input$RE_cauc < 0 || input$RE_cauc > 100) {
-  #     shinyalert("Demographic Breakdown Error", 
-  #                "Caucasian demographic must be within range of [0,100].", 
-  #                type = "error")
-  #   }
-  #   if(!is.numeric(input$RE_cauc) || !is.numeric(input$RE_hisp) ||
-  #      !is.numeric(input$RE_asian) || !is.numeric(input$RE_black)) {
-  #     shinyalert("Demographic Breakdown Error", 
-  #                "Demographic breakdown values must be numeric.", 
-  #                type = "error")
-  #     return()
-  #   }
-  #   if(abs(100 - (input$RE_cauc + input$RE_hisp +
-  #                 input$RE_asian + input$RE_black)) >= 0.0001) {
-  #     shinyalert("Demographic Breakdown Error", 
-  #                "Demographic percentages must sum to 100.", 
-  #                type = "error")
-  #   }
-  # },
-  # ignoreInit = T,
-  # priority = 500)
-  # 
-  # hisp_rate <- reactive({
-  #   validate(
-  #     need(input$RE_hisp >= 0 && input$RE_hisp <= 100, 
-  #          "Hispanic demographic must be within range of [0,100]")
-  #     %then% need(abs(100 - (input$RE_cauc + input$RE_hisp +
-  #                              input$RE_asian + input$RE_black)) < 0.0001,
-  #                 "Demographic percentages must sum to 100"))
-  #   return(input$RE_hisp/100.0)
-  # })
-  # observeEvent(input$RE_hisp, {
-  #   if(!is.numeric(input$RE_hisp) || input$RE_hisp < 0 || input$RE_hisp > 100) {
-  #     shinyalert("Demographic Breakdown Error", 
-  #                "Hispanic demographic must be within range of [0,100].", 
-  #                type = "error")
-  #   }
-  #   if(!is.numeric(input$RE_cauc) || !is.numeric(input$RE_hisp) ||
-  #      !is.numeric(input$RE_asian) || !is.numeric(input$RE_black)) {
-  #     shinyalert("Demographic Breakdown Error", 
-  #                "Demographic breakdown values must be numeric.", 
-  #                type = "error")
-  #     return()
-  #   }
-  #   if(abs(100 - (input$RE_cauc + input$RE_hisp +
-  #                 input$RE_asian + input$RE_black)) >= 0.0001) {
-  #     shinyalert("Demographic Breakdown Error", 
-  #                "Demographic percentages must sum to 100.", 
-  #                type = "error")
-  #   }
-  # },
-  # ignoreInit = T,
-  # priority = 500)
-  # 
-  # asian_rate <- reactive({
-  #   validate(
-  #     need(input$RE_asian >= 0 && input$RE_asian <= 100, 
-  #          "Asian demographic must be within range of [0,100]")
-  #     %then% need(abs(100 - (input$RE_cauc + input$RE_hisp +
-  #                              input$RE_asian + input$RE_black)) < 0.0001,
-  #                 "Demographic percentages must sum to 100"))
-  #   return(input$RE_asian/100.0)
-  # })
-  # observeEvent(input$RE_asian, {
-  #   if(!is.numeric(input$RE_asian) || input$RE_asian < 0 || input$RE_asian > 100) {
-  #     shinyalert("Demographic Breakdown Error", 
-  #                "Asian demographic must be within range of [0,100].", 
-  #                type = "error")
-  #   }
-  #   if(!is.numeric(input$RE_cauc) || !is.numeric(input$RE_hisp) ||
-  #      !is.numeric(input$RE_asian) || !is.numeric(input$RE_black)) {
-  #     shinyalert("Demographic Breakdown Error", 
-  #                "Demographic breakdown values must be numeric.", 
-  #                type = "error")
-  #     return()
-  #   }
-  #   if(abs(100 - (input$RE_cauc + input$RE_hisp +
-  #                 input$RE_asian + input$RE_black)) >= 0.0001) {
-  #     shinyalert("Demographic Breakdown Error", 
-  #                "Demographic percentages must sum to 100.", 
-  #                type = "error")
-  #   }
-  # },
-  # ignoreInit = T,
-  # priority = 500)
-  # 
-  # black_rate <- reactive({
-  #   validate(
-  #     need(input$RE_black >= 0 && input$RE_black <= 100, 
-  #          "Black demographic must be within range of [0,100]")
-  #     %then% need(abs(100 - (input$RE_cauc + input$RE_hisp +
-  #                              input$RE_asian + input$RE_black)) < 0.0001,
-  #                 "Demographic percentages must sum to 100"))
-  #   return(input$RE_black/100.0)
-  # })
-  # observeEvent(input$RE_black, {
-  #   if(!is.numeric(input$RE_black) || input$RE_black < 0 || input$RE_black > 100) {
-  #     shinyalert("Demographic Breakdown Error", 
-  #                "Black demographic must be within range of [0,100].", 
-  #                type = "error")
-  #   }
-  #   if(!is.numeric(input$RE_cauc) || !is.numeric(input$RE_hisp) ||
-  #      !is.numeric(input$RE_asian) || !is.numeric(input$RE_black)) {
-  #     shinyalert("Demographic Breakdown Error", 
-  #                "Demographic breakdown values must be numeric.", 
-  #                type = "error")
-  #     return()
-  #   }
-  #   if(abs(100 - (input$RE_cauc + input$RE_hisp +
-  #                 input$RE_asian + input$RE_black)) >= 0.0001) {
-  #     shinyalert("Demographic Breakdown Error", 
-  #                "Demographic percentages must sum to 100.", 
-  #                type = "error")
-  #   }
-  # },
-  # ignoreInit = T,
-  # priority = 500)
   
   asian_rate <- function(){return(1)}
   
   
   BMD_mean <- reactive({
     validate(
-      need(input$BMD_mean > 0 && input$BMD_mean <= 1.0, 
-           "Mean bone mineral density must be within the range (0, 1.0]"))
+      need(input$BMD_mean >= -4 && input$BMD_mean <= 1.0, 
+           "Mean bone mineral density must be within the range [-4, 1.0]"))
     return(input$BMD_mean)
   })
   observeEvent(input$BMD_mean, {
-    if(!is.numeric(input$BMD_mean) || input$BMD_mean <= 0 || input$BMD_mean > 1.0) {
+    if(!is.numeric(input$BMD_mean) || input$BMD_mean < -4 || input$BMD_mean > 1.0) {
       shinyalert("BMD Parameter Error", 
-                 "Mean bone mineral density must be within the range (0, 1.0].", 
+                 "Mean bone mineral density must be within the range [-4, 1.0].", 
                  type = "error")
     }
   },
@@ -362,14 +327,14 @@ function(input, output, session) {
   
   BMD_SD <- reactive({
     validate(
-      need(input$BMD_SD > 0 && input$BMD_SD <= 1.0, 
-           "Bone mineral density standard deviation must be within the range (0, 1.0]"))
+      need(input$BMD_SD > 0 && input$BMD_SD <= 10.0, 
+           "Bone mineral density standard deviation must be within the range (0, 10.0]"))
     return(input$BMD_SD)
   })  
   observeEvent(input$BMD_SD, {
-    if(!is.numeric(input$BMD_SD) || input$BMD_SD <= 0 || input$BMD_SD > 1.0) {
+    if(!is.numeric(input$BMD_SD) || input$BMD_SD <= 0 || input$BMD_SD > 10.0) {
       shinyalert("BMD Parameter Error", 
-                 "Bone mineral density standard deviation must be within the range (0, 1.0].", 
+                 "Bone mineral density standard deviation must be within the range (0, 10.0].", 
                  type = "error")
     }
   },
@@ -805,10 +770,7 @@ sim_data <- reactive({
   on.exit(progress$close())
   # Validate Inputs
   population <-     pop_input()
-  # caucasian_rate <- cauc_rate()
-  # hispanic_rate <-  hisp_rate()
   asian_rate <-     asian_rate() 
-  # black_rate <-     black_rate()
   
   bmd_mean <-       BMD_mean()
   bmd_sd <-         BMD_SD()
@@ -851,6 +813,13 @@ sim_data <- reactive({
   costcare1 <- costcare1()
   costcare2 <- costcare2()
   
+  ## all-JAPAC additions
+  # country <- input$countrySelect
+  projection <- country_popn_projections()
+  
+  
+  ##
+  
   start_year <- 2018
   end_year   <- as.integer(substring(input$endYear, 1, 4))
   
@@ -863,25 +832,16 @@ sim_data <- reactive({
                                             'data.table'),
                               .export=c('microsim',
                                         'age_probabilities',
-                                        'minimum_age',
-                                        'maximum_age',
-                                        'age_cutoffs',
                                         'age_index_scores',
-                                        # 'race_categories',
-                                        # 'race_index_scores',
                                         'fracture_breakdown',
-                                        'centering_mean',
                                         'bmd_index_scores',
                                         'bmd_cutoffs',
                                         'ID_lookup',
-                                        'MEDICATION_ADHERENCE',
-                                        'NON_ADHERENT_INCREASED_FRACTURE_RISK',
                                         'HIP_FRACTURE_RATIO',
                                         'MULTI_FRACTURE_FACTOR',
                                         'input',
                                         'isolate',
                                         'getAgeIndex',
-                                        # 'getRaceIndex',
                                         'getBMDIndex',
                                         'getRiskFactorIndex',
                                         'getMedicationUtilization',
@@ -890,14 +850,23 @@ sim_data <- reactive({
                                         'getFracture',
                                         'getMultiFraxCost',
                                         'getCostWO',
-                                        'getCostWP'
+                                        'getCostWP',
+                                        'country_popn_value',
+                                        'update_popn_inputs',
+                                        'country_cost_value',
+                                        'update_cost_inputs',
+                                        'country_scenario_value',
+                                        'update_scenario_inputs',
+                                        'country_other_value',
+                                        'country_other_inputs',
+                                        'treat_mix',
+                                        'treat_cost', 
+                                        'treat_efficacy_hip',
+                                        'treat_efficacy_other'
                                         ), .verbose = F,
                                         .options.snow = opts) %dopar% {
                                isolate({microsim(population,
-                                                 # caucasian_rate,
-                                                 # hispanic_rate,
                                                  asian_rate,
-                                                 # black_rate,
                                                  bmd_mean,
                                                  bmd_sd,
                                                  ra_rate,
@@ -934,16 +903,15 @@ sim_data <- reactive({
                                                  
                                                  costcare1,
                                                  costcare2,
-                                                 i, enable_indirect_costs)})
+                                                 i, enable_indirect_costs,
+                                                 input$countrySelect, projection)})
                               })
 })
 
 ###############RENDERING BOXES & PLOTS######################
 uiOutput("nlp_sentences_tree")
 simulation_data <- reactiveValues(sim = NULL)
-#simulation_data$sim <- sim_data()
   
-#sim_data_d <- sim_data %>% debounce(2000)
   
 # Summary Info Box Details
 output$totalfxr_content <- renderText({
@@ -1517,82 +1485,6 @@ output$SecondaryCostBox <- renderInfoBox({
       if(i > 1) {
         ybc <- cbind(ybc, sim[[i]]$total_fractures_with_previous_fracture + ybc[i-1])
         ys1 <- cbind(ys1, sim[[i]]$total_fractures_with_previous_fracture_s1 + ys1[i-1])
-        # print("Previous with Fracture")
-        # print(sim[[i]]$total_fractures_with_previous_fracture)
-        # print(sim[[i]]$total_fractures_with_previous_fracture_s1)
-        # print("Inpatient")
-        # print(sim[[i]]$total_inpatient_with_prev_frac_cost)
-        # print(sim[[i]]$total_inpatient_with_prev_frac_cost_s1)
-        # print("Outpatient")
-        # print(sim[[i]]$total_outpatient_with_prev_frac_cost)
-        # print(sim[[i]]$total_outpatient_with_prev_frac_cost_s1)
-        # print("LTC")
-        # print(sim[[i]]$total_ltc_with_prev_frac_cost)
-        # print(sim[[i]]$total_ltc_with_prev_frac_cost_s1)
-        # print("ED")
-        # print(sim[[i]]$total_ed_with_prev_frac_cost)
-        # print(sim[[i]]$total_ed_with_prev_frac_cost_s1)
-        # print("Other")
-        # print(sim[[i]]$total_other_with_prev_frac_cost)
-        # print(sim[[i]]$total_other_with_prev_frac_cost_s1)
-        # print("Pharmacy")
-        # print(sim[[i]]$total_pharmacy_with_prev_frac_cost)
-        # print(sim[[i]]$total_pharmacy_with_prev_frac_cost_s1)
-        # 
-        # print("Productivity")
-        # print(sim[[i]]$total_productivity_with_prev_frac_losses)
-        # print(sim[[i]]$total_productivity_with_prev_frac_losses_s1)
-        # print("Caregiver")
-        # print(sim[[i]]$total_caregiver_with_prev_frac_losses)
-        # print(sim[[i]]$total_caregiver_with_prev_frac_losses_s1)
-        # 
-        # print("Direct")
-        # print(sim[[i]]$total_direct_with_prev_frac_cost)
-        # print(sim[[i]]$total_direct_with_prev_frac_cost_s1)
-        # 
-        # print("DXA")
-        # print(sim[[i]]$total_dxa_cost)
-        # print(sim[[i]]$total_dxa_cost_s1)
-        # 
-        # print("MED")
-        # print(sim[[i]]$total_med_cost)
-        # print(sim[[i]]$total_med_cost_s1)
-        # 
-        # print("MED_PATIENTS")
-        # 
-        # print(sum(sim[[i]]$num_med_patients))
-        # print(sum(sim[[i]]$num_med_patients_s1))
-        # 
-        # 
-        # print("DXA and Med Costs Partitioned")
-        # print((sim[[i]]$total_dxa_cost + sim[[i]]$total_med_cost)*
-        #         (sim[[i]]$total_fractures_with_previous_fracture/
-        #            (sim[[i]]$total_fractures_with_previous_fracture+sim[[i]]$total_fractures_wo_previous_fracture)))
-        # print((sim[[i]]$total_dxa_cost_s1 + sim[[i]]$total_med_cost_s1)*
-        #         (sim[[i]]$total_fractures_with_previous_fracture_s1/
-        #            (sim[[i]]$total_fractures_with_previous_fracture_s1+sim[[i]]$total_fractures_wo_previous_fracture_s1)))
-        # 
-        # print("Direct Calculation")
-        # print(
-        #   (sim[[i]]$total_dxa_cost + sim[[i]]$total_med_cost)*
-        #     (sim[[i]]$total_fractures_with_previous_fracture/
-        #        (sim[[i]]$total_fractures_with_previous_fracture+sim[[i]]$total_fractures_wo_previous_fracture)) + 
-        #   sim[[i]]$total_inpatient_with_prev_frac_cost + 
-        #         sim[[i]]$total_outpatient_with_prev_frac_cost +
-        #         sim[[i]]$total_ltc_with_prev_frac_cost + 
-        #         sim[[i]]$total_ed_with_prev_frac_cost + 
-        #         sim[[i]]$total_other_with_prev_frac_cost + 
-        #         sim[[i]]$total_pharmacy_with_prev_frac_cost)
-        # print(
-        #   (sim[[i]]$total_dxa_cost_s1 + sim[[i]]$total_med_cost_s1)*
-        #     (sim[[i]]$total_fractures_with_previous_fracture_s1/
-        #        (sim[[i]]$total_fractures_with_previous_fracture_s1+sim[[i]]$total_fractures_wo_previous_fracture_s1)) +
-        #   sim[[i]]$total_inpatient_with_prev_frac_cost_s1 + 
-        #         sim[[i]]$total_outpatient_with_prev_frac_cost_s1 +
-        #         sim[[i]]$total_ltc_with_prev_frac_cost_s1 + 
-        #         sim[[i]]$total_ed_with_prev_frac_cost_s1 + 
-        #         sim[[i]]$total_other_with_prev_frac_cost_s1 + 
-        #         sim[[i]]$total_pharmacy_with_prev_frac_cost_s1)
       } else {
         ybc <- cbind(ybc, sim[[i]]$total_fractures_with_previous_fracture)
         ys1 <- cbind(ys1, sim[[i]]$total_fractures_with_previous_fracture_s1)
@@ -2100,6 +1992,9 @@ output$SecondaryCostBox <- renderInfoBox({
     )  
     
     })
+  
+  
+  
 ###############Priority Manipulation###################################
 outputOptions(output, "costp", priority = 1)
 outputOptions(output, "fxrplot", priority = 1)
