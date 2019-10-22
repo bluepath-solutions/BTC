@@ -3,6 +3,8 @@ abbreviations <- data.frame(abbrev = c("BMD", "CPI", "DXA", "FRAX", "NHANES", "R
                                      "receptor activator of nuclear factor kappa-B ligand", "selective estrogen receptor modulators"))
 references <- data.frame(refs = c("Lewiecki EM, Adler R, Curtis J, Gagel R, Saag K, Singer A, et al. Hip Fractures and Declining DXA Testing: At a Breaking Point? J Bone Miner Res. 2016 Sep;31(S1):S1–411.", "Freemantle N, Cooper C, Diez-Perez A, Gitlin M, Radcliffe H, Shepherd S, et al. Results of indirect and mixed treatment comparison of fracture efficacy for osteoporosis treatments: a meta-analysis. Osteoporos Int. 2013 Jan;24(1):209–1", "Centre for Metabolic Bone Diseases, University of Sheffield, UK. FRAX® Fracture Risk Assessment Tool [Internet]. [cited 2017 Nov 14]. Available from: https://www.sheffield.ac.uk/FRAX/", "Centers for Disease Control and Prevention. NHANES - National Health and Nutrition Examination Survey [Internet]. [cited 2017 May 3]. Available from: https://www.cdc.gov/nchs/nhanes/", "Weaver J, Sajjan S, Lewiecki EM, Harris ST, Marvos P. Prevalence and Cost of Subsequent Fractures Among U.S. Patients with an Incident Fracture. J Manag Care Spec Pharm. 2017 Apr;23(4):461–71.", "Colby, Sandra L., Ortman, Jennifer M. Projections of the Size and Composition of the U.S. Population: 2014 to 2060. US Census Bur Wash DC. 2014 Mar;Current Population Reports, P25-1143:13.  www.census.gov /population/projections/data/national/2014.html>.", "United States Census Bureau [Internet]. Available from: https://www.census.gov/", "Imaz I, Zegarra P, González-Enríquez J, Rubio B, Alcazar R, Amate JM. Poor bisphosphonate adherence for treatment of osteoporosis increases fracture risk: systematic review and meta-analysis. Osteoporos Int. 2010 Nov;21(11):1943–51.", "Durden E, Pinto L, Lopez-Gonzalez L, Juneau P, Barron R. Two-year persistence and compliance with osteoporosis therapies among postmenopausal women in a commercially insured population in the United States. Arch Osteoporos [Internet].2017 Dec [cited 2018 Jun 20];12(1). Available from: http://link.springer.com/10.1007/s11657-017-0316-5", "King AB, Saag KG, Burge RT, Pisu M, Goel N. Fracture Reduction Affects Medicare Economics (FRAME): Impact of increased osteoporosis diagnosis and treatment. Osteoporos Int. 2005 Dec;16(12):1545–57.", "Pike, CT, Birnbaum HG, Schiller M, Swallow E, Burge RT, Edgell ET. Prevalence and costs of osteoporotic patients with subsequent non-vertebral fractures in the US.  Osteoporos Int. 2011;22:2611–2621.", "United States Department of Labor, Bureau of Labor Statistics. Medicare Care CPI (Consumer Price Index) Data Tables. 2019. Available from: https://data.bls.gov/pdq/SurveyOutputServlet", "Pike C, Birnbaum HG, Schiller M, Sharma H, Burge R, Edgell ET. Direct and indirect costs of non-vertebral fracture patients with osteoporosis in the US. PharmacoEconomics. 2010;28(5):395–409.", "Vanness DJ, Tosteson ANA. Estimating the Opportunity Costs of Osteoporosis in the United States: Top Geriatr Rehabil. 2005 Jan;21(1):4–16.", "Leader Jr. D, Williams SA, Curtis JR, Gut R. Osteoporosis-Related Fracture Events in the U.S (M19). AMCP Nexus; 2017 Oct 16; Dallas, TX, USA. S78.", "IBM Micromedex RED BOOK 2019.", "Center for Medicare and Medicaid Services (CMS) Physician Fee Schedule Current Procedural Terminology (CPT) payment rates. Access on March 29, 2019. https://www.cms.gov/apps/physician-fee-schedule/license-agreement.aspx"
 ))
+
+
 #########################################################################################################################################
 fluidPage(
   #setting up tables for alignment
@@ -29,11 +31,8 @@ fluidPage(
     skin = "blue",
     header = dashboardHeaderPlus(
       titleWidth=270,
-      #tags$li(class = "dropdown", actionBttn(inputId="Next", label=icon("arrow-right"),color="primary",style="minimal", size="xs")),
       enable_rightsidebar = FALSE,
-      # rightSidebarIcon = "grip-lines-vertical",
-      title = tagList(span(class = "logo-lg", "Bending the Curve"),
-                      img(src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRb4Eku7HH9tk3KfqEtF5BXU5obNhUmWRT9rS_z8_U_U_0pWf-m")),
+      title = tagList(span(class = "logo-lg", "Bending the Curve")),
       left_menu = tagList(
         dropdownBlock(
           id = "defaultDD",
@@ -43,6 +42,12 @@ fluidPage(
           actionBttn(inputId="restorepop", label="Reset Population Inputs",color="primary",style="minimal", size="xs"),
           actionBttn(inputId="restorefxrcosts", label="Reset Fracture Cost Inputs",color="primary",style="minimal", size="xs"),
           actionBttn(inputId="restorescenarios", label="Reset Scenario Inputs",color="primary",style="minimal", size="xs")
+        ),
+        dropdownBlock(
+          id = "countrySelectBox",
+          title = "Country Select",
+          icon = "th-list",
+          selectizeInput('countrySelect', label = 'Country', choices = c('China', 'Hong Kong', 'Taiwan', 'Japan', 'Thailand'))
         ))
     ),
     sidebar = 
@@ -59,38 +64,14 @@ fluidPage(
                     menuItem("Assumptions & Limitations", icon = icon("exclamation-triangle"), tabName = "Assumptions"),
                     menuItem("_______________________________", tabName = "Break"),
                     menuItem("Disclosures & Study Descriptions", icon = icon("file-alt"), tabName = "Disclosures"),
-                    #menuItem("Abbreviations & Terminology", icon = icon("book-open"), tabName = "Terms"),
                     menuItem("References", icon = icon("asterisk"), tabName = "References")
         )
       ),
-    # rightsidebar = rightSidebar(
-    #   background = "dark",
-    #   rightSidebarTabContent(
-    #     id = 1,
-    #     icon = "sitemap",
-    #     title = "Model Overview",
-    #     active = TRUE,
-    #     rightSidebarMenu(
-    #       rightSidebarMenuItem(
-    #         icon = menuIcon(
-    #           name = "lightbulb",
-    #           color = "red"
-    #         ),
-    #         info = menuInfo(
-    #           title = "Model Information",
-    #           description = tags$p("The model analyzes US women age 65 years and older. Each patient is randomly assigned a unique set of demographics and characteristics based on a probabilsitic distribution. The resulting average across the patients reflects the population evarage inputs customized on the left. 
-    #                                Based on the profile of each patient, a 10-year fracture risk is applied and adjusted to reflect an annual risk. This risk is used to estimate the probability of fracture. 
-    #                                Total fractures are aggreated by type and monetized using direct and indirect costs. For each calendar year, hypothetical cohorts of a specified number of women are simulated within each model scenario.
-    #                                ",style = "font-size: 90%;")
-    #           ))))
-    #           ),
-    
+
     body <- dashboardBody(
       
       hidden(actionBttn(inputId="Previous", label=icon("arrow-left"),color="primary",style="float", size="xs")),  
       hidden(actionBttn(inputId="Next", label=icon("arrow-right"),color="primary",style="float", size="xs")),  
-      
-      #hidden(actionBttn(inputId ="Previous", label = icon("arrow-left"))),
       
       setShadow("box"),
       
@@ -116,10 +97,7 @@ fluidPage(
                                The Estimated Long-Term Value of Improving <br/>
                                Patient Identification and Treatment Rates in <br/>
                                Post-Menopausal Osteoporosis", br())), align = "center", style = "font-size: 190%;"
-                    
-                    #footer = "This model estimates the economic burden of osteoporosis in a representative population and is intended for formulary committees. The model includes estimated treatment costs by drug class and does not specify individual drug costs.", align = "center"
                     )),
-                #fluidRow(h4("")),
                 fluidRow(
                   actionBttn(
                     inputId = "Id_enter",
@@ -183,7 +161,7 @@ fluidPage(
                       column(
                         width = 12,
                         descriptionBlock(
-                          tags$img(src="model_mech.PNG", width = "95%", height = "90%", style="display: block; margin-left: auto; margin-right: auto;")),
+                          tags$img(src="Simulation_Mechanics.png", width = "95%", height = "90%", style="display: block; margin-left: auto; margin-right: auto;")),
                         text = "Model Flow")
                     )),
                 bsPopover("mod_mech", title='<font size="2">Source:', content='<font size="3">DOF, Amgen, Bend the Curve PMO Microsimulation, 2019', placement="left", options = list(container = "body")),
@@ -199,7 +177,7 @@ fluidPage(
                 fluidRow(
                   boxPlus(id = "Pop_Demo", title = "Population Size & Demographics", width = 12, closable = FALSE, collapsible = TRUE,
                           bsPopover("Pop_Demo", title='<font size="2">Source:', content='<font size="3">DOF, Amgen, Bend the Curve PMO Microsimulation, 2019', placement="left", options = list(container = "body")),
-                          enable_dropdown = TRUE, dropdown_icon = "question-circle",
+                          enable_dropdown = FALSE, dropdown_icon = "question-circle",
                           dropdown_menu = dropdownItemList(
                             dropdownDivider(),
                             dropdownItem(name = HTML("Using the Census projection estimates for females of any race or ethnicity, <br/>
@@ -213,35 +191,19 @@ fluidPage(
                           tags$table(id = "inputs-table"
                                      , style = "width: 100%"
                                      , tags$tr(
-                                       tags$td(style = "width: 12.5%; text-align: left", p("Population, Women Aged 65 Years and Older")),
+                                       tags$td(style = "width: 12.5%; text-align: left", p("Population, Women Aged 50 Years and Older")),
                                        tags$td(style = "width: 12.5%; text-align: left",
-                                               tags$style("#pop_input {background-color:#dfdfdf;}"), numericInput(inputId = "pop_input", label = "", value = 1000000, min = 0, max = 30000000)),
+                                               tags$style("#pop_input {background-color:#dfdfdf;}"), numericInput(inputId = "pop_input", label = "", value = country_popn_value('China', 'popn'), min = 0, max = 3000000000)),
                                        tags$td(style = "width: 25%; text-align: left",
                                                h5("")),
                                        tags$td(style = "width: 25%; text-align: left",
                                                tags$img(src="grey_boxes.PNG", width = "190px", height = "60px", style="display: block; margin-left: auto; margin-right: 0px;"))
-                                     )),
-                          # bsTooltip("pop_input", "Enter eligible population. Default value of 1 million is based on ....","right", options = list(container = "body"))),
-                          
-                          tags$table(id = "inputs-table"
-                                     , style = "width: 100%"
-                                     , tags$tr(
-                                       tags$td(style = "width: 11.8%; text-align: left", p("Race/Ethnicity", br(), "Distribution (%)")),
-                                       tags$td(style = "width: 11.8%; text-align: left",
-                                               tags$style("#RE_cauc {background-color:#dfdfdf;}"), numericInput(inputId = "RE_cauc", label = "Caucasian", value = 80.1, min = 0, max = 100, step = 0.1)),
-                                       tags$td(style = "width: 11.8%; text-align: left",
-                                               tags$style("#RE_hisp {background-color:#dfdfdf;}"), numericInput(inputId = "RE_hisp", label = "Hispanic", value = 9.1, min = 0, max = 100, step = 0.1)),
-                                       tags$td(style = "width: 11.8%; text-align: left",
-                                               tags$style("#RE_asian {background-color:#dfdfdf;}"), numericInput(inputId = "RE_asian", label = "Asian", value = 0.5, min = 0, max = 100, step = 0.1)),
-                                       tags$td(style = "width: 11.8%; text-align: left",
-                                               tags$style("#RE_black {background-color:#dfdfdf;}"), numericInput(inputId = "RE_black", label = "Black", value = 10.3, min = 0, max = 100, step = 0.1)),
-                                       tags$td(style = "width: 11.8%; text-align: left",
-                                               h5(textOutput("sum_RE"), align="center",style="margin-right: 0px; padding-bottom:15px"))
-                                     ))),
+                                     ))
+                          ),
                   
                   boxPlus(id = "Risk_Fact", title = "Risk Factors", width = 12, closable = FALSE, collapsible = TRUE,
                           bsPopover("Risk_Fact", title='<font size="2">Source:', content='<font size="3">DOF, Amgen, Bend the Curve PMO Microsimulation, 2019', placement="left", options = list(container = "body")),
-                          enable_dropdown = TRUE, dropdown_icon = "question-circle",
+                          enable_dropdown = FALSE, dropdown_icon = "question-circle",
                           dropdown_menu = dropdownItemList(
                             dropdownDivider(),
                             dropdownItem(name = HTML("Risk factor prevalence was estimated from analyzing National Health and Nutrition Examination Survey (NHANES), <br/>
@@ -255,24 +217,24 @@ fluidPage(
                                      , style = "width: 100%"
                                      , tags$tr(
                                        tags$td(style = "width: 25%; text-align: left",
-                                               tags$style("#BMD_mean {background-color:#dfdfdf}"), numericInput(inputId = "BMD_mean", label = "Mean Bone Mineral Density", value = 0.67, min = 0, max = 1, step = 0.01)),
+                                               tags$style("#BMD_mean {background-color:#dfdfdf}"), numericInput(inputId = "BMD_mean", label = "Mean Bone Mineral Density", value = country_popn_value('China', 'bmdMean'), min = -4, max = 1, step = 0.01)),
                                        tags$td(style = "width: 25%; text-align: left", 
-                                               tags$style("#BMD_SD {background-color:#dfdfdf}"), numericInput(inputId = "BMD_SD", label = "Bone Mineral Density Standard Deviation", value = 0.12, min = 0, max = 1, step = 0.01)),
+                                               tags$style("#BMD_SD {background-color:#dfdfdf}"), numericInput(inputId = "BMD_SD", label = "Bone Mineral Density Standard Deviation", value = country_popn_value('China', 'bmdSD'), min = 0, max = 10, step = 0.01)),
                                        tags$td(style = "width: 25%; text-align: left",
-                                               tags$style("#RA_inp {background-color:#dfdfdf}"), numericInput(inputId = "RA_inp", label = "Rheumatoid Arthritis (%)", value = 8.6, min = 0, max = 100, step = 0.01)),
+                                               tags$style("#RA_inp {background-color:#dfdfdf}"), numericInput(inputId = "RA_inp", label = "Rheumatoid Arthritis (%)", value = country_popn_value('China', 'RAinp'), min = 0, max = 100, step = 0.01)),
                                        tags$td(style = "width: 25%; text-align: left",
-                                               tags$style("#fxr_inp {background-color:#dfdfdf}"), numericInput(inputId = "fxr_inp", label = "Previous Fracture (%)", value = 14.2, min = 0, max = 100, step = 0.01)))),                      
+                                               tags$style("#fxr_inp {background-color:#dfdfdf}"), numericInput(inputId = "fxr_inp", label = "Previous Fracture (%)", value = country_popn_value('China', 'fracInp'), min = 0, max = 100, step = 0.01)))),                      
                           tags$table(id = "inputs-table"
                                      , style = "width: 100%"
                                      , tags$tr(
                                        tags$td(style = "width: 25%; text-align: left",
-                                               tags$style("#parfxr_inp {background-color:#dfdfdf;}"), numericInput(inputId = "parfxr_inp", label = "Parent History of Hip Fracture (%)", value = 12.0, min = 0, max = 100, step = 0.01)),
+                                               tags$style("#parfxr_inp {background-color:#dfdfdf;}"), numericInput(inputId = "parfxr_inp", label = "Parent History of Hip Fracture (%)", value = country_popn_value('China', 'parfracInp'), min = 0, max = 100, step = 0.01)),
                                        tags$td(style = "width: 25%; text-align: left",
-                                               tags$style("#smoker {background-color:#dfdfdf;}"), numericInput(inputId = "smoker", label = "Smoker (%)", value = 8.1, min = 0, max = 100, step = 0.01)),
+                                               tags$style("#smoker {background-color:#dfdfdf;}"), numericInput(inputId = "smoker", label = "Smoker (%)", value = country_popn_value('China', 'smoker'), min = 0, max = 100, step = 0.01)),
                                        tags$td(style = "width: 25%; text-align: left",
-                                               tags$style("#alco {background-color:#dfdfdf;}"), numericInput(inputId = "alco", label = "Excessive Alcohol Use (%)", value = 2.9, min = 0, max = 100, step = 0.01)),
+                                               tags$style("#alco {background-color:#dfdfdf;}"), numericInput(inputId = "alco", label = "Excessive Alcohol Use (%)", value = country_popn_value('China', 'alco'), min = 0, max = 100, step = 0.01)),
                                        tags$td(style = "width: 25%; text-align: left",
-                                               tags$style("#gluco_tx {background-color:#dfdfdf;}"), numericInput(inputId = "gluco_tx", label = "Long-Term Glucocorticoid Therapy (%)", value = 8.7, min = 0, max = 100, step = 0.01))))      
+                                               tags$style("#gluco_tx {background-color:#dfdfdf;}"), numericInput(inputId = "gluco_tx", label = "Long-Term Glucocorticoid Therapy (%)", value = country_popn_value('China', 'gluco'), min = 0, max = 100, step = 0.01))))      
                             ),
                   
                   tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
@@ -286,7 +248,7 @@ fluidPage(
                             "The Estimated Long-Term Value of Improving Patient Identification and Treatment Rates in Post-Menopausal Osteoporosis"), align = "center"),
                 fluidRow(
                   boxPlus(id="FxrCostInp", title = "Fracture Costs", width = 12, closable = FALSE, collapsible = TRUE,
-                          enable_dropdown = TRUE, dropdown_icon = "question-circle",
+                          enable_dropdown = FALSE, dropdown_icon = "question-circle",
                           dropdown_menu = dropdownItemList(
                             dropdownItem(name = HTML("Direct medical costs related to fracture were derived from Weaver et al. This retrospective claims analysis included<br/>
                                                      45,603 patients (mean age of 78.1 years) with Humana Medicare Advantage who experienced an incident fracture between <br/>
@@ -324,45 +286,45 @@ fluidPage(
                             column(width = 4, h5(strong("> One Fracture Per Year")), align = "center")),
                           fluidRow(
                             column(width = 4, h5("Inpatient Stay", align = "left")),
-                            column(width = 4, tags$style("#costinpt1 {background-color:#dfdfdf;}"), numericInput(inputId = "costinpt1", label = NULL, value = "10314", step = 1)),
-                            column(width = 4, tags$style("#costinpt2 {background-color:#dfdfdf;}"), numericInput(inputId = "costinpt2", label = NULL, value = "17746"))),
+                            column(width = 4, tags$style("#costinpt1 {background-color:#dfdfdf;}"), numericInput(inputId = "costinpt1", label = NULL, value = country_cost_value('China', 'inpatient', FALSE), step = 1)),
+                            column(width = 4, tags$style("#costinpt2 {background-color:#dfdfdf;}"), numericInput(inputId = "costinpt2", label = NULL, value = country_cost_value('China', 'inpatient', TRUE), step = 1))),
                           fluidRow(
                             column(width = 4, h5("Outpatient Visit", align = "left")),
-                            column(width = 4, tags$style("#costoutpt1 {background-color:#dfdfdf;}"), numericInput(inputId = "costoutpt1", label = NULL, value = "3062")),
-                            column(width = 4, tags$style("#costoutpt2 {background-color:#dfdfdf;}"), numericInput(inputId = "costoutpt2", label = NULL, value = "4689"))),
+                            column(width = 4, tags$style("#costoutpt1 {background-color:#dfdfdf;}"), numericInput(inputId = "costoutpt1", label = NULL, value = country_cost_value('China', 'outpatient', FALSE), step = 1)),
+                            column(width = 4, tags$style("#costoutpt2 {background-color:#dfdfdf;}"), numericInput(inputId = "costoutpt2", label = NULL, value = country_cost_value('China', 'outpatient', TRUE), step = 1))),
                           fluidRow(
                             column(width = 4, h5("Long-Term Care", align = "left")),
-                            column(width = 4, tags$style("#costLTC1 {background-color:#dfdfdf;}"), numericInput(inputId = "costLTC1", label = NULL, value = "4378")),
-                            column(width = 4, tags$style("#costLTC2 {background-color:#dfdfdf;}"), numericInput(inputId = "costLTC2", label = NULL, value = "9393"))),
+                            column(width = 4, tags$style("#costLTC1 {background-color:#dfdfdf;}"), numericInput(inputId = "costLTC1", label = NULL, value = country_cost_value('China', 'ltc', FALSE), step = 1)),
+                            column(width = 4, tags$style("#costLTC2 {background-color:#dfdfdf;}"), numericInput(inputId = "costLTC2", label = NULL, value = country_cost_value('China', 'ltc', TRUE), step = 1))),
                           fluidRow(
                             column(width = 4, h5("Emergency Department Visit", align = "left")),
-                            column(width = 4, tags$style("#costED1 {background-color:#dfdfdf;}"), numericInput(inputId = "costED1", label = NULL, value = "938")),
-                            column(width = 4, tags$style("#costED2 {background-color:#dfdfdf;}"), numericInput(inputId = "costED2", label = NULL, value = "1311"))),
+                            column(width = 4, tags$style("#costED1 {background-color:#dfdfdf;}"), numericInput(inputId = "costED1", label = NULL, value = country_cost_value('China', 'ed', FALSE), step = 1)),
+                            column(width = 4, tags$style("#costED2 {background-color:#dfdfdf;}"), numericInput(inputId = "costED2", label = NULL, value = country_cost_value('China', 'ed', TRUE), step = 1))),
                           fluidRow(
                             column(width = 4, h5("Other", align = "left")),
-                            column(width = 4, tags$style("#costother1 {background-color:#dfdfdf;}"), numericInput(inputId = "costother1", label = NULL, value = "2694")),
-                            column(width = 4, tags$style("#costother2 {background-color:#dfdfdf;}"), numericInput(inputId = "costother2", label = NULL, value = "4626"))),
+                            column(width = 4, tags$style("#costother1 {background-color:#dfdfdf;}"), numericInput(inputId = "costother1", label = NULL, value = country_cost_value('China', 'other', FALSE), step = 1)),
+                            column(width = 4, tags$style("#costother2 {background-color:#dfdfdf;}"), numericInput(inputId = "costother2", label = NULL, value = country_cost_value('China', 'other', TRUE), step = 1))),
                           fluidRow(
                             column(width = 4, h5("Pharmacy", align = "left")),
-                            column(width = 4, tags$style("#costpharm1 {background-color:#dfdfdf;}"), numericInput(inputId = "costpharm1", label = NULL, value = "2341")),
-                            column(width = 4, tags$style("#costpharm2 {background-color:#dfdfdf;}"), numericInput(inputId = "costpharm2", label = NULL, value = "2679"))),
+                            column(width = 4, tags$style("#costpharm1 {background-color:#dfdfdf;}"), numericInput(inputId = "costpharm1", label = NULL, value = country_cost_value('China', 'pharmacy', FALSE), step = 1)),
+                            column(width = 4, tags$style("#costpharm2 {background-color:#dfdfdf;}"), numericInput(inputId = "costpharm2", label = NULL, value = country_cost_value('China', 'pharmacy', TRUE), step = 1))),
                           fluidRow(
                             box(id="IndirectCosts", "", color = "blue", width = 12, height = 4),
                             bsPopover("IndirectCosts", title='<font size="2">Source:', content='<font size="3">DOF, Amgen, Bend the Curve PMO Microsimulation, 2019', placement="left", options = list(container = "body")),
                             column(width = 4, prettyCheckbox(inputId = "IndirectCosts", strong("Include Indirect Costs"), value = TRUE, shape = "square"))),
                           fluidRow(
                             column(width = 4, h5("Productivity Losses", align = "left")),
-                            column(width = 4, tags$style("#costprod1 {background-color:#dfdfdf;}"), numericInput(inputId = "costprod1", label = NULL, value = "2820")),
-                            column(width = 4, tags$style("#costprod2 {background-color:#dfdfdf;}"), numericInput(inputId = "costprod2", label = NULL, value = "2820"))),
+                            column(width = 4, tags$style("#costprod1 {background-color:#dfdfdf;}"), numericInput(inputId = "costprod1", label = NULL, value = country_cost_value('China', 'productivity', FALSE), step = 1)),
+                            column(width = 4, tags$style("#costprod2 {background-color:#dfdfdf;}"), numericInput(inputId = "costprod2", label = NULL, value = country_cost_value('China', 'productivity', TRUE), step = 1))),
                           fluidRow(
                             column(width = 4, h5("Informal Caregiver", align = "left")),
-                            column(width = 4, tags$style("#costcare1 {background-color:#dfdfdf;}"), numericInput(inputId = "costcare1", label = NULL, value = "2173")),
-                            column(width = 4, tags$style("#costcare2 {background-color:#dfdfdf;}"), numericInput(inputId = "costcare2", label = NULL, value = "2173")))
+                            column(width = 4, tags$style("#costcare1 {background-color:#dfdfdf;}"), numericInput(inputId = "costcare1", label = NULL, value = country_cost_value('China', 'cgBurden', FALSE), step = 1)),
+                            column(width = 4, tags$style("#costcare2 {background-color:#dfdfdf;}"), numericInput(inputId = "costcare2", label = NULL, value = country_cost_value('China', 'cgBurden', TRUE), step = 1)))
                             )
                             ),
                 fluidRow(
                   boxPlus(id = "clin_inp", title = "Treatment Inputs", width = 12, closable = FALSE, collapsible = TRUE, collapsed = TRUE,
-                          enable_dropdown = TRUE, dropdown_icon = "question-circle",
+                          enable_dropdown = FALSE, dropdown_icon = "question-circle",
                           dropdown_menu = dropdownItemList(
                             dropdownItem(name = HTML("A pre-set market basket of treatments is analyzed with the market mix, monthly cost, and efficacy shown here. The treatment mix comes from an Amgen internal market analysis as of January 2019.<br/>
                                                      <br/>
@@ -382,78 +344,78 @@ fluidPage(
                             ),
                           bsPopover("clin_inp", title='<font size="2">Source:', content='<font size="3">DOF, Amgen, Bend the Curve PMO Microsimulation, 2019', placement="left", options = list(container = "body")),
                           
-                          fluidRow(
-                            column(width = 6, h5(" ")),
-                            column(width = 2, h5(" ")),
-                            column(width = 2, h5(strong("Efficacy")), align = "center"),
-                            column(width = 2, h5(strong("Adherence-Adjusted Efficacy")), align = "center")),
+                          # fluidRow(
+                          #   column(width = 6, h5(" ")),
+                          #   column(width = 2, h5(" ")),
+                          #   column(width = 2, h5(strong("Efficacy")), align = "center"),
+                          #   column(width = 2, h5(strong("Adherence-Adjusted Efficacy")), align = "center")),
                           fluidRow(
                             column(width = 4, h5(strong("Medication")), align = "left"),
                             column(width = 2, h5(strong("Treatment Mix (%)")), align = "center"), 
                             column(width = 2, h5(strong("Monthly Cost ($)")), align = "center"),
-                            column(width = 1, h5(strong("Hip")), align = "center"),
-                            column(width = 1, h5(strong("Other")), align = "center"),
-                            column(width = 1, h5(strong("Hip")), align = "center"),
-                            column(width = 1, h5(strong("Other")), align = "center")),
+                            # column(width = 1, h5(strong("Hip")), align = "center"),
+                            column(width = 2, h5(strong("Efficacy")), align = "center"),
+                            # column(width = 1, h5(strong("Hip")), align = "center"),
+                            column(width = 2, h5(strong("Adherence-Adjusted Efficacy")), align = "center")),
                           
                           fluidRow(
                             column(width = 4, h5("Anti-Resorptive Agents")),
-                            column(width = 2, box(id="AR_MS", tags$p("91.4%", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            column(width = 2, box(id="AR_MS", tags$p("82.8%", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
                             # bsTooltip("AR_MS", "Market share inputs are based on utilization trends as of 2018, DOF.",
                             #           "right", options = list(container = "body")),
-                            column(width = 2, box(id="AR_cost", tags$p("$82.15", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            column(width = 2, box(id="AR_cost", tags$p("$46.99", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
                             # bsTooltip("AR_cost", "Monthly costs are based on a weighted averge of costs - weighted by market share - from Medicare Part D files as of 2018.",
                             #           "right", options = list(container = "body")),
-                            column(width = 1, box(id="AR_eff", tags$p("0.63", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            # column(width = 1, box(id="AR_eff", tags$p("0.63", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
                             # bsTooltip("AR_eff", "Class efficacy is based on a weighted average, weighted by estimated market share, with individual therapy efficacies based on Freemantle et al. 2013.",
                             #           "left", options = list(container = "body")),
-                            column(width = 1, box(id="AR_effoth", tags$p("0.62", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            column(width = 2, box(id="AR_effoth", tags$p("0.66", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
                             # bsTooltip("AR_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
                             #         "left", options = list(container = "body")),
-                            column(width = 1, box(id="AR_eff_adh", tags$p("0.80", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            # column(width = 1, box(id="AR_eff_adh", tags$p("0.80", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
                             # bsTooltip("AR_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
                             #       "left", options = list(container = "body")),
-                            column(width = 1, box(id="AR_effoth_adh", tags$p("0.78", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4))),
+                            column(width = 2, box(id="AR_effoth_adh", tags$p("0.83", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4))),
                           # bsTooltip("AR_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
                           #           "left", options = list(container = "body")),
                           fluidRow(
                             column(width = 4, h5("Selective Estrogen Receptor Modulators (SERMs)")),
-                            column(width = 2, box(id="SERM_MS", tags$p("7.5%", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            column(width = 2, box(id="SERM_MS", tags$p("13.10%", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
                             # bsTooltip("SERM_MS", "Market share inputs are based on utilization trends as of 2018, DOF.",
                             #           "right", options = list(container = "body")),
-                            column(width = 2, box(id="SERM_cost", tags$p("$69.30", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            column(width = 2, box(id="SERM_cost", tags$p("$0.70", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
                             # bsTooltip("SERM_cost", "Monthly costs are based on a weighted averge of costs - weighted by market share - from Medicare Part D files as of 2018.",
                             #           "right", options = list(container = "body")),
-                            column(width = 1, box(id="SERM_eff", tags$p("--", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            # column(width = 1, box(id="SERM_eff", tags$p("--", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
                             #bsTooltip("SERM_eff", "Research on efficacy of SERMs in reducing risk of hip fracture is limited.",
                             #          "left", options = list(container = "body")),
-                            column(width = 1, box(id="SERM_effoth", tags$p("0.59", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            column(width = 2, box(id="SERM_effoth", tags$p("0.59", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
                             # bsTooltip("SERM_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
                             #           "left", options = list(container = "body")),
-                            column(width = 1, box(id="SERM_eff_adh", tags$p("--", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            # column(width = 1, box(id="SERM_eff_adh", tags$p("--", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
                             # bsTooltip("SERM_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
                             #           "left", options = list(container = "body")),
-                            column(width = 1, box(id="SERM_effoth_adh", tags$p("0.75", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4))),
+                            column(width = 2, box(id="SERM_effoth_adh", tags$p("0.75", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4))),
                           # bsTooltip("SERM_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
                           #           "left", options = list(container = "body")),
                           fluidRow(
                             column(width = 4, h5("Anabolics")),
-                            column(width = 2, box(id="PTH_MS", tags$p("1.1%", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            column(width = 2, box(id="PTH_MS", tags$p("0.9%", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
                             # bsTooltip("PTH_MS", "Market share inputs are based on utilization trends as of 2018, DOF.",
                             #           "right", options = list(container = "body")),
-                            column(width = 2, box(id="PTH_cost", tags$p("$2,989.02", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            column(width = 2, box(id="PTH_cost", tags$p("$290.78", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
                             # bsTooltip("PTH_cost", "Monthly costs are based on a weighted averge of costs - weighted by market share - from Medicare Part D files as of 2018",
                             #           "right", options = list(container = "body")),
-                            column(width = 1, box(id="PTH_eff", tags$p("0.25", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            # column(width = 1, box(id="PTH_eff", tags$p("0.25", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
                             # bsTooltip("PTH_eff", "Class efficacy is based on a weighted average, weighted by estimated market share, with individual therapy efficacies based on Freemantle et al. 2013.",
                             #           "left", options = list(container = "body")),
-                            column(width = 1, box(id="PTH_effoth", tags$p("0.37", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            column(width = 2, box(id="PTH_effoth", tags$p("0.25", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
                             # bsTooltip("PTH_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
                             #           "left", options = list(container = "body")),
-                            column(width = 1, box(id="PTH_eff_adh", tags$p("0.32", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
+                            # column(width = 1, box(id="PTH_eff_adh", tags$p("0.32", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4)),
                             # bsTooltip("PTH_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
                             #         "left", options = list(container = "body")),
-                            column(width = 1, box(id="PTH_effoth_adh", tags$p("0.47", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4))
+                            column(width = 2, box(id="PTH_effoth_adh", tags$p("0.32", tags$sup(style="font-size: 15px")), align = "center", color = "blue", width = 16, height = 4))
                             # bsTooltip("PTH_effoth", "Other fractures include vertebral, non-vertebral, and wrist (Freemantle et al. 2013).",
                             #     "left", options = list(container = "body"))
                           ))
@@ -473,8 +435,9 @@ fluidPage(
                             "The Estimated Long-Term Value of Improving Patient Identification and Treatment Rates in Post-Menopausal Osteoporosis"), align = "center"),
                 fluidRow(
                   boxPlus(id = "scenarios_box", title = "Treatment, Identification Rates & Time Horizon", width = 12, closable = FALSE, collapsible = TRUE,
-                          enable_dropdown = TRUE, dropdown_icon = "question-circle",
+                          enable_dropdown = FALSE, dropdown_icon = "question-circle",
                           dropdown_menu = dropdownItemList(
+                            # TODO: UPDATE THIS INFO
                             dropdownItem(name = HTML("Identification Rate in the Base Case scenario was based on Lewiecki et al. 2016. This analysis identified the proportion of Medicare patients with <br/>
                                                      ≥ 1 DXA scan each year from 2002-2014 (11.3% in 2014), based on health care claims and enrollment data from the 5% sample of Medicare fee-for-service  <br/>
                                                      beneficiaries. Current treatment rates and trends were based on unpublished market share data, which indicated 9% of those ages 65+ years were treated  <br/>
@@ -492,13 +455,13 @@ fluidPage(
                             column(width = 4, h5(strong("Treatment Rate (%)")), align = "center", style="padding-top:25px;")),
                           fluidRow(
                             column(width = 4, align="left", blockQuote("    Base Case")),
-                            column(width = 4, tags$style("#basecaseID {background-color:#dfdfdf;}"), numericInput(inputId = "basecaseID", label = NULL, value = "11.3", step = 0.1)),
-                            column(width = 4, tags$style("#basecaseTx {background-color:#dfdfdf;}"), numericInput(inputId = "basecaseTx", label = NULL, value = "9.0", step = 0.1))),
+                            column(width = 4, tags$style("#basecaseID {background-color:#dfdfdf;}"), numericInput(inputId = "basecaseID", label = NULL, value = country_scenario_value('China', 'baseID'), step = 0.1)),
+                            column(width = 4, tags$style("#basecaseTx {background-color:#dfdfdf;}"), numericInput(inputId = "basecaseTx", label = NULL, value = country_scenario_value('China', 'baseTreat'), step = 0.1))),
                           fluidRow(
                             column(width = 4, align="left", blockQuote("    Improved PMO Management")),
-                            column(width = 4, tags$style("#scenario1ID {background-color:#dfdfdf;}"), numericInput(inputId = "scenario1ID", label = NULL, value = "31.3", step = 0.1)),
+                            column(width = 4, tags$style("#scenario1ID {background-color:#dfdfdf;}"), numericInput(inputId = "scenario1ID", label = NULL, value = country_scenario_value('China', 'improvedID'), step = 0.1)),
                             bsTooltip("scenario1ID", "The model only allows scenarios to be evlauted that increase rates of identification and treatment. Please enter a value above the value entered for base case.", "left", options = list(container = "body")),
-                            column(width = 4, tags$style("#scenario1Tx {background-color:#dfdfdf;}"), numericInput(inputId = "scenario1Tx", label = NULL, value = "17.8", step = 0.1)),
+                            column(width = 4, tags$style("#scenario1Tx {background-color:#dfdfdf;}"), numericInput(inputId = "scenario1Tx", label = NULL, value = country_scenario_value('China', 'improvedTreat'), step = 0.1)),
                             bsTooltip("scenario1Tx", "The model only allows scenarios to be evlauted that increase rates of identification and treatment. Please enter a value above the value entered for base case.", "left", options = list(container = "body"))),
                           fluidRow(
                             column(width = 4, align="left", blockQuote("    Time Horizon")),
@@ -518,53 +481,108 @@ fluidPage(
                                               size = "sm"),
                                    align = 'center')
                           ))),
+                
                 boxPlus(width = 12, closable = FALSE, collapsible = TRUE,
+                        # fluidRow(
+                        #   column(width = 6, infoBoxOutput("FraxBox_R"), tags$style("#FraxBox_R {width:100%}")),
+                        #   column(width = 6, infoBoxOutput("CostBox_R"), tags$style("#CostBox_R {width:100%}") )),
+                        # fluidRow(
+                        #   column(width = 6, infoBoxOutput("nNoPriorsBox"), tags$style("#nNoPriorsBox {width:100%}")),
+                        #   column(width = 6, infoBoxOutput("nPriorsBox"), tags$style("#nPriorsBox {width:100%}") )),
                         fluidRow(
-                          column(width = 6, infoBoxOutput("FraxBox_R"), tags$style("#FraxBox_R {width:100%}")),
-                          column(width = 6, infoBoxOutput("CostBox_R"), tags$style("#CostBox_R {width:100%}") ))),
+                          column(width = 6, infoBoxOutput("primaryFracBox"), tags$style("#primaryFracBox {width:100%}")),
+                          column(width = 6, infoBoxOutput("prevFracBox"), tags$style("#prevFracBox {width:100%}") )),
+                        fluidRow(
+                          column(width = 6, infoBoxOutput("primaryFracCostBox"), tags$style("#primaryFracCostBox {width:100%}")),
+                          column(width = 6, infoBoxOutput("prevFracCostBox"), tags$style("#prevFracCostBox {width:100%}") ))
+                        ),
+                # fluidRow(
+                #   boxPlus(withSpinner(plotlyOutput("fxrplot")), width = 6),
+                #   boxPlus(withSpinner(plotlyOutput("costplot")), width = 6)),
+                
                 fluidRow(
-                  boxPlus(withSpinner(plotlyOutput("fxrplot")), width = 6),
-                  boxPlus(withSpinner(plotlyOutput("costplot")), width = 6)),
+                  boxPlus(withSpinner(plotlyOutput("primaryFracPlot")), width = 6),
+                  boxPlus(withSpinner(plotlyOutput("prevFracPlot")), width = 6)),
                 
+                fluidRow(
+                  boxPlus(withSpinner(plotlyOutput("primaryFracCost")), width = 6),
+                  boxPlus(withSpinner(plotlyOutput("prevFracCost")), width = 6)),
                 
+                # uncomment this chunk to see number of population with and without fracs
+                # boxPlus(width = 12, closable = FALSE, collapsible = TRUE, collapsed = TRUE,
+                #         fluidRow(
+                #           column(width = 6, infoBoxOutput("nNoPriorsBox"), tags$style("#nNoPriorsBox {width:100%}")),
+                #           column(width = 6, infoBoxOutput("nPriorsBox"), tags$style("#nPriorsBox {width:100%}") ))
+                # ),
                 tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
-                                                     ),
+                ),
         tabItem(tabName = "Results",
                 fluidRow(
                   width = NULL, background = "black"),
                 h3("Bending the Curve: The Estimated Long-Term Value of Improving Patient Identification and Treatment in Post-Menopausal Osteoporosis", align = "center"),
+                # fluidRow(
+                #   boxPlus(title = "Total Estimated Fractures", 
+                #           closable = FALSE, status = "info", solidHeader = FALSE, collapsible = TRUE, width = 7,
+                #           p(textOutput('totalfxr_content'))
+                #   ),
+                #   column(width=5,infoBoxOutput("FraxBox"), tags$style("#FraxBox {width:100%; word-break: keep-all; overflow-wrap: anywhere;}"))
+                #          ), 
+                # fluidRow(
+                #   boxPlus(title = "Total Estimated Costs", 
+                #           closable = FALSE, status = "info", solidHeader = FALSE, collapsible = TRUE, width = 7,
+                #           p(textOutput('totalcost_content'))
+                #   ),
+                #   column(width=5,infoBoxOutput("CostBox"), tags$style("#CostBox {width:100%; word-break: keep-all; overflow-wrap: anywhere;}"))
+                #         ),
                 fluidRow(
-                  boxPlus(title = "Total Estimated Fractures", 
+                  boxPlus(title = "Primary Estimated Fractures", 
                           closable = FALSE, status = "info", solidHeader = FALSE, collapsible = TRUE, width = 7,
-                          p(textOutput('totalfxr_content'))
+                          p(textOutput('primaryfxr_content'))
                   ),
-                  column(width=5,infoBoxOutput("FraxBox"), tags$style("#FraxBox {width:100%; word-break: keep-all; overflow-wrap: anywhere;}"))
-                         ), 
+                  column(width=5,infoBoxOutput("PrimaryFraxBox"), tags$style("#PrimaryFraxBox {width:100%; word-break: keep-all; overflow-wrap: anywhere;}"))
+                ), 
                 fluidRow(
-                  boxPlus(title = "Total Estimated Costs", 
+                  boxPlus(title = "Primary Estimated Costs", 
                           closable = FALSE, status = "info", solidHeader = FALSE, collapsible = TRUE, width = 7,
-                          p(textOutput('totalcost_content'))
+                          p(textOutput('primarycost_content'))
                   ),
-
-                  infoBoxOutput("CostBox")),
+                  column(width=5,infoBoxOutput("PrimaryCostBox"), tags$style("#PrimaryCostBox {width:100%; word-break: keep-all; overflow-wrap: anywhere;}"))
+                ),
                 fluidRow(
-                  boxPlus(title = "Base Case Fracture Reccurence", 
-                          closable = FALSE, status = "warning", solidHeader = FALSE, collapsible = TRUE, width = 8,
-                          p(textOutput('reocc_text_1'))
+                  boxPlus(title = "Secondary Estimated Fractures", 
+                          closable = FALSE, status = "info", solidHeader = FALSE, collapsible = TRUE, width = 7,
+                          p(textOutput('secondaryfxr_content'))
                   ),
-                  infoBoxOutput("FractureReoccurence")),
+                  column(width=5,infoBoxOutput("SecondaryFraxBox"), tags$style("#SecondaryFraxBox {width:100%; word-break: keep-all; overflow-wrap: anywhere;}"))
+                ), 
                 fluidRow(
-                  boxPlus(title = "Base Case Fracture Risk Ratio", 
-                          closable = FALSE, status = "warning", solidHeader = FALSE, collapsible = TRUE, width = 8,
-                          p(textOutput('fracture_risk_text'))
+                  boxPlus(title = "Secondary Estimated Costs", 
+                          closable = FALSE, status = "info", solidHeader = FALSE, collapsible = TRUE, width = 7,
+                          p(textOutput('secondarycost_content'))
                   ),
-                  infoBoxOutput("FractureRatio")),
-                fluidRow(
-                  boxPlus(title = "New Scenario Fracture Risk Ratio", 
-                          closable = FALSE, status = "warning", solidHeader = FALSE, collapsible = TRUE, width = 8,
-                          p(textOutput('fracture_risk_text_s1'))
-                  ),
-                  infoBoxOutput("FractureRatioS1")),
+                  column(width=5,infoBoxOutput("SecondaryCostBox"), tags$style("#SecondaryCostBox {width:100%; word-break: keep-all; overflow-wrap: anywhere;}"))
+                ),
+                
+                # fluidRow(
+                #   boxPlus(title = "Base Case Fracture Reccurence", 
+                #           closable = FALSE, status = "warning", solidHeader = FALSE, collapsible = TRUE, width = 8,
+                #           p(textOutput('reocc_text_1'))
+                #   ),
+                #   infoBoxOutput("FractureReoccurence")),
+                
+                
+                # fluidRow(
+                #   boxPlus(title = "Base Case Fracture Risk Ratio", 
+                #           closable = FALSE, status = "warning", solidHeader = FALSE, collapsible = TRUE, width = 8,
+                #           p(textOutput('fracture_risk_text'))
+                #   ),
+                #   infoBoxOutput("FractureRatio")),
+                # fluidRow(
+                #   boxPlus(title = "New Scenario Fracture Risk Ratio", 
+                #           closable = FALSE, status = "warning", solidHeader = FALSE, collapsible = TRUE, width = 8,
+                #           p(textOutput('fracture_risk_text_s1'))
+                #   ),
+                #   infoBoxOutput("FractureRatioS1")),
 
                 fluidRow(
                   boxPlus(title = "Thank you for visiting.", 

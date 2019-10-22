@@ -4,11 +4,88 @@ abbreviations <- data.frame(abbrev = c("BMD", "CPI", "DXA", "FRAX", "NHANES"),
 
 tab_id <- c("Home", "Overview", "Mechanics", "Pop_Inputs", "ClinEcon_Inputs", "Scenarios", "Results", "Assumptions", "Disclosures", "Terms", "References")
 
+######################### FUNKY FUNCTIONS ######################
+
+update_popn_inputs <- function(session, country) {
+  updateNumericInput(session, 'pop_input', value = country_popn_value(country, 'popn'))
+  updateNumericInput(session, 'BMD_mean', value = country_popn_value(country, 'bmdMean'))
+  updateNumericInput(session, 'BMD_SD', value = country_popn_value(country, 'bmdSD'))
+  updateNumericInput(session, 'RA_inp', value = country_popn_value(country, 'RAinp'))
+  updateNumericInput(session, 'fxr_inp', value = country_popn_value(country, 'fracInp'))
+  updateNumericInput(session, 'parfxr_inp', value = country_popn_value(country, 'parfracInp'))
+  updateNumericInput(session, 'smoker', value = country_popn_value(country, 'smoker'))
+  updateNumericInput(session, 'alco', value = country_popn_value(country, 'alco'))
+  updateNumericInput(session, 'gluco_tx', value = country_popn_value(country, 'gluco'))
+}
 
 
-#################################################################
+update_cost_inputs <- function(session, country) {
+  ## single fracs
+  updateNumericInput(session, 'costinpt1', value = country_cost_value(country, 'inpatient', FALSE))
+  updateNumericInput(session, 'costoutpt1', value = country_cost_value(country, 'outpatient', FALSE))
+  updateNumericInput(session, 'costLTC1', value = country_cost_value(country, 'ltc', FALSE))
+  updateNumericInput(session, 'costED1', value = country_cost_value(country, 'ed', FALSE))
+  updateNumericInput(session, 'costother1', value = country_cost_value(country, 'other', FALSE))
+  updateNumericInput(session, 'costpharm1', value = country_cost_value(country, 'pharmacy', FALSE))
+  updateNumericInput(session, 'costprod1', value = country_cost_value(country, 'productivity', FALSE))
+  updateNumericInput(session, 'costcare1', value = country_cost_value(country, 'cgBurden', FALSE))
+  
+  ## multi fracs
+  updateNumericInput(session, 'costinpt2', value = country_cost_value(country, 'inpatient', TRUE))
+  updateNumericInput(session, 'costoutpt2', value = country_cost_value(country, 'outpatient', TRUE))
+  updateNumericInput(session, 'costLTC2', value = country_cost_value(country, 'ltc', TRUE))
+  updateNumericInput(session, 'costED2', value = country_cost_value(country, 'ed', TRUE))
+  updateNumericInput(session, 'costother2', value = country_cost_value(country, 'other', TRUE))
+  updateNumericInput(session, 'costpharm2', value = country_cost_value(country, 'pharmacy', TRUE))
+  updateNumericInput(session, 'costprod2', value = country_cost_value(country, 'productivity', TRUE))
+  updateNumericInput(session, 'costcare2', value = country_cost_value(country, 'cgBurden', TRUE))
+}
+
+
+update_scenario_inputs <- function(session, country) {
+  updateNumericInput(session, 'basecaseID', value = country_scenario_value(country, 'baseID'))
+  updateNumericInput(session, 'basecaseTx', value = country_scenario_value(country, 'baseTreat'))
+  updateNumericInput(session, 'scenario1ID', value = country_scenario_value(country, 'improvedID'))
+  updateNumericInput(session, 'scenario1Tx', value = country_scenario_value(country, 'improvedTreat'))
+}
+
+
+## other ####
+
+popn_projections <- list(China = c(687997, 691559, 694970, 698159, 701076, # 2016-2020
+                                  703694, 706017, 708062, 709863, 711448, # 2021-2025
+                                  712815, 713960, 714893, 715630, 716181, # 2026-2030
+                                  716555, 716751, 716765, 716587, 716211, # 2031-2035
+                                  715637, 714871, 713918, 712784, 711477), # 2036-2040
+                        `Hong Kong` = c(3892, 3933, 3976, 4018, 4057,
+                                     4094, 4128, 4160, 4192, 4223,
+                                     4254, 4285, 4314, 4341, 4363,
+                                     4382, 4396, 4407, 4416, 4424,
+                                     4431, 4436, 4440, 4443, 4444),
+                        Taiwan = c(11835, 11876, 11914, 11950, 11982,
+                                   12012, 12039, 12064, 12086, 12106,
+                                   12124, 12139, 12152, 12162, 12169,
+                                   12173, 12173, 12169, 12160, 12147,
+                                   12130, 12107, 12079, 12047, 12009),
+                        Japan = c(65345, 65221, 65076, 64910, 64723,
+                                  64516, 64289, 64044, 63781, 63503,
+                                  63211, 62904, 62586, 62258, 61921,
+                                  61578, 61228, 60872, 60509, 60138,
+                                  59761, 59378, 58991, 58599, 58205),
+                        Thailand = c(35311, 35458, 35595, 35721, 35834,
+                                     35934, 36021, 36096, 36159, 36211,
+                                     36251, 36281, 36300, 36308, 36306,
+                                     36293, 36271, 36238, 36194, 36141,
+                                     36077, 36003, 35918, 35823, 35716))
+## made a reactive variable in server function to update with current country popn_projection
+## country_popn_projection
+
+################ START. THE. COOOOOODE!!!! #################################################
 function(input, output, session) {
   output$value <- renderText({ input$inpt })
+  
+  # stop app when browser is closed
+  session$onSessionEnded(stopApp)
   
 ###############DEFAULT ACTIONS###################################
   observe({
@@ -72,10 +149,6 @@ function(input, output, session) {
     reset("smoker")
     reset("alco")
     reset("gluco_tx")
-    reset("RE_cauc")
-    reset("RE_hisp")
-    reset("RE_asian")
-    reset("RE_black")
    
     reset("costinpt1")
     reset("costinpt2")
@@ -93,7 +166,7 @@ function(input, output, session) {
     reset("costprod2")
     reset("costcare1")
     reset("costcare2")
-	reset("basecaseID")
+	  reset("basecaseID")
     reset("basecaseTx")
     reset("scenario1ID")
     reset("scenario1Tx")
@@ -115,10 +188,6 @@ function(input, output, session) {
     reset("smoker")
     reset("alco")
     reset("gluco_tx")
-    reset("RE_cauc")
-    reset("RE_hisp")
-    reset("RE_asian")
-    reset("RE_black")
   })  
   
   observeEvent(input$restorefxrcosts, {
@@ -158,6 +227,43 @@ function(input, output, session) {
     reset("scenario1ID")
     reset("scenario1Tx")
   })
+    
+    
+    observeEvent(input$basecaseID, {
+      isolate(updateNumericInput(session,
+                                 inputId = 'scenario1ID',
+                                 label = NULL,
+                                 value = input$basecaseID + 15))
+    },
+    ignoreInit = T, 
+    priority = 1000)
+    
+    
+  ## Beginning logic section to add all countries in one app ####
+    
+  
+    
+  ## well, that's what this was, but then I moved all of the machinery outside of
+  ## this section and into global or server pre-function.
+
+  ## section to initialize and update numeric inputs
+  updateSelectizeInput(session, 'countrySelect', selected = 'China',
+                       choices = country_names)
+  
+  
+  ## section to update inputs when country has been changed
+  observeEvent(input$countrySelect, {
+    update_popn_inputs(session, input$countrySelect)
+    update_cost_inputs(session, input$countrySelect) 
+    update_scenario_inputs(session, input$countrySelect)
+  })
+    
+  country_popn_projections <- reactive({
+    projections <- unlist(unname(popn_projections[input$countrySelect]))
+    return(projections)
+    })
+
+  ## other sections ####
   
   observeEvent(input$scenario1ID, {
     isolate(updateNumericInput(session,
@@ -167,6 +273,7 @@ function(input, output, session) {
   },
   ignoreInit = T, 
   priority = 1000)
+  
   observeEvent(input$gluco_tx, {
     simulation_data$sim <- sim_data()
   }, ignoreInit = F,
@@ -174,6 +281,7 @@ function(input, output, session) {
   once = T,  
   autoDestroy = T
   )
+  
   observeEvent(input$run_simulation, {
     simulation_data$sim <- sim_data()
   }, 
@@ -197,145 +305,20 @@ function(input, output, session) {
   ignoreInit = T,
   priority = 500)
   
-  cauc_rate <- reactive({
-    validate(
-      need(input$RE_cauc >= 0 && input$RE_cauc <= 100, 
-           "Caucasion demographic must be within range of [0,100]")
-      %then% need(abs(100 - (input$RE_cauc + input$RE_hisp +
-                    input$RE_asian + input$RE_black)) < 0.0001,
-                  "Demographic percentages must sum to 100"))
-    return(input$RE_cauc/100.0)
-  })
-  observeEvent(input$RE_cauc, {
-    if(!is.numeric(input$RE_cauc) || input$RE_cauc < 0 || input$RE_cauc > 100) {
-      shinyalert("Demographic Breakdown Error", 
-                 "Caucasian demographic must be within range of [0,100].", 
-                 type = "error")
-    }
-    if(!is.numeric(input$RE_cauc) || !is.numeric(input$RE_hisp) ||
-       !is.numeric(input$RE_asian) || !is.numeric(input$RE_black)) {
-      shinyalert("Demographic Breakdown Error", 
-                 "Demographic breakdown values must be numeric.", 
-                 type = "error")
-      return()
-    }
-    if(abs(100 - (input$RE_cauc + input$RE_hisp +
-                  input$RE_asian + input$RE_black)) >= 0.0001) {
-      shinyalert("Demographic Breakdown Error", 
-                 "Demographic percentages must sum to 100.", 
-                 type = "error")
-    }
-  },
-  ignoreInit = T,
-  priority = 500)
   
-  hisp_rate <- reactive({
-    validate(
-      need(input$RE_hisp >= 0 && input$RE_hisp <= 100, 
-           "Hispanic demographic must be within range of [0,100]")
-      %then% need(abs(100 - (input$RE_cauc + input$RE_hisp +
-                               input$RE_asian + input$RE_black)) < 0.0001,
-                  "Demographic percentages must sum to 100"))
-    return(input$RE_hisp/100.0)
-  })
-  observeEvent(input$RE_hisp, {
-    if(!is.numeric(input$RE_hisp) || input$RE_hisp < 0 || input$RE_hisp > 100) {
-      shinyalert("Demographic Breakdown Error", 
-                 "Hispanic demographic must be within range of [0,100].", 
-                 type = "error")
-    }
-    if(!is.numeric(input$RE_cauc) || !is.numeric(input$RE_hisp) ||
-       !is.numeric(input$RE_asian) || !is.numeric(input$RE_black)) {
-      shinyalert("Demographic Breakdown Error", 
-                 "Demographic breakdown values must be numeric.", 
-                 type = "error")
-      return()
-    }
-    if(abs(100 - (input$RE_cauc + input$RE_hisp +
-                  input$RE_asian + input$RE_black)) >= 0.0001) {
-      shinyalert("Demographic Breakdown Error", 
-                 "Demographic percentages must sum to 100.", 
-                 type = "error")
-    }
-  },
-  ignoreInit = T,
-  priority = 500)
-  
-  asian_rate <- reactive({
-    validate(
-      need(input$RE_asian >= 0 && input$RE_asian <= 100, 
-           "Asian demographic must be within range of [0,100]")
-      %then% need(abs(100 - (input$RE_cauc + input$RE_hisp +
-                               input$RE_asian + input$RE_black)) < 0.0001,
-                  "Demographic percentages must sum to 100"))
-    return(input$RE_asian/100.0)
-  })
-  observeEvent(input$RE_asian, {
-    if(!is.numeric(input$RE_asian) || input$RE_asian < 0 || input$RE_asian > 100) {
-      shinyalert("Demographic Breakdown Error", 
-                 "Asian demographic must be within range of [0,100].", 
-                 type = "error")
-    }
-    if(!is.numeric(input$RE_cauc) || !is.numeric(input$RE_hisp) ||
-       !is.numeric(input$RE_asian) || !is.numeric(input$RE_black)) {
-      shinyalert("Demographic Breakdown Error", 
-                 "Demographic breakdown values must be numeric.", 
-                 type = "error")
-      return()
-    }
-    if(abs(100 - (input$RE_cauc + input$RE_hisp +
-                  input$RE_asian + input$RE_black)) >= 0.0001) {
-      shinyalert("Demographic Breakdown Error", 
-                 "Demographic percentages must sum to 100.", 
-                 type = "error")
-    }
-  },
-  ignoreInit = T,
-  priority = 500)
-  
-  black_rate <- reactive({
-    validate(
-      need(input$RE_black >= 0 && input$RE_black <= 100, 
-           "Black demographic must be within range of [0,100]")
-      %then% need(abs(100 - (input$RE_cauc + input$RE_hisp +
-                               input$RE_asian + input$RE_black)) < 0.0001,
-                  "Demographic percentages must sum to 100"))
-    return(input$RE_black/100.0)
-  })
-  observeEvent(input$RE_black, {
-    if(!is.numeric(input$RE_black) || input$RE_black < 0 || input$RE_black > 100) {
-      shinyalert("Demographic Breakdown Error", 
-                 "Black demographic must be within range of [0,100].", 
-                 type = "error")
-    }
-    if(!is.numeric(input$RE_cauc) || !is.numeric(input$RE_hisp) ||
-       !is.numeric(input$RE_asian) || !is.numeric(input$RE_black)) {
-      shinyalert("Demographic Breakdown Error", 
-                 "Demographic breakdown values must be numeric.", 
-                 type = "error")
-      return()
-    }
-    if(abs(100 - (input$RE_cauc + input$RE_hisp +
-                  input$RE_asian + input$RE_black)) >= 0.0001) {
-      shinyalert("Demographic Breakdown Error", 
-                 "Demographic percentages must sum to 100.", 
-                 type = "error")
-    }
-  },
-  ignoreInit = T,
-  priority = 500)
+  asian_rate <- function(){return(1)}
   
   
   BMD_mean <- reactive({
     validate(
-      need(input$BMD_mean > 0 && input$BMD_mean <= 1.0, 
-           "Mean bone mineral density must be within the range (0, 1.0]"))
+      need(input$BMD_mean >= -4 && input$BMD_mean <= 1.0, 
+           "Mean bone mineral density must be within the range [-4, 1.0]"))
     return(input$BMD_mean)
   })
   observeEvent(input$BMD_mean, {
-    if(!is.numeric(input$BMD_mean) || input$BMD_mean <= 0 || input$BMD_mean > 1.0) {
+    if(!is.numeric(input$BMD_mean) || input$BMD_mean < -4 || input$BMD_mean > 1.0) {
       shinyalert("BMD Parameter Error", 
-                 "Mean bone mineral density must be within the range (0, 1.0].", 
+                 "Mean bone mineral density must be within the range [-4, 1.0].", 
                  type = "error")
     }
   },
@@ -344,14 +327,14 @@ function(input, output, session) {
   
   BMD_SD <- reactive({
     validate(
-      need(input$BMD_SD > 0 && input$BMD_SD <= 1.0, 
-           "Bone mineral density standard deviation must be within the range (0, 1.0]"))
+      need(input$BMD_SD > 0 && input$BMD_SD <= 10.0, 
+           "Bone mineral density standard deviation must be within the range (0, 10.0]"))
     return(input$BMD_SD)
   })  
   observeEvent(input$BMD_SD, {
-    if(!is.numeric(input$BMD_SD) || input$BMD_SD <= 0 || input$BMD_SD > 1.0) {
+    if(!is.numeric(input$BMD_SD) || input$BMD_SD <= 0 || input$BMD_SD > 10.0) {
       shinyalert("BMD Parameter Error", 
-                 "Bone mineral density standard deviation must be within the range (0, 1.0].", 
+                 "Bone mineral density standard deviation must be within the range (0, 10.0].", 
                  type = "error")
     }
   },
@@ -456,14 +439,14 @@ function(input, output, session) {
   
   Base_Case_ID <- reactive({
     validate(
-      need(input$basecaseID >= 11.3 && input$basecaseID <= 100.0, 
-           "Base case identification rate must be within the range [11.3, 100.0]"))
+      need(input$basecaseID >= 0 && input$basecaseID <= 100.0, 
+           "Base case identification rate must be within the range [0, 100.0]"))
     return(input$basecaseID/100.0)
   })
   observeEvent(input$basecaseID, {
-    if(!is.numeric(input$basecaseID) ||input$basecaseID < 11.3 || input$basecaseID > 100.0) {
+    if(!is.numeric(input$basecaseID) ||input$basecaseID < 0 || input$basecaseID > 100.0) {
       shinyalert("Identification Rate Error", 
-                 "Base case identification rate must be within the range [11.3, 100.0].", 
+                 "Base case identification rate must be within the range [0, 100.0].", 
                  type = "error")
     }
   },
@@ -472,14 +455,14 @@ function(input, output, session) {
   
   Base_Case_Treatment <- reactive({
     validate(
-      need(input$basecaseTx >= 9.0 && input$basecaseTx <= 100.0, 
-           "Base case treatment percentage must be within the range [9.0, 100.0]"))
+      need(input$basecaseTx >= 0 && input$basecaseTx <= 100.0, 
+           "Base case treatment percentage must be within the range [0, 100.0]"))
     return(input$basecaseTx/100.0)
   })
   observeEvent(input$basecaseTx, {
-    if(!is.numeric(input$basecaseTx) || input$basecaseTx < 9.0 || input$basecaseTx > 100.0) {
+    if(!is.numeric(input$basecaseTx) || input$basecaseTx < 0 || input$basecaseTx > 100.0) {
       shinyalert("Treatment Rate Error", 
-                 "Base case treatment percentage must be within the range [9.0, 100.0].", 
+                 "Base case treatment percentage must be within the range [0, 100.0].", 
                  type = "error")
     }
   },
@@ -488,14 +471,15 @@ function(input, output, session) {
   
   S1_ID <- reactive({
     validate(
-      need(input$scenario1ID >= 11.3 && input$scenario1ID <= 100.0, 
-           "New scenario identification rate must be within the range [11.3, 100.0]"))
+      need(input$scenario1ID >= input$basecaseID && input$scenario1ID <= 100.0, 
+           paste0("New scenario identification rate must be within the range [", input$basecaseID,", 100.0].")))
     return(input$scenario1ID/100.0)
   })
   observeEvent(input$scenario1ID, {
-    if(!is.numeric(input$scenario1ID) || input$scenario1ID < 11.3 || input$scenario1ID > 100.0) {
+    if(!is.numeric(input$scenario1ID) || input$scenario1ID < input$basecaseID || input$scenario1ID > 100.0) {
       shinyalert("Identification Rate Error", 
-                 "New scenario identification rate must be within the range [11.3, 100.0].", 
+                 paste0("New scenario identification rate must be within the range [", input$basecaseID,
+                        ", 100.0] and treatment percentage within [", input$basecaseTx,", 100.0]."), 
                  type = "error")
     }
   },
@@ -504,15 +488,16 @@ function(input, output, session) {
   
   S1_Treatment <- reactive({
     validate(
-      need(input$scenario1Tx >= 9.0 && input$scenario1Tx <= 100.0, 
-           "New scenario treatment percentage must be within the range [9.0, 100.0]"))
+      need(input$scenario1Tx >= input$basecaseTx && input$scenario1Tx <= 100.0, 
+           paste0("New scenario treatment percentage must be within the range [", input$basecaseTx,", 100.0].")))
     return(input$scenario1Tx/100.0)
   })
   observeEvent(input$scenario1Tx, {
-    if(!is.numeric(input$scenario1Tx) || input$scenario1Tx < 9.0 || input$scenario1Tx > 100.0) {
+    if(!is.numeric(input$scenario1Tx) || input$scenario1Tx < input$basecaseTx || input$scenario1Tx > 100.0) {
       shinyalert("Treatment 
                  Rate Error", 
-                 "New scenario treatment percentage must be within the range [9.0, 100.0].", 
+                 paste0("New scenario identification rate must be within the range [", input$basecaseID,
+                        ", 100.0] and treatment percentage within [", input$basecaseTx,", 100.0]."), 
                  type = "error")
     }
   },
@@ -785,10 +770,7 @@ sim_data <- reactive({
   on.exit(progress$close())
   # Validate Inputs
   population <-     pop_input()
-  caucasian_rate <- cauc_rate()
-  hispanic_rate <-  hisp_rate()
   asian_rate <-     asian_rate() 
-  black_rate <-     black_rate()
   
   bmd_mean <-       BMD_mean()
   bmd_sd <-         BMD_SD()
@@ -831,6 +813,13 @@ sim_data <- reactive({
   costcare1 <- costcare1()
   costcare2 <- costcare2()
   
+  ## all-JAPAC additions
+  # country <- input$countrySelect
+  projection <- country_popn_projections()
+  
+  
+  ##
+  
   start_year <- 2018
   end_year   <- as.integer(substring(input$endYear, 1, 4))
   
@@ -843,41 +832,41 @@ sim_data <- reactive({
                                             'data.table'),
                               .export=c('microsim',
                                         'age_probabilities',
-                                        'minimum_age',
-                                        'maximum_age',
-                                        'age_cutoffs',
                                         'age_index_scores',
-                                        'race_categories',
-                                        'race_index_scores',
                                         'fracture_breakdown',
-                                        'centering_mean',
                                         'bmd_index_scores',
                                         'bmd_cutoffs',
                                         'ID_lookup',
-                                        'MEDICATION_ADHERENCE',
-                                        'NON_ADHERENT_INCREASED_FRACTURE_RISK',
                                         'HIP_FRACTURE_RATIO',
                                         'MULTI_FRACTURE_FACTOR',
                                         'input',
                                         'isolate',
                                         'getAgeIndex',
-                                        'getRaceIndex',
                                         'getBMDIndex',
                                         'getRiskFactorIndex',
-                                        'getRiskFactors',
-                                        'countPatientRiskFactorIndex',
                                         'getMedicationUtilization',
                                         'getDXAScans',
                                         'getMedPatients',
                                         'getFracture',
-                                        'getMultiFraxCost'
+                                        'getMultiFraxCost',
+                                        'getCostWO',
+                                        'getCostWP',
+                                        'country_popn_value',
+                                        'update_popn_inputs',
+                                        'country_cost_value',
+                                        'update_cost_inputs',
+                                        'country_scenario_value',
+                                        'update_scenario_inputs',
+                                        'country_other_value',
+                                        'country_other_inputs',
+                                        'treat_mix',
+                                        'treat_cost', 
+                                        'treat_efficacy_hip',
+                                        'treat_efficacy_other'
                                         ), .verbose = F,
                                         .options.snow = opts) %dopar% {
                                isolate({microsim(population,
-                                                 caucasian_rate,
-                                                 hispanic_rate,
                                                  asian_rate,
-                                                 black_rate,
                                                  bmd_mean,
                                                  bmd_sd,
                                                  ra_rate,
@@ -914,16 +903,15 @@ sim_data <- reactive({
                                                  
                                                  costcare1,
                                                  costcare2,
-                                                 i, enable_indirect_costs)})
+                                                 i, enable_indirect_costs,
+                                                 input$countrySelect, projection)})
                               })
 })
 
 ###############RENDERING BOXES & PLOTS######################
 uiOutput("nlp_sentences_tree")
 simulation_data <- reactiveValues(sim = NULL)
-#simulation_data$sim <- sim_data()
   
-#sim_data_d <- sim_data %>% debounce(2000)
   
 # Summary Info Box Details
 output$totalfxr_content <- renderText({
@@ -931,9 +919,9 @@ output$totalfxr_content <- renderText({
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
   total_frax <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
-    total_frax <- total_frax + (base_case[[i]]$total_fractures_s1 - base_case[[i]]$total_fractures)}
+    total_frax <- total_frax + (base_case[[i]]$total_fractures_with_previous_fracture_s1 - base_case[[i]]$total_fractures_with_previous_fracture)}
   formatted_fxrs <- formatC(abs(round(total_frax)), format = 'd', big.mark=',')
   paste("The total number of fractures is estimated to ", 
                                             ifelse(total_frax > 0, "increase by ", "decrease by "), 
@@ -945,20 +933,77 @@ output$totalcost_content <- renderText({
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
   total_frax_cost <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
-    total_frax_cost <- total_frax_cost + (base_case[[i]]$grand_total_s1 - base_case[[i]]$grand_total)}
+    total_frax_cost <- total_frax_cost + (base_case[[i]]$grand_total_with_prev_frac_s1 - base_case[[i]]$grand_total_with_prev_frac)}
   paste("The total cost is estimated to ", ifelse(total_frax_cost > 0, "increase by ", "decrease by "),
         dollar_format()(abs(total_frax_cost)), 
         " during the years 2018-", inp_year, sep = "", collapse = NULL)
 })
+
+output$primaryfxr_content <- renderText({
+  base_case <- simulation_data$sim
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
+  for(i in 1:duration) {
+    total_frax <- total_frax + (base_case[[i]]$total_fractures_wo_previous_fracture_s1 - base_case[[i]]$total_fractures_wo_previous_fracture)}
+  formatted_fxrs <- formatC(abs(round(total_frax)), format = 'd', big.mark=',')
+  paste("The total number of primary fractures is estimated to ", 
+        ifelse(total_frax > 0, "increase by ", "decrease by "), 
+        formatted_fxrs, 
+        " during the years 2018-", inp_year, sep = "", collapse = NULL)
+})
+output$primarycost_content <- renderText({
+  base_case <- simulation_data$sim
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  total_frax_cost <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
+  for(i in 1:duration) {
+    total_frax_cost <- total_frax_cost + (base_case[[i]]$grand_total_wo_prev_frac_s1 - base_case[[i]]$grand_total_wo_prev_frac)}
+  paste("The total cost of primary fractures is estimated to ", ifelse(total_frax_cost > 0, "increase by ", "decrease by "),
+        dollar_format()(abs(total_frax_cost)), 
+        " during the years 2018-", inp_year, sep = "", collapse = NULL)
+})
+
+
+output$secondaryfxr_content <- renderText({
+  base_case <- simulation_data$sim
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
+  for(i in 1:duration) {
+    total_frax <- total_frax + (base_case[[i]]$total_fractures_with_previous_fracture_s1 - base_case[[i]]$total_fractures_with_previous_fracture)}
+  formatted_fxrs <- formatC(abs(round(total_frax)), format = 'd', big.mark=',')
+  paste("The total number of primary fractures is estimated to ", 
+        ifelse(total_frax > 0, "increase by ", "decrease by "), 
+        formatted_fxrs, 
+        " during the years 2018-", inp_year, sep = "", collapse = NULL)
+})
+output$secondarycost_content <- renderText({
+  base_case <- simulation_data$sim
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  total_frax_cost <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
+  for(i in 1:duration) {
+    total_frax_cost <- total_frax_cost + (base_case[[i]]$grand_total_with_prev_frac_s1 - base_case[[i]]$grand_total_with_prev_frac)}
+  paste("The total cost of primary fractures is estimated to ", ifelse(total_frax_cost > 0, "increase by ", "decrease by "),
+        dollar_format()(abs(total_frax_cost)), 
+        " during the years 2018-", inp_year, sep = "", collapse = NULL)
+})
+
+
 
 output$reocc_text_1 <- renderText({
   base_case <- simulation_data$sim
   total_reoccurence_prob <- 0.0
   base_occur_dist <- c()
   s1_occur_dist <- c()
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_reoccurence_prob <- (total_reoccurence_prob) + base_case[[i]]$prob_fracture_given_previous_fractures
     base_occur_dist <- c(base_occur_dist, base_case[[i]]$prob_fracture_given_previous_fractures)
@@ -970,7 +1015,7 @@ output$reocc_text_1 <- renderText({
   change_in_fracture_reocc <- reoccurence_prob_s1 - reoccurence_prob
   
   base <- paste("In the base case, patients with previous fractures experienced subsequent fractures at a rate of", percent(reoccurence_prob), sep = ' ')
-  next_text <- paste(base, 'while in the new scenario patients with the same history experienced subsequent fractures at a rate of', sep = ' ')
+  next_text <- paste(base, 'while in the new scenario patients with the same history experienced fractures at a rate of', sep = ' ')
   end_text <- paste (next_text, percent(reoccurence_prob_s1), sep = ' ')
   paste(end_text, '.', sep = '')
   
@@ -981,7 +1026,7 @@ output$fracture_risk_text <- renderText({
   total_reoccurence_prob <- 0.0
   new_frac_prob <- 0.0
   
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_reoccurence_prob <- (total_reoccurence_prob) + base_case[[i]]$prob_fracture_given_previous_fractures
     new_frac_prob <- (new_frac_prob) + base_case[[i]]$prob_fracture_given_no_previous_fractures
@@ -989,7 +1034,7 @@ output$fracture_risk_text <- renderText({
   risk_ratio <- total_reoccurence_prob/new_frac_prob
   
   base <- paste("In the base case, patients with previous fractures experienced subsequent fractures at a rate of", percent(total_reoccurence_prob/duration), sep = ' ')
-  next_text <- paste(base, 'annually while in the new scenario patients with the same history experienced subsequent fractures at a rate of', sep = ' ')
+  next_text <- paste(base, 'annually while patients without a prior fracture experienced fractures at a rate of', sep = ' ')
   end_text <- paste (next_text, percent(new_frac_prob/duration), sep = ' ')
   paste(end_text, 'annually.', sep = ' ')
   
@@ -1000,7 +1045,7 @@ output$fracture_risk_text_s1 <- renderText({
   total_reoccurence_prob <- 0.0
   new_frac_prob <- 0.0
   
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
     total_reoccurence_prob <- (total_reoccurence_prob) + base_case[[i]]$prob_fracture_given_previous_fractures_s1
     new_frac_prob <- (new_frac_prob) + base_case[[i]]$prob_fracture_given_no_previous_fractures_s1
@@ -1008,7 +1053,7 @@ output$fracture_risk_text_s1 <- renderText({
   risk_ratio <- total_reoccurence_prob/new_frac_prob
   
   base <- paste("In the new scenario, patients with previous fractures experienced subsequent fractures at a rate of", percent(total_reoccurence_prob/duration), sep = ' ')
-  next_text <- paste(base, 'annually while in the new scenario patients with the same history experienced subsequent fractures at a rate of', sep = ' ')
+  next_text <- paste(base, 'annually while patients without a prior fracture experienced subsequent fractures at a rate of', sep = ' ')
   end_text <- paste (next_text, percent(new_frac_prob/duration), sep = ' ')
   paste(end_text, 'annually.', sep = ' ')
   
@@ -1017,14 +1062,14 @@ output$fracture_risk_text_s1 <- renderText({
 output$FraxBox_R <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
-    total_frax <- total_frax + (base_case[[i]]$total_fractures_s1 - base_case[[i]]$total_fractures)
+    total_frax <- total_frax + (base_case[[i]]$total_fractures_with_previous_fracture_s1 - base_case[[i]]$total_fractures_with_previous_fracture)
   }
-  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Fracture Incidence Increasing", "Efforts to Improve PMO Management Result in Fracture Incidence Decreasing")
+  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Secondary Fracture Incidence Increasing", "Efforts to Improve PMO Management Result in Secondary Fracture Incidence Decreasing")
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
-  title_text <- paste("Change in Fracture Occurrence, 2018-", inp_year, sep = "", collapse = NULL)
+  title_text <- paste("Change in Secondary Fracture Occurrence, 2018-", inp_year, sep = "", collapse = NULL)
   infoBox(
     title = title_text,
     subtitle = subtitle_text, 
@@ -1034,12 +1079,174 @@ output$FraxBox_R <- renderInfoBox({
   )
 })
 
+## Primary Frac Info
+output$nPrimaryBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
+  for(i in 1:duration) {
+    total_frax <- total_frax + (base_case[[i]]$n_patients_wo_previous_fracture_s1 - base_case[[i]]$n_patients_wo_previous_fracture)
+  }
+  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Primary Fracture Patients Increasing", "Efforts to Improve PMO Management Result in Primary Fracture Patients Decreasing")
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("Difference in Primary Fracture Patients, 2018-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    subtitle = subtitle_text, 
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "blue", fill = T, width = NULL#3
+  )
+})
+
+
+output$nNoPriorsBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
+  for(i in 1:duration) {
+    total_frax <- total_frax + base_case[[i]]$prev_no_fracs_per_yr
+  }
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("Cumulative number of patients with no prior history of fractures, 2018-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "blue", fill = T, width = NULL#3
+  )
+})
+
+output$primaryFracBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
+  for(i in 1:duration) {
+    total_frax <- total_frax + (base_case[[i]]$total_fractures_wo_previous_fracture_s1 - base_case[[i]]$total_fractures_wo_previous_fracture)
+  }
+  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Primary Fractures Increasing", "Efforts to Improve PMO Management Result in Primary Fractures Decreasing")
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("Difference in Primary Fractures, 2018-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    subtitle = subtitle_text, 
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "green", fill = T, width = NULL#3
+  )
+})
+
+output$primaryFracCostBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
+  for(i in 1:duration) {
+    total_frax <- total_frax + (base_case[[i]]$grand_total_wo_prev_frac_s1 - base_case[[i]]$grand_total_wo_prev_frac)
+  }
+  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Costs of Primary Fractures Increasing", "Efforts to Improve PMO Management Result in Costs of Primary Fractures Decreasing")
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("Difference in Primary Fracture Costs, 2018-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    subtitle = subtitle_text, 
+    value = dollar_format(negative_parens = TRUE)((total_frax)),
+    icon = icon("list"),
+    color = "orange", fill = T, width = NULL#3
+  )
+})
+
+
+## Secondary Frac boxes
+output$nPrevBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
+  for(i in 1:duration) {
+    total_frax <- total_frax + (base_case[[i]]$n_patients_with_previous_fracture_s1 - base_case[[i]]$n_patients_with_previous_fracture)
+  }
+  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Secondary Fracture Patients Increasing", "Efforts to Improve PMO Management Result in Secondary Fracture Patients Decreasing")
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("Difference in Secondary Fracture Patients, 2018-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    subtitle = subtitle_text, 
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "blue", fill = T, width = NULL#3
+  )
+})
+
+
+output$nPriorsBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
+  for(i in 1:duration) {
+    total_frax <- total_frax + base_case[[i]]$prev_fracs_per_yr
+  }
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("Cumulative number of patients with prior history of fractures, 2018-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "blue", fill = T, width = NULL#3
+  )
+})
+
+
+output$prevFracBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
+  for(i in 1:duration) {
+    total_frax <- total_frax + (base_case[[i]]$total_fractures_with_previous_fracture_s1 - base_case[[i]]$total_fractures_with_previous_fracture)
+  }
+  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Secondary Fractures Increasing", "Efforts to Improve PMO Management Result in Secondary Fractures Decreasing")
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("Difference in Secondary Fractures, 2018-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    subtitle = subtitle_text, 
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "green", fill = T, width = NULL#3
+  )
+})
+
+output$prevFracCostBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
+  for(i in 1:duration) {
+    total_frax <- total_frax + (base_case[[i]]$grand_total_with_prev_frac_s1 - base_case[[i]]$grand_total_with_prev_frac)
+  }
+  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Costs of Secondary Fractures Increasing", "Efforts to Improve PMO Management Result in Costs of Secondary Fractures Decreasing")
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("Difference in Secondary Fracture Costs, 2018-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    subtitle = subtitle_text, 
+    value = dollar_format(negative_parens = TRUE)((total_frax)),
+    icon = icon("list"),
+    color = "orange", fill = T, width = NULL#3
+  )
+})
+
 output$CostBox_R <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax_cost <- (0)
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
-    total_frax_cost <- (total_frax_cost) + (base_case[[i]]$grand_total_s1 - base_case[[i]]$grand_total)
+    total_frax_cost <- (total_frax_cost) + (base_case[[i]]$grand_total_with_prev_frac_s1 - base_case[[i]]$grand_total_with_prev_frac)
   }
   subtitle_text <- ifelse(total_frax_cost > 0, "Efforts to Improve PMO Management Result in Cost Increases", "Efforts to Improve PMO Management Result in Cost Decreases")
   inp_year <- as.Date(input$endYear, "%Y")
@@ -1057,9 +1264,9 @@ output$CostBox_R <- renderInfoBox({
 output$FraxBox <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax <- 0
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
-    total_frax <- total_frax + (base_case[[i]]$total_fractures_s1 - base_case[[i]]$total_fractures)
+    total_frax <- total_frax + (base_case[[i]]$total_fractures_with_previous_fracture_s1 - base_case[[i]]$total_fractures_with_previous_fracture)
   }
   subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Fracture Incidence Increasing", "Efforts to Improve PMO Management Result in Fracture Incidence Decreasing")
   inp_year <- as.Date(input$endYear, "%Y")
@@ -1077,11 +1284,10 @@ output$FraxBox <- renderInfoBox({
 output$CostBox <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax_cost <- (0)
-  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
   for(i in 1:duration) {
-    total_frax_cost <- (total_frax_cost) + (base_case[[i]]$grand_total_s1 - base_case[[i]]$grand_total)
+    total_frax_cost <- (total_frax_cost) + (base_case[[i]]$grand_total_with_prev_frac_s1 - base_case[[i]]$grand_total_with_prev_frac)
   }
-  print(total_frax_cost)
   subtitle_text <- ifelse(total_frax_cost > 0, "Efforts to Improve PMO Management Result in Cost Increases", "Efforts to Improve PMO Management Result in Cost Decreases")
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
@@ -1094,6 +1300,89 @@ output$CostBox <- renderInfoBox({
     color = "orange", fill = T, width = NULL#3
   )
 })
+
+output$PrimaryFraxBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
+  for(i in 1:duration) {
+    total_frax <- total_frax + (base_case[[i]]$total_fractures_wo_previous_fracture_s1 - base_case[[i]]$total_fractures_wo_previous_fracture)
+  }
+  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Primary Fracture Incidence Increasing", "Efforts to Improve PMO Management Result in Primary Fracture Incidence Decreasing")
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("Change in Primary Fracture Occurrence, 2018-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    subtitle = subtitle_text, 
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "blue", fill = T, width = NULL#3
+  )
+})
+
+output$PrimaryCostBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax_cost <- (0)
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
+  for(i in 1:duration) {
+    total_frax_cost <- (total_frax_cost) + (base_case[[i]]$grand_total_wo_prev_frac_s1 - base_case[[i]]$grand_total_wo_prev_frac)
+  }
+  subtitle_text <- ifelse(total_frax_cost > 0, "Efforts to Improve PMO Management Result in Primary Cost Increases", "Efforts to Improve PMO Management Result in Primary Cost Decreases")
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("Change in Total Primary Costs, 2018-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    subtitle = subtitle_text, 
+    value = dollar_format(negative_parens = TRUE)((total_frax_cost)),
+    icon = icon("list"),
+    color = "orange", fill = T, width = NULL#3
+  )
+})
+
+
+output$SecondaryFraxBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
+  for(i in 1:duration) {
+    total_frax <- total_frax + (base_case[[i]]$total_fractures_with_previous_fracture_s1 - base_case[[i]]$total_fractures_with_previous_fracture)
+  }
+  subtitle_text <- ifelse(total_frax > 0, "Efforts to Improve PMO Management Result in Secondary Fracture Incidence Increasing", "Efforts to Improve PMO Management Result in Secondary Fracture Incidence Decreasing")
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("Change in Secondary Fracture Occurrence, 2018-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    subtitle = subtitle_text, 
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "blue", fill = T, width = NULL#3
+  )
+})
+
+output$SecondaryCostBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax_cost <- (0)
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
+  for(i in 1:duration) {
+    total_frax_cost <- (total_frax_cost) + (base_case[[i]]$grand_total_with_prev_frac_s1 - base_case[[i]]$grand_total_with_prev_frac)
+  }
+  subtitle_text <- ifelse(total_frax_cost > 0, "Efforts to Improve PMO Management Result in Secondary Cost Increases", "Efforts to Improve PMO Management Result in Secondary Cost Decreases")
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("Change in Total Secondary Costs, 2018-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    subtitle = subtitle_text, 
+    value = dollar_format(negative_parens = TRUE)((total_frax_cost)),
+    icon = icon("list"),
+    color = "orange", fill = T, width = NULL#3
+  )
+})
+
+
 
   output$costp <-  renderPlotly({
     costid <- rbind("One per Year", "> One per Year", stringAsFactors = TRUE)
@@ -1143,8 +1432,7 @@ output$CostBox <- renderInfoBox({
     ybc <- c()
     ys1 <- c()
 
-    
-    print(sim)
+
     for(i in 1:length(xbc)) {
       if(i > 1) {
         ybc <- cbind(ybc, sim[[i]]$total_fractures + ybc[i-1])
@@ -1158,8 +1446,8 @@ output$CostBox <- renderInfoBox({
     # progress$set(value = progress$getValue() + (progress$getMax() - progress$getValue())/3, detail = "Preparing Plot")
     color_pal <- brewer.pal(3, "Paired")
     p <- plot_ly(dummybc, x = ~xbc) %>% 
-      add_trace(y = ~ybc, name = "Base Case", mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
-      add_trace(y = ~ys1, name = "Improved PMO Management", mode = 'lines', line = list(color = color_pal[2]),text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
+      add_trace(y = ~ybc, name = "Base Case", type = 'scatter', mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
+      add_trace(y = ~ys1, name = "Improved PMO Management", type = 'scatter', mode = 'lines', line = list(color = color_pal[2]),text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
       config(displayModeBar = F) %>%
       layout(
         title = "Cumulative Fractures vs. Time",
@@ -1169,6 +1457,277 @@ output$CostBox <- renderInfoBox({
         ),
         yaxis = list(
           title = "Total Number of Fractures",
+          zeroline = TRUE
+        ),
+        xaxis = list(
+          title = "Year",
+          zeroline = TRUE
+        )
+      )
+    return(p)
+  })
+  
+  # Previous Fractures Plot
+  output$prevFracPlot <- renderPlotly({
+    
+    
+    sim <- simulation_data$sim
+    
+    start_year <- 2018
+    end_year   <- as.integer(substring(input$endYear, 1, 4))
+    
+    xbc <- c(start_year:end_year)
+    ybc <- c()
+    ys1 <- c()
+    
+    print(sim)
+    for(i in 1:length(xbc)) {
+      if(i > 1) {
+        ybc <- cbind(ybc, sim[[i]]$total_fractures_with_previous_fracture + ybc[i-1])
+        ys1 <- cbind(ys1, sim[[i]]$total_fractures_with_previous_fracture_s1 + ys1[i-1])
+      } else {
+        ybc <- cbind(ybc, sim[[i]]$total_fractures_with_previous_fracture)
+        ys1 <- cbind(ys1, sim[[i]]$total_fractures_with_previous_fracture_s1)
+      }
+    }
+    dummybc <- data.frame(xbc, ybc, ys1)
+    color_pal <- brewer.pal(3, "Paired")
+    p <- plot_ly(dummybc, x = ~xbc) %>% 
+      add_trace(y = ~as.integer(ybc), name = "Base Case", type = 'scatter', mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
+      add_trace(y = ~as.integer(ys1), name = "Improved PMO Management", type = 'scatter', mode = 'lines', line = list(color = color_pal[2]),text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
+      config(displayModeBar = F) %>%
+      layout(
+        title = "Cumulative Secondary Fractures vs. Time",
+        xaxis = list(showgrid = FALSE,
+                     title = "Year",
+                     zeroline = TRUE
+        ),
+        yaxis = list(
+          title = "Total Number of Secondary Fractures",
+          zeroline = TRUE
+        ),
+        xaxis = list(
+          title = "Year",
+          zeroline = TRUE
+        )
+      )
+    return(p)
+  })
+  
+  # No Previous Fractures Plot
+  output$primaryFracPlot <- renderPlotly({
+    
+    
+    sim <- simulation_data$sim
+    
+    start_year <- 2018
+    end_year   <- as.integer(substring(input$endYear, 1, 4))
+    
+    xbc <- c(start_year:end_year)
+    ybc <- c()
+    ys1 <- c()
+    
+    for(i in 1:length(xbc)) {
+      if(i > 1) {
+        ybc <- cbind(ybc, sim[[i]]$total_fractures_wo_previous_fracture + ybc[i-1])
+        ys1 <- cbind(ys1, sim[[i]]$total_fractures_wo_previous_fracture_s1 + ys1[i-1])  
+      } else {
+        ybc <- cbind(ybc, sim[[i]]$total_fractures_wo_previous_fracture)
+        ys1 <- cbind(ys1, sim[[i]]$total_fractures_wo_previous_fracture_s1)
+      }
+    }
+    dummybc <- data.frame(xbc, ybc, ys1)
+    color_pal <- brewer.pal(3, "Paired")
+    p <- plot_ly(dummybc, x = ~xbc) %>% 
+      add_trace(y = ~as.integer(ybc), name = "Base Case", type = 'scatter', mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
+      add_trace(y = ~as.integer(ys1), name = "Improved PMO Management", type = 'scatter', mode = 'lines', line = list(color = color_pal[2]),text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
+      config(displayModeBar = F) %>%
+      layout(
+        title = "Cumulative Primary Fractures vs. Time",
+        xaxis = list(showgrid = FALSE,
+                     title = "Year",
+                     zeroline = TRUE
+        ),
+        yaxis = list(
+          title = "Total Number of Primary Fractures",
+          zeroline = TRUE
+        ),
+        xaxis = list(
+          title = "Year",
+          zeroline = TRUE
+        )
+      )
+    return(p)
+  })
+  
+  # Number of Primary Fracture patient plots
+  output$nPrimaryPlot <- renderPlotly({
+    
+    
+    sim <- simulation_data$sim
+    
+    start_year <- 2018
+    end_year   <- as.integer(substring(input$endYear, 1, 4))
+    
+    xbc <- c(start_year:end_year)
+    ybc <- c()
+    ys1 <- c()
+    
+    for(i in 1:length(xbc)) {
+      if(i > 1) {
+        ybc <- cbind(ybc, sim[[i]]$n_patients_wo_previous_fracture + ybc[i-1])
+        ys1 <- cbind(ys1, sim[[i]]$n_patients_wo_previous_fracture_s1 + ys1[i-1])
+      } else {
+        ybc <- cbind(ybc, sim[[i]]$n_patients_wo_previous_fracture)
+        ys1 <- cbind(ys1, sim[[i]]$n_patients_wo_previous_fracture_s1)
+      }
+    }
+    dummybc <- data.frame(xbc, ybc, ys1)
+    color_pal <- brewer.pal(3, "Paired")
+    p <- plot_ly(dummybc, x = ~xbc) %>% 
+      add_trace(y = ~as.integer(ybc), name = "Base Case", type = 'scatter', mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
+      add_trace(y = ~as.integer(ys1), name = "Improved PMO Management", type = 'scatter', mode = 'lines', line = list(color = color_pal[2]),text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
+      config(displayModeBar = F) %>%
+      layout(
+        title = "Cumulative Primary Fracture Patients vs. Time",
+        xaxis = list(showgrid = FALSE,
+                     title = "Year",
+                     zeroline = TRUE
+        ),
+        yaxis = list(
+          title = "Total Number of Primary Fracture Patients",
+          zeroline = TRUE
+        ),
+        xaxis = list(
+          title = "Year",
+          zeroline = TRUE
+        )
+      )
+    return(p)
+  })
+  
+  # number of people each year with no prior fractures
+  output$nNoPriorsPlot <- renderPlotly({
+    
+    
+    sim <- simulation_data$sim
+    
+    start_year <- 2018
+    end_year   <- as.integer(substring(input$endYear, 1, 4))
+    
+    xbc <- c(start_year:end_year)
+    ybc <- c()
+    ys1 <- c()
+    
+    for(i in 1:length(xbc)) {
+      if(i > 1) {
+        ybc <- cbind(ybc, sim[[i]]$prev_no_fracs_per_yr + ybc[i-1])
+      } else {
+        ybc <- cbind(ybc, sim[[i]]$prev_no_fracs_per_yr)
+      }
+    }
+    dummybc <- data.frame(xbc, ybc)
+    color_pal <- brewer.pal(3, "Paired")
+    p <- plot_ly(dummybc, x = ~xbc) %>% 
+      add_trace(y = ~as.integer(ybc), name = "Base Case", type = 'scatter', mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
+      config(displayModeBar = F) %>%
+      layout(
+        title = "Cumulative Population without Previous Fracture vs. Time",
+        xaxis = list(showgrid = FALSE,
+                     title = "Year",
+                     zeroline = TRUE
+        ),
+        yaxis = list(
+          title = "Total Population without Previous Fracture",
+          zeroline = TRUE
+        ),
+        xaxis = list(
+          title = "Year",
+          zeroline = TRUE
+        )
+      )
+    return(p)
+  })
+  
+  # Number of Secondary Fracture patient plots
+  output$nPrevPlot <- renderPlotly({
+    
+    
+    sim <- simulation_data$sim
+    
+    start_year <- 2018
+    end_year   <- as.integer(substring(input$endYear, 1, 4))
+    
+    xbc <- c(start_year:end_year)
+    ybc <- c()
+    ys1 <- c()
+    
+    for(i in 1:length(xbc)) {
+      if(i > 1) {
+        ybc <- cbind(ybc, sim[[i]]$n_patients_with_previous_fracture + ybc[i-1])
+        ys1 <- cbind(ys1, sim[[i]]$n_patients_with_previous_fracture_s1 + ys1[i-1])
+      } else {
+        ybc <- cbind(ybc, sim[[i]]$n_patients_with_previous_fracture)
+        ys1 <- cbind(ys1, sim[[i]]$n_patients_with_previous_fracture_s1)
+      }
+    }
+    dummybc <- data.frame(xbc, ybc, ys1)
+    color_pal <- brewer.pal(3, "Paired")
+    p <- plot_ly(dummybc, x = ~xbc) %>% 
+      add_trace(y = ~as.integer(ybc), name = "Base Case", type = 'scatter', mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
+      add_trace(y = ~as.integer(ys1), name = "Improved PMO Management", type = 'scatter', mode = 'lines', line = list(color = color_pal[2]),text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
+      config(displayModeBar = F) %>%
+      layout(
+        title = "Cumulative Secondary Fracture Patients vs. Time",
+        xaxis = list(showgrid = FALSE,
+                     title = "Year",
+                     zeroline = TRUE
+        ),
+        yaxis = list(
+          title = "Total Number of Secondary Fracture Patients",
+          zeroline = TRUE
+        ),
+        xaxis = list(
+          title = "Year",
+          zeroline = TRUE
+        )
+      )
+    return(p)
+  })
+  
+  # number of population each year that had previous fractures
+  output$nPriorsPlot <- renderPlotly({
+    
+    
+    sim <- simulation_data$sim
+    
+    start_year <- 2018
+    end_year   <- as.integer(substring(input$endYear, 1, 4))
+    
+    xbc <- c(start_year:end_year)
+    ybc <- c()
+    ys1 <- c()
+    
+    for(i in 1:length(xbc)) {
+      if(i > 1) {
+        ybc <- cbind(ybc, sim[[i]]$prev_fracs_per_yr + ybc[i-1])
+      } else {
+        ybc <- cbind(ybc, sim[[i]]$prev_fracs_per_yr)
+      }
+    }
+    dummybc <- data.frame(xbc, ybc)
+    color_pal <- brewer.pal(3, "Paired")
+    p <- plot_ly(dummybc, x = ~xbc) %>% 
+      add_trace(y = ~as.integer(ybc), name = "Base Case", type = 'scatter', mode = 'lines', line = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>% 
+      config(displayModeBar = F) %>%
+      layout(
+        title = "Cumulative Population with Previous Fracture vs. Time",
+        xaxis = list(showgrid = FALSE,
+                     title = "Year",
+                     zeroline = TRUE
+        ),
+        yaxis = list(
+          title = "Total Population with Previous Fracture",
           zeroline = TRUE
         ),
         xaxis = list(
@@ -1206,9 +1765,9 @@ output$CostBox <- renderInfoBox({
     p <- plot_ly(dummybc, 
                  x = ~xbc) %>%
          add_trace(y = ~costybc, name = "Base Case", type = 'scatter', 
-                   mode = "markers", marker = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>%
+                   type = 'scatter', mode = "markers", marker = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>%
          add_trace(y = ~costys1, name = "Improved PMO Management", type = 'scatter',
-                   mode = "markers", marker = list(color = color_pal[2]), text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
+                   type = 'scatter', mode = "markers", marker = list(color = color_pal[2]), text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
               
               config(displayModeBar = F) %>%
               layout(
@@ -1224,12 +1783,104 @@ output$CostBox <- renderInfoBox({
               ) 
   })
   
+  
+  # Cumulative Subsequent Fractures Cost Plot
+  output$prevFracCost <- renderPlotly({
+
+    sim <- simulation_data$sim
+
+    start_year <- 2018
+    end_year   <- as.integer(substring(input$endYear, 1, 4))
+
+    xbc <- c(start_year:end_year)
+    costybc <- c()
+    costys1 <- c()
+
+    for(i in 1:length(xbc)) {
+      if(i > 1) {
+        costybc <- cbind(costybc, sim[[i]]$grand_total_with_prev_frac + costybc[i-1])
+        costys1 <- cbind(costys1, sim[[i]]$grand_total_with_prev_frac_s1 + costys1[i-1])
+      } else {
+        costybc <- cbind(costybc, sim[[i]]$grand_total_with_prev_frac)
+        costys1 <- cbind(costys1, sim[[i]]$grand_total_with_prev_frac_s1)
+      }
+    }
+
+    dummybc <- data.frame(xbc, costybc, costys1)
+    color_pal <- brewer.pal(3, "Paired")
+    p <- plot_ly(dummybc,
+                 x = ~xbc) %>%
+      add_trace(y = ~costybc, name = "Base Case", type = 'scatter',
+                type = 'scatter', mode = "markers", marker = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>%
+      add_trace(y = ~costys1, name = "Improved PMO Management", type = 'scatter',
+                type = 'scatter', mode = "markers", marker = list(color = color_pal[2]), text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
+
+      config(displayModeBar = F) %>%
+      layout(
+        title = "Cumulative Total Costs among Secondary Fracture Population by Year",
+        xaxis = list(showgrid = FALSE,
+                     title = "Year",
+                     zeroline = TRUE
+        ),
+        yaxis = list(
+          title = "Total Cost ($)",
+          zeroline = TRUE
+        )
+      )
+  })
+
+  # Cumulative Primary Fractures Cost Plot
+  output$primaryFracCost <- renderPlotly({
+
+    sim <- simulation_data$sim
+
+    start_year <- 2018
+    end_year   <- as.integer(substring(input$endYear, 1, 4))
+
+    xbc <- c(start_year:end_year)
+    costybc <- c()
+    costys1 <- c()
+
+    for(i in 1:length(xbc)) {
+      if(i > 1) {
+        costybc <- cbind(costybc, sim[[i]]$grand_total_wo_prev_frac + costybc[i-1])
+        costys1 <- cbind(costys1, sim[[i]]$grand_total_wo_prev_frac_s1 + costys1[i-1])
+      } else {
+        costybc <- cbind(costybc, sim[[i]]$grand_total_wo_prev_frac)
+        costys1 <- cbind(costys1, sim[[i]]$grand_total_wo_prev_frac_s1)
+      }
+    }
+
+    dummybc <- data.frame(xbc, costybc, costys1)
+    color_pal <- brewer.pal(3, "Paired")
+    p <- plot_ly(dummybc,
+                 x = ~xbc) %>%
+      add_trace(y = ~costybc, name = "Base Case", type = 'scatter',
+                type = 'scatter', mode = "markers", marker = list(color = color_pal[1]), text = ~paste('<br>Base Case'), hoverinfo="text+x+y" ) %>%
+      add_trace(y = ~costys1, name = "Improved PMO Management", type = 'scatter',
+                type = 'scatter', mode = "markers", marker = list(color = color_pal[2]), text = ~paste('<br>Improved PMO Management'), hoverinfo="text+x+y") %>%
+
+      config(displayModeBar = F) %>%
+      layout(
+        title = "Cumulative Total Costs Among the Primary Fracture Population by Year",
+        xaxis = list(showgrid = FALSE,
+                     title = "Year",
+                     zeroline = TRUE
+        ),
+        yaxis = list(
+          title = "Total Cost ($)",
+          zeroline = TRUE
+        )
+      )
+  })
+  
+  
   output$FractureReoccurence <- renderInfoBox({
     base_case <- simulation_data$sim
     total_reoccurence_prob <- 0.0
     base_occur_dist <- c()
     s1_occur_dist <- c()
-    duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+    duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
     for(i in 1:duration) {
       total_reoccurence_prob <- (total_reoccurence_prob) + base_case[[i]]$prob_fracture_given_previous_fractures
       base_occur_dist <- c(base_occur_dist, base_case[[i]]$prob_fracture_given_previous_fractures)
@@ -1262,7 +1913,7 @@ output$CostBox <- renderInfoBox({
     total_reoccurence_prob <- 0.0
     new_frac_prob <- 0.0
 
-    duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+    duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1 
     for(i in 1:duration) {
       total_reoccurence_prob <- (total_reoccurence_prob) + base_case[[i]]$prob_fracture_given_previous_fractures
       new_frac_prob <- (new_frac_prob) + base_case[[i]]$prob_fracture_given_no_previous_fractures
@@ -1290,7 +1941,7 @@ output$CostBox <- renderInfoBox({
     total_reoccurence_prob <- 0.0
     new_frac_prob <- 0.0
     
-    duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018
+    duration <-  as.integer(substring(input$endYear, 1, 4)) - 2018 + 1
     for(i in 1:duration) {
       total_reoccurence_prob <- (total_reoccurence_prob) + base_case[[i]]$prob_fracture_given_previous_fractures_s1
       new_frac_prob <- (new_frac_prob) + base_case[[i]]$prob_fracture_given_no_previous_fractures_s1
@@ -1312,6 +1963,38 @@ output$CostBox <- renderInfoBox({
       color = "purple", fill = T, width = NULL#3
     )
   })
+  
+  output$PrevFracPerYear <- renderInfoBox({
+    
+    sim <- simulation_data$sim
+    
+    start_year <- 2018
+    end_year   <- as.integer(substring(input$endYear, 1, 4))
+    
+    xbc <- c(start_year:end_year)
+    costybc <- c()
+    costys1 <- c()
+    
+    for(i in 1:length(xbc)) {
+      if(i > 1) {
+        costybc <- cbind(costybc, sim[[i]]$prev_fracs_per_year + costybc[i-1])
+      } else {
+        costybc <- cbind(costybc, sim[[i]]$prev_fracs_per_year)
+      }
+    }
+    
+    infoBox(
+      title = 'cum. prev. fracs per year',
+      subtitle = 'subtitle_text', 
+      value = format(round(costybc, 2), nsmall = 2),
+      icon = icon("list"),
+      color = "purple", fill = T, width = NULL#3
+    )  
+    
+    })
+  
+  
+  
 ###############Priority Manipulation###################################
 outputOptions(output, "costp", priority = 1)
 outputOptions(output, "fxrplot", priority = 1)
