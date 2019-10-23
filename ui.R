@@ -47,7 +47,7 @@ fluidPage(
           id = "countrySelectBox",
           title = "Country Select",
           icon = "th-list",
-          selectizeInput('countrySelect', label = 'Country', choices = c('China', 'Hong Kong', 'Taiwan', 'Japan', 'Thailand'))
+          selectizeInput('countrySelect', label = 'Country', choices = c('China', 'Hong Kong', 'Taiwan', 'Japan', 'Thailand', 'South Korea'))
         ))
     ),
     sidebar = 
@@ -182,7 +182,7 @@ fluidPage(
                             dropdownDivider(),
                             dropdownItem(name = HTML("Using the Census projection estimates for females of any race or ethnicity, <br/>
                                                      the probability of each age starting at 65 years old was estimated using the <br/>
-                                                     Census projections for each calendar year included in the model (2018-2040). <br/>
+                                                     Census projections for each calendar year included in the model (2020-2040). <br/>
                                                      The distribution of race and ethnicity were estimated from Census data. <br/>
                                                      The estimates for race and ethnicity were generated to be mutually exclusive <br/>
                                                       and sum to 100%. Therefore, some races are not included in the model as the  <br/>
@@ -442,7 +442,7 @@ fluidPage(
                                                      ≥ 1 DXA scan each year from 2002-2014 (11.3% in 2014), based on health care claims and enrollment data from the 5% sample of Medicare fee-for-service  <br/>
                                                      beneficiaries. Current treatment rates and trends were based on unpublished market share data, which indicated 9% of those ages 65+ years were treated  <br/>
                                                      (i.e., filled at least one osteoporosis medication) in 2017, with the rate steadily declining since 2011. Thus, it was assumed that the overall treatment  <br/>
-                                                     rate was 9% in 2018 and declined year over year through 2040.  In the Improved PMO Management scenario, the selected treatment rate remains constant  <br/>
+                                                     rate was 9% in 2020 and declined year over year through 2040.  In the Improved PMO Management scenario, the selected treatment rate remains constant  <br/>
                                                      over the specified time period. ")),
                             dropdownDivider(),
                             dropdownItem(name = HTML("The microsimulation is estimating the effects of identification and treatment across a cohort of the size entered in the <br/>
@@ -468,7 +468,7 @@ fluidPage(
                             column(width = 6,
                                    sliderInput(inputId = "endYear", 
                                                label = NULL,
-                                               min = as.Date("2022", '%Y'),
+                                               min = as.Date("2021", '%Y'),
                                                max = as.Date("2040", '%Y'),
                                                value = as.Date("2040", '%Y'),
                                                step = 365,

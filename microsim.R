@@ -77,30 +77,10 @@ med_base_prob <-  BASECASETX
 dxa_prob_s1 <- S1ID
 med_base_prob_s1 <- S1TX
 
-# https://fred.stlouisfed.org/series/KORCPIALLMINMEI
-# Korean CPI Jan 2012-Jan 2019, Jan 2006-Jan 2019
-price_inflation_2012_2019 <- 104.24/96.184 
-price_inflation_2012_2018 <- 103.42/93.07
-price_inflation_2006_2019 <- 104.24/79.306
-price_inflation_2018_2019 <- 103.42/104.24
-
 
 # Treatment Mix - THIS IS NOT DYNAMIC
 # CHINA NOTE: for those with mix > 0 and have a generic, assuming that 1/2 people will
 # get name brand, 1/2 will get generic. 
-# treatment_mix <-c(0.76 * 1, # alendronate soduium 10mg
-#                   0.76 * 0, # generic,
-#                   0, # ibandronate sodium 150mg
-#                   .095, # risedronate sodium oral table 5mg
-#                   0, # ibandronate sodium IV 3mg/3ml
-#                   0.145 * 1, # zoledronic acid iv 5mg/100ml
-#                   0.145 * 0, # generic
-#                   0, # denosumab subQ 60mg/ml
-#                   0, # conjugated estrogens/bazedoxifene 0.45-20mg
-#                   0, # raloxifene HCl 60mg
-#                   0, # generic
-#                   0, # forteo subQ 600 mcg/2.4ml
-#                   0) # Tymlos
 
 treatment_mix <- treat_mix[[COUNTRY]]
 
@@ -108,54 +88,12 @@ treatment_mix <- treat_mix[[COUNTRY]]
 
 
 # Monthly Costs
-# treatment_monthly_cost <- (price_inflation_2018_2019 *
-#                              c(421, # alendronate soduium 10mg
-#                                123, # generic,
-#                                0, # ibandronate sodium 150mg
-#                                218, # risedronate sodium oral table 5mg
-#                                316, # ibandronate sodium IV 3mg/3ml
-#                                449, # zoledronic acid iv 5mg/100ml
-#                                260, # generic
-#                                0, # denosumab subQ 60mg/ml
-#                                0, # conjugated estrogens/bazedoxifene 0.45-20mg
-#                                503, # raloxifene HCl 60mg
-#                                243, # generic
-#                                801, # forteo subQ 600 mcg/2.4ml
-#                                0)) # tymlos
 
 treatment_monthly_cost <- treat_cost[[COUNTRY]] # will probably need to put in price_inflation factors in global.R
                              
 
-# treatment_efficacy_hip <- c(0.65, # alendronate soduium 10mg
-#                             0.65, # generic,
-#                             0.73, # ibandronate sodium 150mg
-#                             0.74, # risedronate sodium oral table 5mg
-#                             0.59, # ibandronate sodium IV 3mg/3ml
-#                             0.59, # zoledronic acid iv 5mg/100ml
-#                             0.59, # generic
-#                             0.61, # denosumab subQ 60mg/ml
-#                             0.59, # conjugated estrogens/bazedoxifene 0.45-20mg
-#                             0.59, # raloxifene HCl 60mg
-#                             0.59, # generic
-#                             0.25, # forteo subQ 600 mcg/2.4ml
-#                             0.25)# tymlos
-
 treatment_efficacy_hip <- treat_efficacy_hip[[COUNTRY]]
                             
-
-# treatment_efficacy_other <- c(0.65, # alendronate soduium 10mg
-#                               0.65, # generic,
-#                               0.73, # ibandronate sodium 150mg
-#                               0.74, # risedronate sodium oral table 5mg
-#                               0.59, # ibandronate sodium IV 3mg/3ml
-#                               0.59, # zoledronic acid iv 5mg/100ml
-#                               0.59, # generic
-#                               0.61, # denosumab subQ 60mg/ml
-#                               0.59, # conjugated estrogens/bazedoxifene 0.45-20mg
-#                               0.59, # raloxifene HCl 60mg
-#                               0.59, # generic
-#                               0.25, # forteo subQ 600 mcg/2.4ml
-#                               0.25)# tymlos
 
 treatment_efficacy_other <- treat_efficacy_other[[COUNTRY]]
 
@@ -175,7 +113,7 @@ ANY_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_other * MEDICATION_
 #                    Korean population (of women).
 
 # THIS IS NOT DYNAMIC
-dxa_cost <- 27
+dxa_cost <- country_other_value(COUNTRY, 'dxaScreen')
 
 weird_coefficient <- POPN_PROJECTION
 
@@ -216,7 +154,6 @@ age_index <- getAgeIndex(age_index_scores,
 bmd_index <- getBMDIndex(population_size,
                          bmdTScoremean,
                          bmdTScoreSD,
-                         # centering_mean,
                          bmd_cutoffs,
                          bmd_index_scores
 )
@@ -713,9 +650,7 @@ no_prev_frac_data <- data.frame(prev_no_fracs_per_yr,
 packaged_data <- data.frame(clinical_data, financial_data, clinical_data_s1, financial_data_s1, prev_frac_data, no_prev_frac_data)*EXTRAPOLATION_FACTOR 
 packaged_data <- data.frame(packaged_data, prob_data, prob_data_s1,
                             prob_history_given_fracture, prob_no_history_given_fracture,
-                            prob_history_given_fracture_s1, prob_no_history_given_fracture_s1,
-                            weird_coefficient[year-2015], sum(hip_fracture), MULTI_FRACTURE_FACTOR, EXTRAPOLATION_FACTOR, HIP_FRACTURE_AVERAGE, sum(med_patients),
-                            sum(frax_major==0))
+                            prob_history_given_fracture_s1, prob_no_history_given_fracture_s1)
 
 return(packaged_data)
 }
