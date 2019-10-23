@@ -80,7 +80,6 @@ getAgeIndex <- function(AGE_INDEX_SCORES, AGE_DISTRIBUTION, POPULATION_SIZE) {
 getBMDIndex <- function(POPULATION_SIZE,
                         BMD_MEAN,
                         BMD_STDDEV,
-                        # CENTERING_MEAN,
                         BMD_CUTOFFS,
                         BMD_INDEX_SCORES
                         ) {
@@ -147,7 +146,7 @@ getRiskFactorIndex <- function(POPULATION_SIZE,
 # implementation scheme utilizes logarithmic decay as described in the Excel Model.
 getMedicationUtilization <- function(BASE_MEDICATION_UTILIZATION,
                                    YEAR) {
-  return(BASE_MEDICATION_UTILIZATION - 0.026 * log(YEAR - 2013))
+  return(BASE_MEDICATION_UTILIZATION - 0.026 * log(YEAR - 2019))
 }
 
 

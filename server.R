@@ -1388,6 +1388,117 @@ output$SecondaryCostBox <- renderInfoBox({
 })
 
 
+## split costs section ####
+
+output$baseDXAcostBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2020 + 1
+  for(i in 1:duration) {
+    total_frax <- total_frax + base_case[[i]]$total_dxa_cost
+  }
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("DXA base costs, 2020-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "blue", fill = T, width = NULL#3
+  )
+})
+
+output$improvedDXAcostBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2020 + 1
+  for(i in 1:duration) {
+    total_frax <- total_frax + base_case[[i]]$total_dxa_cost_s1
+  }
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("DXA improved scenario costs, 2020-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "blue", fill = T, width = NULL#3
+  )
+})
+
+output$baseMedCostBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2020 + 1
+  for(i in 1:duration) {
+    total_frax <- total_frax + base_case[[i]]$total_med_cost
+  }
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("med base costs, 2020-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "blue", fill = T, width = NULL#3
+  )
+})
+
+output$improvedMedCostBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2020 + 1
+  for(i in 1:duration) {
+    total_frax <- total_frax + base_case[[i]]$total_med_cost_s1
+  }
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("med improved scenario costs, 2020-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "blue", fill = T, width = NULL#3
+  )
+})
+
+
+output$baseFracturesCostBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2020 + 1
+  for(i in 1:duration) {
+    total_frax <- total_frax + base_case[[i]]$total_direct_cost
+  }
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("direct base costs, 2020-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "blue", fill = T, width = NULL#3
+  )
+})
+
+output$improvedFracturesCostBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2020 + 1
+  for(i in 1:duration) {
+    total_frax <- total_frax + base_case[[i]]$total_direct_cost_s1
+  }
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("direct improved scenario costs, 2020-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "blue", fill = T, width = NULL#3
+  )
+})
+
 
   output$costp <-  renderPlotly({
     costid <- rbind("One per Year", "> One per Year", stringAsFactors = TRUE)

@@ -514,6 +514,17 @@ fluidPage(
                 #           column(width = 6, infoBoxOutput("nNoPriorsBox"), tags$style("#nNoPriorsBox {width:100%}")),
                 #           column(width = 6, infoBoxOutput("nPriorsBox"), tags$style("#nPriorsBox {width:100%}") ))
                 # ),
+                boxPlus(width = 12, closable = FALSE, collapsible = TRUE, collapsed = FALSE,
+                        fluidRow(
+                          column(width = 6, infoBoxOutput("baseDXAcostBox"), tags$style("#nNoPriorsBox {width:100%}")),
+                          column(width = 6, infoBoxOutput("improvedDXAcostBox"), tags$style("#nPriorsBox {width:100%}") )),
+                        fluidRow(
+                          column(width = 6, infoBoxOutput("baseMedCostBox"), tags$style("#nNoPriorsBox {width:100%}")),
+                          column(width = 6, infoBoxOutput("improvedMedCostBox"), tags$style("#nPriorsBox {width:100%}") )),
+                        fluidRow(
+                          column(width = 6, infoBoxOutput("baseFracturesCostBox"), tags$style("#nNoPriorsBox {width:100%}")),
+                          column(width = 6, infoBoxOutput("improvedFracturesCostBox"), tags$style("#nPriorsBox {width:100%}") ))
+                ),
                 tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
                 ),
         tabItem(tabName = "Results",
