@@ -110,7 +110,7 @@ ANY_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_other * MEDICATION_
                         treatment_mix %*% treatment_efficacy_other * (1 - MEDICATION_ADHERENCE) * NON_ADHERENT_INCREASED_FRACTURE_RISK   
 
 # Weird Coefficent - This extrapolates the simulated population to the projected 
-#                    Korean population (of women).
+#                    population (of women).
 
 # THIS IS NOT DYNAMIC
 dxa_cost <- country_other_value(COUNTRY, 'dxaScreen')
