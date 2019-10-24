@@ -134,10 +134,14 @@ risk_factor_prob <- c(rheu_arth_prob, prev_fracture_prob, hist_fracture_prob,
 risk_names <- c('arthritis', 'prevFrac', 'parentFrac', 'smoker', 'alcohol', 'gluco')
 
 MEDICATION_COST <- treatment_mix %*% treatment_monthly_cost
-HIP_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_hip * MEDICATION_ADHERENCE +
-                        treatment_mix %*% treatment_efficacy_hip * (1 - MEDICATION_ADHERENCE) * NON_ADHERENT_INCREASED_FRACTURE_RISK
-ANY_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_other * MEDICATION_ADHERENCE +
-                        treatment_mix %*% treatment_efficacy_other * (1 - MEDICATION_ADHERENCE) * NON_ADHERENT_INCREASED_FRACTURE_RISK   
+# HIP_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_hip * MEDICATION_ADHERENCE +
+#                         treatment_mix %*% treatment_efficacy_hip * (1 - MEDICATION_ADHERENCE) * NON_ADHERENT_INCREASED_FRACTURE_RISK
+# ANY_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_other * MEDICATION_ADHERENCE +
+#                         treatment_mix %*% treatment_efficacy_other * (1 - MEDICATION_ADHERENCE) * NON_ADHERENT_INCREASED_FRACTURE_RISK   
+HIP_FRACTURE_AVERAGE <- ((1 - (treatment_mix %*% treatment_efficacy_hip))*(1-MEDICATION_ADHERENCE)*(NON_ADHERENT_INCREASED_FRACTURE_RISK-1)) +
+  (treatment_mix %*% treatment_efficacy_hip)
+ANY_FRACTURE_AVERAGE <- ((1 - (treatment_mix %*% treatment_efficacy_other))*(1-MEDICATION_ADHERENCE)*(NON_ADHERENT_INCREASED_FRACTURE_RISK-1)) +
+  (treatment_mix %*% treatment_efficacy_other)
 
 
 # Weird Coefficent - This extrapolates the simulated population to the projected 
@@ -251,38 +255,6 @@ med_patients_s1 <- getMedPatients(#population_size,
                                med_base_prob_s1,
                                year)
 
-## sim fcns
-# dxa_scans <- simDXAScans(population_size,
-#                          dxa_prob)
-# 
-# dxa_scans_s1 <- simDXAScans(population_size,
-#                             dxa_prob_s1)
-# 
-# 
-# med_patients <- simMedPatients(population_size,
-#   med_base_prob,
-#   year)
-# 
-# med_patients_s1 <- simMedPatients(population_size,
-#   med_base_prob_s1,
-#   year)
-
-## det fcns
-# dxa_scans <- detDXAScans(population_size,
-#                          dxa_prob)
-# 
-# dxa_scans_s1 <- detDXAScans(population_size,
-#                             dxa_prob_s1)
-# 
-# 
-# med_patients <- detMedPatients(population_size,
-#                                med_base_prob,
-#                                year)
-# 
-# med_patients_s1 <- detMedPatients(population_size,
-#                                   med_base_prob_s1,
-#                                   year)
-
 sim_dxa_prob <- sum(dxa_scans)/population_size
 sim_dxa_prob_s1 <- sum(dxa_scans_s1)/population_size
 sim_med_patients <- sum(med_patients)/population_size
@@ -293,8 +265,8 @@ sim_med_patients_s1 <- sum(med_patients_s1)/population_size
 # using truncnorm to induce lower variance than runif, but without biasing the samples.
 # could also adjust the sd of the distribution, but may run into issue of too many samples
 # (not) getting fractures
-samples <- truncnorm::rtruncnorm(population_size, a=0, b=1, mean=.5) 
-# samples <- runif(population_size)
+# samples <- truncnorm::rtruncnorm(population_size, a=0, b=1, mean=.5) 
+samples <- runif(population_size)
 
 any_fracture <- getFracture(med_patients,
                             ANY_FRACTURE_AVERAGE,
@@ -306,8 +278,8 @@ any_fracture_s1 <- getFracture(med_patients_s1,
                             frax_major,
                             samples)
 
-samples <- truncnorm::rtruncnorm(population_size, a=0, b=1, mean=.5) 
-# samples <- runif(population_size)
+# samples <- truncnorm::rtruncnorm(population_size, a=0, b=1, mean=.5) 
+samples <- runif(population_size)
 
 hip_fracture <- getFracture(med_patients,
                             HIP_FRACTURE_AVERAGE,

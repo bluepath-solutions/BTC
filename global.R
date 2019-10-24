@@ -88,6 +88,7 @@ NON_ADHERENT_INCREASED_FRACTURE_RISK <- 1.46
 HIP_FRACTURE_RATIO <- (45603/5024) # ~9.077
 MULTI_FRACTURE_FACTOR <- 1.226
 
+
 accumulate_by <- function(dat, var) {
   var <- lazyeval::f_eval(var, dat)
   lvls <- plotly:::getLevels(var)
