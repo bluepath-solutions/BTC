@@ -137,11 +137,15 @@ MEDICATION_COST <- treatment_mix %*% treatment_monthly_cost
 # HIP_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_hip * MEDICATION_ADHERENCE +
 #                         treatment_mix %*% treatment_efficacy_hip * (1 - MEDICATION_ADHERENCE) * NON_ADHERENT_INCREASED_FRACTURE_RISK
 # ANY_FRACTURE_AVERAGE <- treatment_mix %*% treatment_efficacy_other * MEDICATION_ADHERENCE +
-#                         treatment_mix %*% treatment_efficacy_other * (1 - MEDICATION_ADHERENCE) * NON_ADHERENT_INCREASED_FRACTURE_RISK   
+#                         treatment_mix %*% treatment_efficacy_other * (1 - MEDICATION_ADHERENCE) * NON_ADHERENT_INCREASED_FRACTURE_RISK
 HIP_FRACTURE_AVERAGE <- ((1 - (treatment_mix %*% treatment_efficacy_hip))*(1-MEDICATION_ADHERENCE)*(NON_ADHERENT_INCREASED_FRACTURE_RISK-1)) +
   (treatment_mix %*% treatment_efficacy_hip)
 ANY_FRACTURE_AVERAGE <- ((1 - (treatment_mix %*% treatment_efficacy_other))*(1-MEDICATION_ADHERENCE)*(NON_ADHERENT_INCREASED_FRACTURE_RISK-1)) +
   (treatment_mix %*% treatment_efficacy_other)
+# HIP_FRACTURE_AVERAGE <- ((1 - (treatment_mix %*% treatment_efficacy_hip))*(1-MEDICATION_ADHERENCE)*(1-1/NON_ADHERENT_INCREASED_FRACTURE_RISK)) +
+#   (treatment_mix %*% treatment_efficacy_hip)
+# ANY_FRACTURE_AVERAGE <- ((1 - (treatment_mix %*% treatment_efficacy_other))*(1-MEDICATION_ADHERENCE)*(1-1/NON_ADHERENT_INCREASED_FRACTURE_RISK)) +
+#   (treatment_mix %*% treatment_efficacy_other)
 
 
 # Weird Coefficent - This extrapolates the simulated population to the projected 
