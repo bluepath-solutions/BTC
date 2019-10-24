@@ -202,7 +202,7 @@ getFracture <- function(MED_PATIENTS,
   prob_of_fracture_in_given_year <- 1-(1-FRAX)^.1
   
   return(ifelse(MED_PATIENTS,
-                         SAMPLE < (FRACTURE_AVERAGE*prob_of_fracture_in_given_year),
+                         SAMPLE <  (FRACTURE_AVERAGE*prob_of_fracture_in_given_year),
                          SAMPLE < prob_of_fracture_in_given_year))  
 }
 

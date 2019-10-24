@@ -163,7 +163,7 @@ country_scenario_inputs <- data.frame(country = country_names,
                                       improvedTreat = c(27.2, 29.5, 35.91, 32.62, 28.9, 21.0))
 country_other_inputs <- data.frame(country = country_names,
                                    adherence = c(28.2, 28.2, 28.2, 25, 25, 22.1)/100,
-                                   nonadherentRisk = c(1.71, 1.71, 1.71, 1.1, 1.5, 1.1),
+                                   nonadherentRisk = c(1.5, 1.71, 1.71, 1.1, 1.5, 1.1),
                                    dxaScreen = c(27, 80, 21.29, 45, 70, 33.36))
 
 
