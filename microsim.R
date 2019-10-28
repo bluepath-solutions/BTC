@@ -123,7 +123,7 @@ dxa_cost <- country_other_value(COUNTRY, 'dxaScreen')
 
 weird_coefficient <- POPN_PROJECTION
 
-# Coefficient here extrapolates to census data
+# Coefficient here extrapolates to census data 
 weird_coefficient <- weird_coefficient/weird_coefficient[1]
 
 inpatient_wo_subsequent_fracture <- COSTINPT1 #9576
@@ -548,23 +548,27 @@ total_direct_cost_s1 <- total_dxa_cost_s1 + total_med_cost_s1 + total_inpatient_
                      total_outpatient_cost_s1 + total_ltc_cost_s1 + total_ed_cost_s1 +
                      total_other_cost_s1 + total_pharmacy_cost_s1
 
-total_direct_with_prev_frac_cost <- (total_dxa_cost + total_med_cost)*(total_fractures_with_previous_fracture/(total_fractures_with_previous_fracture+total_fractures_wo_previous_fracture)) + 
-                                    total_inpatient_with_prev_frac_cost +
-                                    total_outpatient_with_prev_frac_cost + total_ltc_with_prev_frac_cost + total_ed_with_prev_frac_cost +
-                                    total_other_with_prev_frac_cost + total_pharmacy_with_prev_frac_cost
-total_direct_with_prev_frac_cost_s1 <- (total_dxa_cost_s1 + total_med_cost_s1)*(total_fractures_with_previous_fracture_s1/(total_fractures_with_previous_fracture_s1+total_fractures_wo_previous_fracture_s1)) + 
-                        total_inpatient_with_prev_frac_cost_s1 +
-                        total_outpatient_with_prev_frac_cost_s1 + total_ltc_with_prev_frac_cost_s1 + total_ed_with_prev_frac_cost_s1 +
-                        total_other_with_prev_frac_cost_s1 + total_pharmacy_with_prev_frac_cost_s1
-
-total_direct_wo_prev_frac_cost <- (total_dxa_cost + total_med_cost)*(total_fractures_wo_previous_fracture/(total_fractures_wo_previous_fracture+total_fractures_with_previous_fracture)) + 
-                                    total_inpatient_wo_prev_frac_cost +
-                                    total_outpatient_wo_prev_frac_cost + total_ltc_wo_prev_frac_cost + total_ed_wo_prev_frac_cost +
-                                    total_other_wo_prev_frac_cost + total_pharmacy_wo_prev_frac_cost
-total_direct_wo_prev_frac_cost_s1 <- (total_dxa_cost_s1 + total_med_cost_s1)*(total_fractures_wo_previous_fracture_s1/(total_fractures_wo_previous_fracture_s1+total_fractures_with_previous_fracture_s1)) + 
-                                        total_inpatient_wo_prev_frac_cost_s1 +
-                                        total_outpatient_wo_prev_frac_cost_s1 + total_ltc_wo_prev_frac_cost_s1 + total_ed_wo_prev_frac_cost_s1 +
-                                        total_other_wo_prev_frac_cost_s1 + total_pharmacy_wo_prev_frac_cost_s1
+# note (matt and sophie, 10.25.19): people with prev frac should not have a dxa cost. all dxa costs should be to people without history. 
+total_dxa_med_cost_with_prev_frac <- (total_dxa_cost + total_med_cost)*(total_fractures_with_previous_fracture/(total_fractures_with_previous_fracture+total_fractures_wo_previous_fracture))
+total_frac_cost_with_prev_frac <- total_inpatient_with_prev_frac_cost + total_outpatient_with_prev_frac_cost + total_ltc_with_prev_frac_cost +
+  total_ed_with_prev_frac_cost + total_other_with_prev_frac_cost + total_pharmacy_with_prev_frac_cost
+total_direct_with_prev_frac_cost <-  total_dxa_med_cost_with_prev_frac + total_frac_cost_with_prev_frac
+                                    
+total_dxa_med_cost_with_prev_frac_s1 <- (total_dxa_cost_s1 + total_med_cost_s1)*(total_fractures_with_previous_fracture_s1/(total_fractures_with_previous_fracture_s1+total_fractures_wo_previous_fracture_s1))
+total_frac_cost_with_prev_frac_s1 <- total_inpatient_with_prev_frac_cost_s1 + total_outpatient_with_prev_frac_cost_s1 + total_ltc_with_prev_frac_cost_s1 +
+  total_ed_with_prev_frac_cost_s1 + total_other_with_prev_frac_cost_s1 + total_pharmacy_with_prev_frac_cost_s1
+total_direct_with_prev_frac_cost_s1 <- total_dxa_med_cost_with_prev_frac_s1 + total_frac_cost_with_prev_frac_s1
+                        
+total_dxa_med_cost_wo_prev_frac <- (total_dxa_cost + total_med_cost)*(total_fractures_wo_previous_fracture/(total_fractures_wo_previous_fracture+total_fractures_with_previous_fracture))
+total_frac_cost_wo_prev_frac <- total_inpatient_wo_prev_frac_cost + total_outpatient_wo_prev_frac_cost + total_ltc_wo_prev_frac_cost +
+  total_ed_wo_prev_frac_cost + total_other_wo_prev_frac_cost + total_pharmacy_wo_prev_frac_cost
+total_direct_wo_prev_frac_cost <-  total_dxa_med_cost_wo_prev_frac + total_frac_cost_wo_prev_frac
+                                    
+total_dxa_med_cost_wo_prev_frac_s1 <- (total_dxa_cost_s1 + total_med_cost_s1)*(total_fractures_wo_previous_fracture_s1/(total_fractures_wo_previous_fracture_s1+total_fractures_with_previous_fracture_s1))
+total_frac_cost_wo_prev_frac_s1 <- total_inpatient_wo_prev_frac_cost_s1 + total_outpatient_wo_prev_frac_cost_s1 + total_ltc_wo_prev_frac_cost_s1 +
+  total_ed_wo_prev_frac_cost_s1 + total_other_wo_prev_frac_cost_s1 + total_pharmacy_wo_prev_frac_cost_s1
+total_direct_wo_prev_frac_cost_s1 <-  total_dxa_med_cost_wo_prev_frac_s1 + total_frac_cost_wo_prev_frac_s1
+                                        
 
 total_indirect_cost <-    total_productivity_losses + total_caregiver_losses
 total_indirect_cost_s1 <- total_productivity_losses_s1 + total_caregiver_losses_s1
@@ -628,12 +632,14 @@ prob_data_s1 <- data.frame(prob_fracture_given_previous_fractures_s1, prob_fract
 
 prev_frac_data <- data.frame(prev_fracs_per_yr,
                               total_fractures_with_previous_fracture,
+                             total_dxa_med_cost_with_prev_frac, total_frac_cost_with_prev_frac,
                              total_inpatient_with_prev_frac_cost, total_outpatient_with_prev_frac_cost, total_ltc_with_prev_frac_cost,
                              total_ed_with_prev_frac_cost, total_other_with_prev_frac_cost, total_pharmacy_with_prev_frac_cost,
                              total_productivity_with_prev_frac_losses, total_caregiver_with_prev_frac_losses, total_direct_with_prev_frac_cost,
                              total_indirect_with_prev_frac_cost, grand_total_with_prev_frac,
                              #
                              total_fractures_with_previous_fracture_s1, 
+                             total_dxa_med_cost_with_prev_frac_s1, total_frac_cost_with_prev_frac_s1,
                              total_inpatient_with_prev_frac_cost_s1, total_outpatient_with_prev_frac_cost_s1, total_ltc_with_prev_frac_cost_s1,
                              total_ed_with_prev_frac_cost_s1, total_other_with_prev_frac_cost_s1, total_pharmacy_with_prev_frac_cost_s1,
                              total_productivity_with_prev_frac_losses_s1, total_caregiver_with_prev_frac_losses_s1, total_direct_with_prev_frac_cost_s1,
@@ -641,12 +647,14 @@ prev_frac_data <- data.frame(prev_fracs_per_yr,
 
 no_prev_frac_data <- data.frame(prev_no_fracs_per_yr,
                                 total_fractures_wo_previous_fracture,
+                                total_dxa_med_cost_wo_prev_frac, total_frac_cost_wo_prev_frac,
                              total_inpatient_wo_prev_frac_cost, total_outpatient_wo_prev_frac_cost, total_ltc_wo_prev_frac_cost,
                              total_ed_wo_prev_frac_cost, total_other_wo_prev_frac_cost, total_pharmacy_wo_prev_frac_cost,
                              total_productivity_wo_prev_frac_losses, total_caregiver_wo_prev_frac_losses, total_direct_wo_prev_frac_cost,
                              total_indirect_wo_prev_frac_cost, grand_total_wo_prev_frac,
                              #
                              total_fractures_wo_previous_fracture_s1,
+                             total_dxa_med_cost_wo_prev_frac_s1, total_frac_cost_wo_prev_frac_s1,
                              total_inpatient_wo_prev_frac_cost_s1, total_outpatient_wo_prev_frac_cost_s1, total_ltc_wo_prev_frac_cost_s1,
                              total_ed_wo_prev_frac_cost_s1, total_other_wo_prev_frac_cost_s1, total_pharmacy_wo_prev_frac_cost_s1,
                              total_productivity_wo_prev_frac_losses_s1, total_caregiver_wo_prev_frac_losses_s1, total_direct_wo_prev_frac_cost_s1,
