@@ -1651,16 +1651,16 @@ output$totalSecondaryS1CostBox <- renderInfoBox({
 })
 
 ###
-output$totalPrimaryTrtCostBox <- renderInfoBox({
+output$totalPrimaryDXACostBox <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax <- 0
   duration <-  as.integer(substring(input$endYear, 1, 4)) - 2020 + 1
   for(i in 1:duration) {
-    total_frax <- total_frax + base_case[[i]]$total_dxa_med_cost_wo_prev_frac/1000
+    total_frax <- total_frax + base_case[[i]]$total_dxa_cost_wo_prev_frac/1000
   }
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
-  title_text <- paste("primary fracs trt cost, 2020-", inp_year, sep = "", collapse = NULL)
+  title_text <- paste("primary fracs DXA cost, 2020-", inp_year, sep = "", collapse = NULL)
   infoBox(
     title = title_text,
     value = formatC(round(total_frax), format = 'd', big.mark=','),
@@ -1670,16 +1670,16 @@ output$totalPrimaryTrtCostBox <- renderInfoBox({
 })
 
 
-output$totalPrimaryS1TrtCostBox <- renderInfoBox({
+output$totalPrimaryS1DXACostBox <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax <- 0
   duration <-  as.integer(substring(input$endYear, 1, 4)) - 2020 + 1
   for(i in 1:duration) {
-    total_frax <- total_frax + base_case[[i]]$total_dxa_med_cost_wo_prev_frac_s1/1000
+    total_frax <- total_frax + base_case[[i]]$total_dxa_cost_wo_prev_frac_s1/1000
   }
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
-  title_text <- paste("primary s1 fracs trt cost, 2020-", inp_year, sep = "", collapse = NULL)
+  title_text <- paste("primary s1 fracs DXA cost, 2020-", inp_year, sep = "", collapse = NULL)
   infoBox(
     title = title_text,
     value = formatC(round(total_frax), format = 'd', big.mark=','),
@@ -1689,16 +1689,16 @@ output$totalPrimaryS1TrtCostBox <- renderInfoBox({
 })
 
 
-output$totalSecondaryTrtCostBox <- renderInfoBox({
+output$totalSecondaryDXACostBox <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax <- 0
   duration <-  as.integer(substring(input$endYear, 1, 4)) - 2020 + 1
   for(i in 1:duration) {
-    total_frax <- total_frax + base_case[[i]]$total_dxa_med_cost_with_prev_frac/1000
+    total_frax <- total_frax + base_case[[i]]$total_dxa_cost_with_prev_frac/1000
   }
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
-  title_text <- paste("secondary fracs trt cost, 2020-", inp_year, sep = "", collapse = NULL)
+  title_text <- paste("secondary fracs DXA cost, 2020-", inp_year, sep = "", collapse = NULL)
   infoBox(
     title = title_text,
     value = formatC(round(total_frax), format = 'd', big.mark=','),
@@ -1708,16 +1708,92 @@ output$totalSecondaryTrtCostBox <- renderInfoBox({
 })
 
 
-output$totalSecondaryS1TrtCostBox <- renderInfoBox({
+output$totalSecondaryS1DXACostBox <- renderInfoBox({
   base_case <- simulation_data$sim
   total_frax <- 0
   duration <-  as.integer(substring(input$endYear, 1, 4)) - 2020 + 1
   for(i in 1:duration) {
-    total_frax <- total_frax + base_case[[i]]$total_dxa_med_cost_with_prev_frac_s1/1000
+    total_frax <- total_frax + base_case[[i]]$total_dxa_cost_with_prev_frac_s1/1000
   }
   inp_year <- as.Date(input$endYear, "%Y")
   inp_year <- format(inp_year, "%Y")
-  title_text <- paste("secondary s1 fracs trt cost, 2020-", inp_year, sep = "", collapse = NULL)
+  title_text <- paste("secondary s1 fracs DXA cost, 2020-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "blue", fill = T, width = NULL
+  )
+})
+
+
+output$totalPrimaryMedCostBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2020 + 1
+  for(i in 1:duration) {
+    total_frax <- total_frax + base_case[[i]]$total_med_cost_wo_prev_frac/1000
+  }
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("primary fracs Med cost, 2020-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "blue", fill = T, width = NULL
+  )
+})
+
+
+output$totalPrimaryS1MedCostBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2020 + 1
+  for(i in 1:duration) {
+    total_frax <- total_frax + base_case[[i]]$total_med_cost_wo_prev_frac_s1/1000
+  }
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("primary s1 fracs Med cost, 2020-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "blue", fill = T, width = NULL
+  )
+})
+
+
+output$totalSecondaryMedCostBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2020 + 1
+  for(i in 1:duration) {
+    total_frax <- total_frax + base_case[[i]]$total_med_cost_with_prev_frac/1000
+  }
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("secondary fracs Med cost, 2020-", inp_year, sep = "", collapse = NULL)
+  infoBox(
+    title = title_text,
+    value = formatC(round(total_frax), format = 'd', big.mark=','),
+    icon = icon("list"),
+    color = "blue", fill = T, width = NULL
+  )
+})
+
+
+output$totalSecondaryS1MedCostBox <- renderInfoBox({
+  base_case <- simulation_data$sim
+  total_frax <- 0
+  duration <-  as.integer(substring(input$endYear, 1, 4)) - 2020 + 1
+  for(i in 1:duration) {
+    total_frax <- total_frax + base_case[[i]]$total_med_cost_with_prev_frac_s1/1000
+  }
+  inp_year <- as.Date(input$endYear, "%Y")
+  inp_year <- format(inp_year, "%Y")
+  title_text <- paste("secondary s1 fracs Med cost, 2020-", inp_year, sep = "", collapse = NULL)
   infoBox(
     title = title_text,
     value = formatC(round(total_frax), format = 'd', big.mark=','),

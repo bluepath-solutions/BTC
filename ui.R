@@ -514,34 +514,30 @@ fluidPage(
                 #           column(width = 6, infoBoxOutput("nNoPriorsBox"), tags$style("#nNoPriorsBox {width:100%}")),
                 #           column(width = 6, infoBoxOutput("nPriorsBox"), tags$style("#nPriorsBox {width:100%}") ))
                 # ),
-                        fluidRow(
-                          column(width = 3, infoBoxOutput("totalPrimaryFracsBox"), tags$style("#totalPrimaryFracsBox {width:100%}")),
-                          column(width = 3, infoBoxOutput("totalPrimaryS1FracsBox"), tags$style("#totalPrimaryS1FracsBox {width:100%}")),
-                          column(width = 3, infoBoxOutput("totalSecondaryFracsBox"), tags$style("#totalSecondaryFracsBox {width:100%}")),
-                          column(width = 3, infoBoxOutput("totalSecondaryS1FracsBox"), tags$style("#totalSecondaryS1FracsBox {width:100%}"))),
-                        fluidRow(
-                          column(width = 3, infoBoxOutput("totalPrimaryTrtCostBox"), tags$style("#totalPrimaryTrtCostBox {width:100%}")),
-                          column(width = 3, infoBoxOutput("totalPrimaryS1TrtCostBox"), tags$style("#totalPrimaryS1TrtCostBox {width:100%}")),
-                          column(width = 3, infoBoxOutput("totalSecondaryTrtCostBox"), tags$style("#totalSecondaryTrtCostBox {width:100%}")),
-                          column(width = 3, infoBoxOutput("totalSecondaryS1TrtCostBox"), tags$style("#totalSecondaryS1TrtCostBox {width:100%}"))),
                 fluidRow(
-                  column(width = 3, infoBoxOutput("totalPrimaryFracCostBox"), tags$style("#totalPrimaryFracCostBox {width:100%}")),
-                  column(width = 3, infoBoxOutput("totalPrimaryS1FracCostBox"), tags$style("#totalPrimaryS1FracCostBox {width:100%}")),
-                  column(width = 3, infoBoxOutput("totalSecondaryFracCostBox"), tags$style("#totalSecondaryFracCostBox {width:100%}")),
-                  column(width = 3, infoBoxOutput("totalSecondaryS1FracCostBox"), tags$style("#totalSecondaryS1FracCostBox {width:100%}"))),
-                        # fluidRow(
-                        #   column(width = 6, infoBoxOutput("baseFracturesCostBox"), tags$style("#nNoPriorsBox {width:100%}")),
-                        #   column(width = 6, infoBoxOutput("improvedFracturesCostBox"), tags$style("#nPriorsBox {width:100%}") ))
-                # fluidRow(
-                #   column(width = 6, infoBoxOutput('totalDXACostBox'), tags$style('#totalDXACostBox {width: 100%}')),
-                #   column(width = 6, infoBoxOutput('totalDXAS1costBox'), tags$style('#totalDXAS1costBox {width: 100%}'))),
-                # fluidRow(
-                #   column(width = 6, infoBoxOutput('totalMedcostBox'), tags$style('#totalMedcostBox {width: 100%}')),
-                #   column(width = 6, infoBoxOutput('totalMedS1costBox'), tags$style('#totalMedS1costBox {width: 100%}'))),
-                # fluidRow(
-                #   column(width = 6, infoBoxOutput('totalDirectcostBox'), tags$style('#totalDirectcostBox {width: 100%}')),
-                #   column(width = 6, infoBoxOutput('totalDirectS1costBox'), tags$style('#totalDirectS1costBox {width: 100%}'))),
-                  
+                  column(width = 3, infoBoxOutput("totalPrimaryFracsBox"), tags$style("#totalPrimaryFracsBox {width:100%}")),
+                  column(width = 3, infoBoxOutput("totalPrimaryDXACostBox"), tags$style("#totalPrimaryDXACostBox {width:100%}")),
+                  column(width = 3, infoBoxOutput("totalPrimaryMedCostBox"), tags$style("#totalPrimaryMedCostBox {width:100%}")),
+                  column(width = 3, infoBoxOutput("totalPrimaryFracCostBox"), tags$style("#totalPrimaryFracCostBox {width:100%}"))
+                ),
+                fluidRow(
+                  column(width = 3, infoBoxOutput("totalPrimaryS1FracsBox"), tags$style("#totalPrimaryS1FracsBox {width:100%}")),
+                  column(width = 3, infoBoxOutput("totalPrimaryS1DXACostBox"), tags$style("#totalPrimaryS1DXACostBox {width:100%}")),
+                  column(width = 3, infoBoxOutput("totalPrimaryS1MedCostBox"), tags$style("#totalPrimaryS1MedCostBox {width:100%}")),
+                  column(width = 3, infoBoxOutput("totalPrimaryS1FracCostBox"), tags$style("#totalPrimaryS1FracCostBox {width:100%}"))
+                ),
+                fluidRow(
+                  column(width = 3, infoBoxOutput("totalSecondaryFracsBox"), tags$style("#totalSecondaryFracsBox {width:100%}")),
+                  column(width = 3, infoBoxOutput("totalSecondaryDXACostBox"), tags$style("#totalSecondaryDXACostBox {width:100%}")),
+                  column(width = 3, infoBoxOutput("totalSecondaryMedCostBox"), tags$style("#totalSecondaryMedCostBox {width:100%}")),
+                  column(width = 3, infoBoxOutput("totalSecondaryFracCostBox"), tags$style("#totalSecondaryFracCostBox {width:100%}"))
+                ),
+                fluidRow(
+                  column(width = 3, infoBoxOutput("totalSecondaryS1FracsBox"), tags$style("#totalSecondaryS1FracsBox {width:100%}")),
+                  column(width = 3, infoBoxOutput("totalSecondaryS1DXACostBox"), tags$style("#totalSecondaryS1DXACostBox {width:100%}")),
+                  column(width = 3, infoBoxOutput("totalSecondaryS1MedCostBox"), tags$style("#totalSecondaryS1MedCostBox {width:100%}")),
+                  column(width = 3, infoBoxOutput("totalSecondaryS1FracCostBox"), tags$style("#totalSecondaryS1FracCostBox {width:100%}"))
+                ),
 
                 tags$img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Amgen.svg/1280px-Amgen.svg.png", width = "100px", height = "30px", style="display: block; margin-left: auto; margin-right: auto;")
                 ),
